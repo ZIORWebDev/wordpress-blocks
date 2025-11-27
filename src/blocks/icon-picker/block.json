@@ -3,39 +3,132 @@
 	"apiVersion": 3,
 	"name": "ziorwebdev/icon-picker",
 	"title": "Icon Picker",
-	"category": "widgets",
-	"description": "Display an icon.",
+	"category": "ziorwebdev",
+	"allowedBlocks": [
+		"ziorwebdev/icon"
+	],
+	"description": "Display icons linking to your social profiles or sites.",
+	"keywords": [
+		"links"
+	],
 	"textdomain": "default",
 	"attributes": {
-		"url": {
-			"type": "string",
-			"role": "content"
-		},
-		"service": {
+		"iconColor": {
 			"type": "string"
 		},
-		"label": {
-			"type": "string",
-			"role": "content"
+		"customIconColor": {
+			"type": "string"
 		},
-		"rel": {
+		"iconColorValue": {
+			"type": "string"
+		},
+		"iconBackgroundColor": {
+			"type": "string"
+		},
+		"customIconBackgroundColor": {
+			"type": "string"
+		},
+		"iconBackgroundColorValue": {
+			"type": "string"
+		},
+		"openInNewTab": {
+			"type": "boolean",
+			"default": false
+		},
+		"showLabels": {
+			"type": "boolean",
+			"default": false
+		},
+		"size": {
 			"type": "string"
 		}
 	},
-	"usesContext": [
-		"openInNewTab",
-		"showLabels",
-		"iconColor",
-		"iconColorValue",
-		"iconBackgroundColor",
-		"iconBackgroundColorValue"
-	],
+	"providesContext": {
+		"openInNewTab": "openInNewTab",
+		"showLabels": "showLabels",
+		"iconColor": "iconColor",
+		"iconColorValue": "iconColorValue",
+		"iconBackgroundColor": "iconBackgroundColor",
+		"iconBackgroundColorValue": "iconBackgroundColorValue"
+	},
 	"supports": {
-		"reusable": false,
+		"align": [
+			"left",
+			"center",
+			"right"
+		],
+		"anchor": true,
 		"html": false,
+		"__experimentalExposeControlsToChildren": true,
+		"layout": {
+			"allowSwitching": false,
+			"allowInheriting": false,
+			"allowVerticalAlignment": false,
+			"default": {
+				"type": "flex"
+			}
+		},
+		"color": {
+			"enableContrastChecker": false,
+			"background": true,
+			"gradients": true,
+			"text": false,
+			"__experimentalDefaultControls": {
+				"background": false
+			}
+		},
+		"spacing": {
+			"blockGap": [
+				"horizontal",
+				"vertical"
+			],
+			"margin": true,
+			"padding": true,
+			"units": [
+				"px",
+				"em",
+				"rem",
+				"vh",
+				"vw"
+			],
+			"__experimentalDefaultControls": {
+				"blockGap": true,
+				"margin": true,
+				"padding": false
+			}
+		},
 		"interactivity": {
 			"clientNavigation": true
-		}
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"color": true,
+			"width": true,
+			"style": true,
+			"__experimentalDefaultControls": {
+				"radius": true,
+				"color": true,
+				"width": true,
+				"style": true
+			}
+		},
+		"contentRole": true
 	},
-	"editorStyle": "wp-block-icon-picker-editor"
+	"styles": [
+		{
+			"name": "default",
+			"label": "Default",
+			"isDefault": true
+		},
+		{
+			"name": "logos-only",
+			"label": "Logos Only"
+		},
+		{
+			"name": "pill-shape",
+			"label": "Pill Shape"
+		}
+	],
+	"editorStyle": "wp-block-ziorwebdev-icon-picker-editor",
+	"style": "wp-block-ziorwebdev-icon-picker"
 }

@@ -39,7 +39,6 @@ abstract class BaseBlock {
 			throw new Exception( 'Block must define $block_name.' );
 		}
 
-		console.log( 'IS THIS FILE LOADED?' );
 		add_action( 'init', array( $this, 'register' ) );
 	}
 

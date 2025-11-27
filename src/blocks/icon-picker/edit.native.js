@@ -1,219 +1,147 @@
 /**
  * External dependencies
  */
-import { View, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
-
+import { View } from 'react-native';
 /**
  * WordPress dependencies
  */
 import {
-	BlockControls,
+	InnerBlocks,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { useEffect, useState, useRef, useCallback } from '@wordpress/element';
-import {
-	ToolbarGroup,
-	ToolbarButton,
-	LinkSettingsNavigation,
-} from '@wordpress/components';
-import { compose } from '@wordpress/compose';
-import { __, sprintf } from '@wordpress/i18n';
-import { link, Icon } from '@wordpress/icons';
-import { withSelect } from '@wordpress/data';
-import { store as blocksStore } from '@wordpress/blocks';
+import { withDispatch, withSelect } from '@wordpress/data';
+import { useRef, useEffect, useState } from '@wordpress/element';
+import { compose, usePreferredColorSchemeStyle } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
-import { getSocialService } from './icon-picker';
 import styles from './editor.scss';
 
-const DEFAULT_ACTIVE_ICON_STYLES = {
-	backgroundColor: '#f0f0f0',
-	color: '#444',
-};
-const ANIMATION_DELAY = 300;
-const ANIMATION_DURATION = 400;
+// Template contains the links that show when start.
+const TEMPLATE = [
+	[
+		'core/social-link-wordpress',
+		{ service: 'wordpress', url: 'https://wordpress.org' },
+	],
+	[ 'core/social-link-facebook', { service: 'facebook' } ],
+	[ 'core/social-link-twitter', { service: 'twitter' } ],
+	[ 'core/social-link-instagram', { service: 'instagram' } ],
+];
 
-const linkSettingsOptions = {
-	url: {
-		label: __( 'URL' ),
-		placeholder: __( 'Add URL' ),
-		autoFocus: true,
-	},
-	linkLabel: {
-		label: __( 'Link label' ),
-		placeholder: __( 'None' ),
-	},
-	footer: {
-		label: __( 'Briefly describe the link to help screen reader user' ),
-	},
-};
-
-const SocialLinkEdit = ( {
-	attributes,
-	setAttributes,
+function SocialLinksEdit( {
+	shouldDelete,
+	onDelete,
 	isSelected,
-	onFocus,
-	name,
-	activeVariation,
-} ) => {
-	const { url, service = name } = attributes;
-	const [ isLinkSheetVisible, setIsLinkSheetVisible ] = useState( false );
-	const [ hasUrl, setHasUrl ] = useState( !! url );
-	const activeIcon =
-		styles[ `wp-social-link-${ service }` ] ||
-		styles[ `wp-social-link` ] ||
-		DEFAULT_ACTIVE_ICON_STYLES;
-	const animatedValue = useRef( new Animated.Value( 0 ) ).current;
-
-	const { icon, label: socialLinkName } = getSocialService( activeVariation );
-
-	// When new social icon is added link sheet is opened automatically.
-	useEffect( () => {
-		if ( isSelected && ! url ) {
-			setIsLinkSheetVisible( true );
-		}
-	}, [] );
+	isInnerIconSelected,
+	innerBlocks,
+	attributes,
+	activeInnerBlocks,
+	getBlock,
+	blockWidth,
+} ) {
+	const [ initialCreation, setInitialCreation ] = useState( true );
+	const shouldRenderFooterAppender = isSelected || isInnerIconSelected;
+	const { align } = attributes;
+	const { marginLeft: spacing } = styles.spacing;
 
 	useEffect( () => {
-		if ( ! url ) {
-			setHasUrl( false );
-			animatedValue.setValue( 0 );
-		} else if ( url ) {
-			animateColors();
+		if ( ! shouldRenderFooterAppender ) {
+			setInitialCreation( false );
 		}
-	}, [ url ] );
+	}, [ shouldRenderFooterAppender ] );
 
-	const interpolationColors = {
-		opacity: animatedValue.interpolate( {
-			inputRange: [ 0, 1 ],
-			outputRange: [ 0.3, 1 ],
-		} ),
-	};
+	const renderFooterAppender = useRef( () => (
+		<View style={ styles.footerAppenderContainer }>
+			<InnerBlocks.ButtonBlockAppender isFloating />
+		</View>
+	) );
 
-	const { opacity } = hasUrl ? activeIcon : interpolationColors;
+	const placeholderStyle = usePreferredColorSchemeStyle(
+		styles.placeholder,
+		styles.placeholderDark
+	);
 
-	function animateColors() {
-		Animated.sequence( [
-			Animated.delay( ANIMATION_DELAY ),
-			Animated.timing( animatedValue, {
-				toValue: 1,
-				duration: ANIMATION_DURATION,
-				easing: Easing.circle,
-				useNativeDriver: false,
-			} ),
-		] ).start( () => setHasUrl( true ) );
+	function renderPlaceholder() {
+		return [ ...new Array( innerBlocks.length || 1 ) ].map(
+			( _, index ) => (
+				<View
+					testID="icon-picker-placeholder"
+					style={ placeholderStyle }
+					key={ index }
+				/>
+			)
+		);
 	}
 
-	const onCloseSettingsSheet = useCallback( () => {
-		setIsLinkSheetVisible( false );
-	}, [] );
-
-	const onOpenSettingsSheet = useCallback( () => {
-		setIsLinkSheetVisible( true );
-	}, [] );
-
-	const onEmptyURL = useCallback( () => {
-		animatedValue.setValue( 0 );
-		setHasUrl( false );
-	}, [ animatedValue ] );
-
-	function onIconPress() {
-		if ( isSelected ) {
-			setIsLinkSheetVisible( true );
-		} else {
-			onFocus();
-		}
+	function filterInnerBlocks( blockIds ) {
+		return blockIds.filter(
+			( blockId ) => getBlock( blockId ).attributes.url
+		);
 	}
 
-	const accessibilityHint = url
-		? sprintf(
-				// translators: %s: social link name e.g: "Instagram".
-				__( '%s has URL set' ),
-				socialLinkName
-		  )
-		: sprintf(
-				// translators: %s: social link name e.g: "Instagram".
-				__( '%s has no URL set' ),
-				socialLinkName
-		  );
+	if ( ! shouldRenderFooterAppender && activeInnerBlocks.length === 0 ) {
+		return (
+			<View style={ styles.placeholderWrapper }>
+				{ renderPlaceholder() }
+			</View>
+		);
+	}
 
 	return (
-		<View style={ styles.container }>
-			{ isSelected && (
-				<>
-					<BlockControls>
-						<ToolbarGroup>
-							<ToolbarButton
-								title={ sprintf(
-									// translators: %s: social link name e.g: "Instagram".
-									__( 'Add link to %s' ),
-									socialLinkName
-								) }
-								icon={ link }
-								onClick={ onOpenSettingsSheet }
-								isActive={ url }
-							/>
-						</ToolbarGroup>
-					</BlockControls>
-					<LinkSettingsNavigation
-						isVisible={ isLinkSheetVisible }
-						url={ attributes.url }
-						label={ attributes.label }
-						rel={ attributes.rel }
-						onEmptyURL={ onEmptyURL }
-						onClose={ onCloseSettingsSheet }
-						setAttributes={ setAttributes }
-						options={ linkSettingsOptions }
-						withBottomSheet
-					/>
-				</>
-			) }
-
-			<TouchableWithoutFeedback
-				onPress={ onIconPress }
-				accessibilityRole="button"
-				accessibilityLabel={ sprintf(
-					// translators: %s: social link name e.g: "Instagram".
-					__( '%s social icon' ),
-					socialLinkName
-				) }
-				accessibilityHint={ accessibilityHint }
-			>
-				<Animated.View
-					style={ [
-						styles.iconContainer,
-						{
-							backgroundColor: activeIcon.backgroundColor,
-							opacity,
-						},
-					] }
-				>
-					<Icon
-						animated
-						icon={ icon() }
-						style={ { color: activeIcon.color } }
-					/>
-				</Animated.View>
-			</TouchableWithoutFeedback>
-		</View>
+		<InnerBlocks
+			templateLock={ false }
+			template={ initialCreation && TEMPLATE }
+			renderFooterAppender={
+				shouldRenderFooterAppender && renderFooterAppender.current
+			}
+			orientation="horizontal"
+			onDeleteBlock={ shouldDelete ? onDelete : undefined }
+			marginVertical={ spacing }
+			marginHorizontal={ spacing }
+			horizontalAlignment={ align }
+			filterInnerBlocks={
+				! shouldRenderFooterAppender && filterInnerBlocks
+			}
+			blockWidth={ blockWidth }
+		/>
 	);
-};
+}
 
-export default compose( [
+export default compose(
 	withSelect( ( select, { clientId } ) => {
-		const { getBlock } = select( blockEditorStore );
-		const { getActiveBlockVariation } = select( blocksStore );
-
-		const block = getBlock( clientId );
-		const name = block?.name.substring( 17 );
+		const {
+			getBlockCount,
+			getBlockParents,
+			getSelectedBlockClientId,
+			getBlocks,
+			getBlock,
+		} = select( blockEditorStore );
+		const selectedBlockClientId = getSelectedBlockClientId();
+		const selectedBlockParents = getBlockParents(
+			selectedBlockClientId,
+			true
+		);
+		const innerBlocks = getBlocks( clientId );
+		const activeInnerBlocks = innerBlocks.filter(
+			( block ) => block.attributes?.url
+		);
 
 		return {
-			name,
-			activeVariation: block
-				? getActiveBlockVariation( block.name, block.attributes )
-				: undefined,
+			shouldDelete: getBlockCount( clientId ) === 1,
+			isInnerIconSelected: selectedBlockParents[ 0 ] === clientId,
+			innerBlocks,
+			activeInnerBlocks,
+			getBlock,
 		};
 	} ),
-] )( SocialLinkEdit );
+	withDispatch( ( dispatch, { clientId } ) => {
+		const { removeBlock } = dispatch( blockEditorStore );
+
+		return {
+			onDelete: () => {
+				removeBlock( clientId, false );
+			},
+		};
+	} )
+)( SocialLinksEdit );

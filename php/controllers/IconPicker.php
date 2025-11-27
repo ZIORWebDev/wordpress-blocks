@@ -93,11 +93,11 @@ class IconPicker extends BaseBlock {
 			)
 		);
 
-		$link  = '<li ' . $wrapper_attributes . '>';
+		$link  = '<span ' . $wrapper_attributes . '>';
 		$link .= '<a href="' . esc_url( $url ) . '" class="wp-block-social-link-anchor">';
 		$link .= $icon;
 		$link .= '<span class="wp-block-social-link-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
-		$link .= '</a></li>';
+		$link .= '</a></span>';
 
 		$processor = new WP_HTML_Tag_Processor( $link );
 		$processor->next_tag( 'a' );
@@ -426,5 +426,19 @@ class IconPicker extends BaseBlock {
 		}
 
 		return ' ' . implode( ' ', $classes );
+	}
+
+	/**
+	 * Returns instance of Settings.
+	 *
+	 * @since 1.0.0
+	 * @return object
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 }

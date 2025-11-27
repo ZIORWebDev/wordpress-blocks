@@ -38,7 +38,7 @@ final class Load {
 	 */
 	public function __construct() {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_blocks_script' ) );
-		error_log( 'final class Load' );
+
 		Controllers\IconPicker::get_instance();
 	}
 
@@ -62,20 +62,54 @@ final class Load {
 			$dependencies[] = 'wp-edit-widgets';
 		}
 
+		$vendor_js        = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/vendors.min.js';
+		$block_editor_js  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.js';
+		$block_editor_css = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.css';
+		$block_style_css  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/main.min.css';
+
+		// Enqueue vendor JS
+		wp_enqueue_script(
+			'ziorwebdev-wordpress-blocks-vendor',
+			$vendor_js,
+			array(),
+			null
+		);
+
 		// Enqueue editor JS
 		wp_enqueue_script(
-			'localbusiness-schema-pro-editor',
-			LOCALBUSINESS_SCHEMA_PRO_PLUGIN_URL . 'dist/blocks/editor.min.js',
+			'ziorwebdev-wordpress-blocks-editor',
+			$block_editor_js,
 			$dependencies,
 			null
 		);
 
 		// Enqueue editor CSS
 		wp_enqueue_style(
-			'localbusiness-schema-pro-editor',
-			LOCALBUSINESS_SCHEMA_PRO_PLUGIN_URL . 'dist/blocks/editor.min.css',
+			'ziorwebdev-wordpress-blocks-style',
+			$block_style_css,
 			array(), // dependencies
 			null
 		);
+
+		wp_enqueue_style(
+			'ziorwebdev-wordpress-blocks-editor',
+			$block_editor_css,
+			array(), // dependencies
+			null
+		);
+	}
+
+	/**
+	 * Returns instance of Settings.
+	 *
+	 * @since 1.0.0
+	 * @return object
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 }

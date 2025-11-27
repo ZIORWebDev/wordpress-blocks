@@ -1,12 +1,12 @@
 <?php
 /**
- * Server-side rendering of the `ziorwebdev/icon-picker` blocks.
+ * Server-side rendering of the `core/social-link` blocks.
  *
  * @package WordPress
  */
 
 /**
- * Renders the `ziorwebdev/icon-picker` block on server.
+ * Renders the `core/social-link` block on server.
  *
  * @since 5.4.0
  *
@@ -16,14 +16,14 @@
  *
  * @return string Rendered HTML of the referenced block.
  */
-function render_block_icon_picker( $attributes, $content, $block ) {
+function render_block_core_social_link( $attributes, $content, $block ) {
 	$open_in_new_tab = isset( $block->context['openInNewTab'] ) ? $block->context['openInNewTab'] : false;
 
 	$text = ! empty( $attributes['label'] ) ? trim( $attributes['label'] ) : '';
 
 	$service     = isset( $attributes['service'] ) ? $attributes['service'] : 'Icon';
 	$url         = isset( $attributes['url'] ) ? $attributes['url'] : false;
-	$text        = $text ? $text : block_icon_picker_get_name( $service );
+	$text        = $text ? $text : block_core_social_link_get_name( $service );
 	$rel         = isset( $attributes['rel'] ) ? $attributes['rel'] : '';
 	$show_labels = array_key_exists( 'showLabels', $block->context ) ? $block->context['showLabels'] : false;
 
@@ -48,18 +48,18 @@ function render_block_icon_picker( $attributes, $content, $block ) {
 		$url = 'https://' . $url;
 	}
 
-	$icon               = block_icon_picker_get_icon( $service );
+	$icon               = block_core_social_link_get_icon( $service );
 	$wrapper_attributes = get_block_wrapper_attributes(
 		array(
-			'class' => 'wp-social-link wp-social-link-' . $service . block_icon_picker_get_color_classes( $block->context ),
-			'style' => block_icon_picker_get_color_styles( $block->context ),
+			'class' => 'wp-ziorwebdev-icon wp-ziorwebdev-icon-' . $service . block_core_social_link_get_color_classes( $block->context ),
+			'style' => block_core_social_link_get_color_styles( $block->context ),
 		)
 	);
 
 	$link  = '<li ' . $wrapper_attributes . '>';
-	$link .= '<a href="' . esc_url( $url ) . '" class="wp-block-social-link-anchor">';
+	$link .= '<a href="' . esc_url( $url ) . '" class="wp-block-ziorwebdev-icon-anchor">';
 	$link .= $icon;
-	$link .= '<span class="wp-block-social-link-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
+	$link .= '<span class="wp-block-ziorwebdev-icon-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
 	$link .= '</a></li>';
 
 	$processor = new WP_HTML_Tag_Processor( $link );
@@ -74,19 +74,19 @@ function render_block_icon_picker( $attributes, $content, $block ) {
 }
 
 /**
- * Registers the `ziorwebdev/icon-picker` blocks.
+ * Registers the `core/social-link` blocks.
  *
  * @since 5.4.0
  */
-function register_block_icon_picker() {
+function register_block_core_social_link() {
 	register_block_type_from_metadata(
 		__DIR__ . '/social-link',
 		array(
-			'render_callback' => 'render_block_icon_picker',
+			'render_callback' => 'render_block_core_social_link',
 		)
 	);
 }
-add_action( 'init', 'register_block_icon_picker' );
+add_action( 'init', 'register_block_core_social_link' );
 
 
 /**
@@ -98,8 +98,8 @@ add_action( 'init', 'register_block_icon_picker' );
  *
  * @return string SVG Element for service icon.
  */
-function block_icon_picker_get_icon( $service ) {
-	$services = block_icon_picker_services();
+function block_core_social_link_get_icon( $service ) {
+	$services = block_core_social_link_services();
 	if ( isset( $services[ $service ] ) && isset( $services[ $service ]['icon'] ) ) {
 		return $services[ $service ]['icon'];
 	}
@@ -116,8 +116,8 @@ function block_icon_picker_get_icon( $service ) {
  *
  * @return string Brand label.
  */
-function block_icon_picker_get_name( $service ) {
-	$services = block_icon_picker_services();
+function block_core_social_link_get_name( $service ) {
+	$services = block_core_social_link_services();
 	if ( isset( $services[ $service ] ) && isset( $services[ $service ]['name'] ) ) {
 		return $services[ $service ]['name'];
 	}
@@ -135,7 +135,7 @@ function block_icon_picker_get_name( $service ) {
  *
  * @return array|string
  */
-function block_icon_picker_services( $service = '', $field = '' ) {
+function block_core_social_link_services( $service = '', $field = '' ) {
 	$services_data = array(
 		'fivehundredpx' => array(
 			'name' => _x( '500px', 'social link block variation name' ),
@@ -346,7 +346,7 @@ function block_icon_picker_services( $service = '', $field = '' ) {
 	 * @param array $services_data The list of services. Each item is an array containing a 'name' and 'icon' key.
 	 * @return array The list of social services.
 	 */
-	$services_data = apply_filters( 'block_icon_picker_get_services', $services_data );
+	$services_data = apply_filters( 'block_core_social_link_get_services', $services_data );
 
 	if ( ! empty( $service )
 		&& ! empty( $field )
@@ -370,7 +370,7 @@ function block_icon_picker_services( $service = '', $field = '' ) {
  *
  * @return string Inline CSS styles for link's icon and background colors.
  */
-function block_icon_picker_get_color_styles( $context ) {
+function block_core_social_link_get_color_styles( $context ) {
 	$styles = array();
 
 	if ( array_key_exists( 'iconColorValue', $context ) ) {
@@ -393,7 +393,7 @@ function block_icon_picker_get_color_styles( $context ) {
  *
  * @return string CSS classes for link's icon and background colors.
  */
-function block_icon_picker_get_color_classes( $context ) {
+function block_core_social_link_get_color_classes( $context ) {
 	$classes = array();
 
 	if ( array_key_exists( 'iconColor', $context ) ) {

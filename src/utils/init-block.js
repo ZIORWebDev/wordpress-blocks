@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { registerBlockType } from '@wordpress/blocks';
-
-/**
  * Function to register an individual block.
  *
  * @param {Object} block The block to be registered.
@@ -15,6 +10,10 @@ export default function initBlock( block ) {
 	if ( ! block ) {
 		return;
 	}
+
 	const { metadata, settings, name } = block;
-	return registerBlockType( { name, ...metadata }, settings );
+	console.log( name, metadata, settings );
+	
+	// Direct usage of global wp object
+	return wp.blocks.registerBlockType( { name, ...metadata }, settings );
 }

@@ -1,12 +1,21 @@
 /**
  * WordPress dependencies
  */
-import { useSelect } from '@wordpress/data';
-import { useLayoutEffect, useEffect, useRef } from '@wordpress/element';
-import { getBlobByURL, isBlobURL, revokeBlobURL } from '@wordpress/blob';
-import { store as blockEditorStore } from '@wordpress/block-editor';
-import { store as coreStore } from '@wordpress/core-data';
-import { useViewportMatch } from '@wordpress/compose';
+// Data
+const { useSelect } = wp.data;
+
+// Element
+const { useLayoutEffect, useEffect, useRef } = wp.element;
+
+// Blob utilities
+const { getBlobByURL, isBlobURL, revokeBlobURL } = wp.blob;
+
+// Stores
+const { store: blockEditorStore } = wp.blockEditor;
+const { store: coreStore } = wp.coreData;
+
+// Compose
+const { useViewportMatch } = wp.compose;
 
 /**
  * Returns whether the current user can edit the given entity.
