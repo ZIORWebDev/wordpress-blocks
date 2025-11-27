@@ -48,6 +48,7 @@ const { ToolbarButton, ToolbarGroup } = wp.components;
  * Internal dependencies
  */
 import { useToolsPanelDropdownMenuProps } from '../../utils/hooks';
+import ToolbarBlockInserter from '../../components/icon-inserter';
 
 const sizeOptions = [
 	{ label: __( 'Default' ), value: '' },
@@ -182,15 +183,15 @@ export function SocialLinksEdit(props) {
 
 	return (
 		<>
-			<BlockControls>
-				<ToolbarGroup>
-					<ToolbarButton
-						icon="admin-links"
-						label={ __( 'Icon' ) }
-						onClick={ () => setShowAppender( true ) }
-					/>
-				</ToolbarGroup>
-			</BlockControls>
+            <BlockControls>
+                <ToolbarGroup>
+                    <ToolbarBlockInserter
+                        rootClientId={clientId}
+                        label="Add Social Icon"
+                        onSelectOrClose={() => console.log('Block inserted or inserter closed')}
+                    />
+                </ToolbarGroup>
+            </BlockControls>
 			<InspectorControls>
 				<ToolsPanel
 					label={ __( 'Settings' ) }

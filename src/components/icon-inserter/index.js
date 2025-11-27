@@ -1,11 +1,20 @@
 /**
  * WordPress dependencies
  */
-import { useRef } from '@wordpress/element';
-import { ToolbarButton } from '@wordpress/block-editor';
-import { Inserter } from '@wordpress/block-editor';
-import { Icon, plus } from '@wordpress/icons';
-import { __ } from '@wordpress/i18n';
+// wp.element
+const { useRef } = wp.element;
+
+// wp.components
+const { ToolbarButton, Icon } = wp.components;
+
+// wp.blockEditor
+const { Inserter } = wp.blockEditor;
+
+// wp.icons
+const { plus } = wp.icons;
+
+// wp.i18n
+const { __ } = wp.i18n;
 
 /**
  * ToolbarBlockInserter
