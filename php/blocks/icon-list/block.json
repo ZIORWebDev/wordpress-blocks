@@ -1,56 +1,19 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "ziorwebdev/icon-picker",
-	"title": "Icon Picker",
+	"name": "ziorwebdev/icon-list",
+	"title": "Icon List",
 	"category": "widgets",
 	"allowedBlocks": [
-		"ziorwebdev/icon"
+		"ziorwebdev/icon-picker",
+		"core/paragraph"
 	],
-	"description": "Display icon.",
+	"description": "Display icon list.",
 	"keywords": [
-		"links"
+		"icon",
+		"list"
 	],
 	"textdomain": "default",
-	"attributes": {
-		"iconColor": {
-			"type": "string"
-		},
-		"customIconColor": {
-			"type": "string"
-		},
-		"iconColorValue": {
-			"type": "string"
-		},
-		"iconBackgroundColor": {
-			"type": "string"
-		},
-		"customIconBackgroundColor": {
-			"type": "string"
-		},
-		"iconBackgroundColorValue": {
-			"type": "string"
-		},
-		"openInNewTab": {
-			"type": "boolean",
-			"default": false
-		},
-		"showLabels": {
-			"type": "boolean",
-			"default": false
-		},
-		"size": {
-			"type": "string"
-		}
-	},
-	"providesContext": {
-		"openInNewTab": "openInNewTab",
-		"showLabels": "showLabels",
-		"iconColor": "iconColor",
-		"iconColorValue": "iconColorValue",
-		"iconBackgroundColor": "iconBackgroundColor",
-		"iconBackgroundColorValue": "iconBackgroundColorValue"
-	},
 	"supports": {
 		"align": [
 			"left",

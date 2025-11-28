@@ -121,7 +121,7 @@ const IconLinkURLPopover = ( {
 	);
 };
 
-const IconLinkEdit = ( {
+const IconEdit = ( {
 	attributes,
 	context,
 	isSelected,
@@ -323,4 +323,4 @@ const IconLinkEdit = ( {
 	);
 };
 
-export default IconLinkEdit;
+export default IconEdit;

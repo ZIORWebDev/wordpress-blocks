@@ -7,7 +7,7 @@ import clsx from 'clsx';
  * WordPress dependencies
  */
 // wp.element
-const { useEffect, useState } = wp.element;
+const { useEffect } = wp.element;
 
 // wp.blockEditor
 const {
@@ -16,8 +16,6 @@ const {
 	InspectorControls,
 	ContrastChecker,
 	withColors,
-	InnerBlocks,
-	Inserter,
 	__experimentalColorGradientSettingsDropdown: ColorGradientSettingsDropdown,
 	__experimentalUseMultipleOriginColorsAndGradients: useMultipleOriginColorsAndGradients,
 	store: blockEditorStore,

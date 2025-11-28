@@ -5,7 +5,7 @@
  * @package ZiorWebDev\WordPressBlocks
  */
 
-namespace ZiorWebDev\WordPressBlocks;
+namespace ZiorWebDev\WordPressBlocks\Blocks;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,18 +25,18 @@ abstract class BaseBlock {
 	protected $block_name;
 
 	/**
-	 * The attributes of the block.
+	 * Path of the block.json file.
 	 *
-	 * @var array
+	 * @var string
 	 */
-	protected $attributes = array();
+	protected $block_json;
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		if ( empty( $this->block_name ) ) {
-			throw new Exception( 'Block must define $block_name.' );
+			throw new \Exception( 'Block must define $block_name.' );
 		}
 
 		add_action( 'init', array( $this, 'register' ) );
@@ -48,10 +48,9 @@ abstract class BaseBlock {
 	 * @return void
 	 */
 	public function register() {
-		register_block_type(
-			$this->block_name,
+		register_block_type_from_metadata(
+			$this->block_json,
 			array(
-				'attributes'      => $this->attributes,
 				'render_callback' => array( $this, 'render' ),
 			)
 		);
@@ -65,17 +64,5 @@ abstract class BaseBlock {
 	* @param array  $block      Block data.
 	* @return string
 	*/
-	protected function render( $attributes, $content, $block ) {
-		return $content;
-	}
-
-	/**
-	* Register service icons.
-	*
-	* @param array $services
-	* @return array
-	*/
-	protected function register_service_icon( array $services ) {
-		return $services;
-	}
+	abstract public function render( $attributes, $content, $block );
 }

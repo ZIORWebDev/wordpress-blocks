@@ -53,7 +53,6 @@ export default function ToolbarBlockInserter({
             )}
             onSelect={( block ) => {
                 // Remove existing icon blocks
-                console.log("ICON SELECTED");
                 const innerBlocks = wp.data.select('core/block-editor').getBlocks(rootClientId);
                 innerBlocks.forEach((b) => {
                     if (b.name === 'ziorwebdev/icon') {

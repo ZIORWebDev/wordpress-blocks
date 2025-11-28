@@ -12,7 +12,6 @@ export default function initBlock( block ) {
 	}
 
 	const { metadata, settings, name } = block;
-	console.log( name, metadata, settings );
 	
 	// Direct usage of global wp object
 	return wp.blocks.registerBlockType( { name, ...metadata }, settings );

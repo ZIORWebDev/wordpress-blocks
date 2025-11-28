@@ -50,7 +50,7 @@ const linkSettingsOptions = {
 	},
 };
 
-const IconLinkEdit = ( {
+const IconEdit = ( {
 	attributes,
 	setAttributes,
 	isSelected,
@@ -216,4 +216,4 @@ export default compose( [
 				: undefined,
 		};
 	} ),
-] )( IconLinkEdit );
+] )( IconEdit );
