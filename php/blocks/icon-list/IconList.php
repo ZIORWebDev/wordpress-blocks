@@ -5,7 +5,7 @@
  * @package ZiorWebDev\WordPressBlocks
  */
 
-namespace ZiorWebDev\WordPressBlocks\Blocks\IconPicker;
+namespace ZiorWebDev\WordPressBlocks\Blocks\IconList;
 
 use ZiorWebDev\WordPressBlocks\Blocks;
 
