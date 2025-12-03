@@ -43,7 +43,7 @@ const { BlockControls } = wp.blockEditor;
  */
 import { useToolsPanelDropdownMenuProps } from '../../utils/hooks';
 import ToolbarBlockInserter from '../../components/icon-inserter';
-import { useReplaceIconOnInsert } from '../../utils/replace-insert';
+// import { useReplaceIconOnInsert } from '../../utils/replace-insert';
 
 const sizeOptions = [
 	{ label: __( 'Default' ), value: '' },
@@ -123,7 +123,7 @@ export function IconPickerEdit(props) {
 	} );
 
 	const blockProps = useBlockProps({ className });
-	useReplaceIconOnInsert(clientId);
+	// useReplaceIconOnInsert(clientId);
 
 	const innerBlocksProps = useInnerBlocksProps(blockProps, {
 		template: [

@@ -5,7 +5,7 @@
 	"title": "Icon List",
 	"category": "widgets",
 	"allowedBlocks": [
-		"ziorwebdev/icon-picker",
+		"ziorwebdev/icon-list",
 		"core/paragraph"
 	],
 	"description": "Display icon list.",
@@ -92,6 +92,6 @@
 			"label": "Pill Shape"
 		}
 	],
-	"editorStyle": "wp-block-ziorwebdev-icon-picker-editor",
-	"style": "wp-block-ziorwebdev-icon-picker"
+	"editorStyle": "wp-block-ziorwebdev-icon-list-editor",
+	"style": "wp-block-ziorwebdev-icon-list"
 }
