@@ -173,7 +173,7 @@ class MetaField extends Blocks\BaseBlock {
 	}
 
 	/**
-	 * Renders the `ziorwebdev/icon-picker` block on server.
+	 * Renders the `ziorwebdev/meta-field` block on server.
 	 *
 	 * @since 5.4.0
 	 *
