@@ -30,7 +30,7 @@ class Icon extends Blocks\BaseBlock {
 	/**
 	 * Singleton instance of the Plugin class.
 	 *
-	 * @var Load
+	 * @var Icon
 	 */
 	protected static $instance;
 

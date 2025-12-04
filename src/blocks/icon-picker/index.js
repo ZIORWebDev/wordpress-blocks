@@ -12,6 +12,7 @@ import edit from './edit';
 import metadata from '../../../php/blocks/icon-picker/block.json';
 import save from './save';
 console.log("metadata", metadata);
+console.log("icon", icon);
 const { name } = metadata;
 
 export { metadata, name };

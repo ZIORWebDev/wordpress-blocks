@@ -29,6 +29,8 @@ final class Load {
 	public function __construct() {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_blocks_script' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
+
+		Blocks::get_instance();
 	}
 
 	/**

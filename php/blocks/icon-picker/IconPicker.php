@@ -30,7 +30,7 @@ class IconPicker extends Blocks\BaseBlock {
 	/**
 	 * Singleton instance of the Plugin class.
 	 *
-	 * @var Load
+	 * @var IconPicker
 	 */
 	protected static $instance;
 

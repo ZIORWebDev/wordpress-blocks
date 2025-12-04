@@ -43,7 +43,6 @@ const { BlockControls } = wp.blockEditor;
  */
 import { useToolsPanelDropdownMenuProps } from '../../utils/hooks';
 import ToolbarBlockInserter from '../../components/icon-inserter';
-// import { useReplaceIconOnInsert } from '../../utils/replace-insert';
 
 const sizeOptions = [
 	{ label: __( 'Default' ), value: '' },
@@ -53,7 +52,7 @@ const sizeOptions = [
 	{ label: __( 'Huge' ), value: 'has-huge-icon-size' },
 ];
 
-export function IconPickerEdit(props) {
+export function IconListEdit(props) {
 	const {
 		clientId,
 		attributes,
@@ -125,11 +124,12 @@ export function IconPickerEdit(props) {
 	const blockProps = useBlockProps({ className });
 	// useReplaceIconOnInsert(clientId);
 
-	const innerBlocksProps = useInnerBlocksProps(blockProps, {
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: [
-			[ 'ziorwebdev/icon', { service: 'wordpress', url: '' } ],
+			[ 'ziorwebdev/icon-picker', {} ],
+			[ 'core/paragraph', { placeholder: __( 'Add content...' ) } ],
 		],
-		renderAppender: false
+		renderAppender: true,
 	} );
 
 	const colorSettings = [
@@ -288,10 +288,3 @@ export function IconPickerEdit(props) {
 		</>
 	);
 }
-
-const iconColorAttributes = {
-	iconColor: 'icon-color',
-	iconBackgroundColor: 'icon-background-color',
-};
-
-export default withColors( iconColorAttributes )( IconPickerEdit );

@@ -32,6 +32,13 @@ abstract class BaseBlock {
 	protected $block_json;
 
 	/**
+	 * REST API routes.
+	 *
+	 * @var array
+	 */
+	protected $routes = array();
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -54,6 +61,16 @@ abstract class BaseBlock {
 				'render_callback' => array( $this, 'render' ),
 			)
 		);
+	}
+
+	/**
+	 * Permission check for REST API routes.
+	 *
+	 * @param \WP_REST_Request $request The REST request.
+	 * @return bool
+	 */
+	public function set_permission( $request ) {
+		return current_user_can( 'edit_posts' );
 	}
 
 	/**
