@@ -30,6 +30,35 @@
 		},
 		"placeholder": {
 			"type": "string"
+		},
+		"tagName": {
+			"type": "string",
+			"default": "h2"
+		},
+		"postType": {
+			"type": "string",
+			"default": "page"
+		},
+		"metaKey": {
+			"type": "string",
+			"default": ""
+		},
+		"metaFieldType": {
+			"type": "string",
+			"default": "post_meta"
+		},
+		"fieldProvider": {
+			"type": "string",
+			"default": ""
+		},
+		"link": {
+			"type": "object",
+			"default": {
+				"href": "",
+				"target": "",
+				"rel": "",
+				"class": ""
+			}
 		}
 	},
 	"supports": {

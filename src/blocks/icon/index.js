@@ -12,7 +12,7 @@ import { widget as icon } from '@wordpress/icons';
 import initBlock from '../../utils/init-block';
 import edit from './edit';
 // import save from './save';
-import metadata from '../../../php/blocks/icon/block.json';
+import metadata from '../../../php/blocks/Icon/block.json';
 import variations from './variations';
 
 const { name } = metadata;

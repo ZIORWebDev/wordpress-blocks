@@ -9,7 +9,7 @@ import { tool as icon } from '@wordpress/icons';
 import initBlock from '../../utils/init-block';
 import deprecated from './deprecated';
 import edit from './edit';
-import metadata from '../../../php/blocks/icon-picker/block.json';
+import metadata from '../../../php/blocks/IconPicker/block.json';
 import save from './save';
 console.log("metadata", metadata);
 console.log("icon", icon);

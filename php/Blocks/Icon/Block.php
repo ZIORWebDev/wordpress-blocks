@@ -15,7 +15,7 @@ use ZiorWebDev\WordPressBlocks\Blocks;
  * @package ZiorWebDev\WordPressBlocks
  * @since 1.0.0
  */
-class Icon extends Blocks\BaseBlock {
+class Block extends Blocks\Base {
 
 	/**
 	 * Block name

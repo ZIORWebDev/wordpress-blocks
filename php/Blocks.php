@@ -7,6 +7,7 @@
  */
 namespace ZiorWebDev\WordPressBlocks;
 
+use ZiorWebDev\WordPressBlocks\Integration;
 /**
  * Class Blocks
  *
@@ -36,8 +37,9 @@ final class Blocks {
 	 * 
 	 */
 	public function __construct() {
-		Blocks\Icon\Icon::get_instance();
-		Blocks\MetaField\MetaField::get_instance();
+		Blocks\Icon\Block::get_instance();
+		Blocks\MetaField\Block::get_instance();
+		Controllers\CarbonFields::get_instance();
 
 		add_filter( 'render_block_context', array( $this, 'inject_parent_context' ), 10, 3 );
 		add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
@@ -55,7 +57,7 @@ final class Blocks {
 			return;
 		}
 
-		foreach ( $this->routes as $route ) {
+		foreach ( $routes as $route ) {
 			register_rest_route(
 				$route['namespace'],
 				$route['route'],

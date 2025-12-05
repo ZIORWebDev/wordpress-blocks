@@ -25,6 +25,7 @@ const { PanelBody, SelectControl } = wp.components;
  * Internal dependencies
  */
 import { generateAnchor, setAnchor } from './autogenerate-anchors';
+import MetaFieldSelector from '../../components/meta-field-selector';
 
 function MegaFieldEdit( {
 	attributes,
@@ -34,7 +35,7 @@ function MegaFieldEdit( {
 	style,
 	clientId,
 } ) {
-	const { textAlign, content, level, levelOptions, placeholder, anchor, tagName } =
+	const { textAlign, content, level, placeholder, anchor, tagName, link } =
 		attributes;
 	const effectiveTag = tagName && tagName.length ? tagName : 'h' + level;
 	const blockProps = useBlockProps( {
@@ -92,17 +93,53 @@ function MegaFieldEdit( {
 		setAttributes( newAttrs );
 	};
 
+	function extractLinkAttributes(html) {
+		if (!html) return {};
+
+		const tempDiv = document.createElement('div');
+		tempDiv.innerHTML = html;
+
+		const link = tempDiv.querySelector('a');
+		if (!link) return { href: '', target: '', rel: '', class: '' };
+
+		return {
+			href: link.getAttribute('href') || '',
+			target: link.getAttribute('target') || '',
+			rel: link.getAttribute('rel') || '',
+			class: link.getAttribute('class') || ''
+		};
+	}
+
+    useEffect(() => {
+        const linkAttrs = extractLinkAttributes(content);
+        // Only update if different
+        if (
+            linkAttrs.href !== link.href ||
+            linkAttrs.target !== link.target ||
+            linkAttrs.rel !== link.rel ||
+            linkAttrs.class !== link.class
+        ) {
+            setAttributes({ link: linkAttrs });
+        }
+    }, [content]);
+
 	return (
 		<>
 			{ blockEditingMode === 'default' && (
 				<BlockControls group="block">
-					<HeadingLevelDropdown
-						value={ level }
-						options={ levelOptions }
-						onChange={ ( newLevel ) =>
-							setAttributes( { level: newLevel, tagName: '' } )
-						}
-					/>
+					{/* <HeadingLevelDropdown
+						value={level}
+						options={levelOptions}
+						onChange={(selected) => {
+							if ( selected && selected.startsWith && selected.startsWith( 'h' ) ) {
+								const parsed = parseInt(selected.substr(1), 10);
+								const currentLevel = isNaN( parsed ) ? level : parsed;
+								setAttributes( { level: currentLevel, tagName: 'h'+ currentLevel } );
+							} else {
+								setAttributes( { tagName: selected } );
+							}
+						}}
+					/> */}
 					<AlignmentControl
 						value={ textAlign }
 						onChange={ ( nextAlign ) => {
@@ -113,44 +150,15 @@ function MegaFieldEdit( {
 			) }
 			<InspectorControls>
 				<PanelBody title={ __( 'Meta Field Settings' ) } initialOpen={ true }>
-					<SelectControl
-						label={ __( 'Meta Field Type' ) }
-						value={ '' }
-						options={[
-							{ label: '', value: '-' },
-							{ label: 'Options', value: 'options' },
-							{ label: 'Post Meta', value: 'post_meta' }
-						] }
-						onChange={ ( next ) => {
-							// If user picked an hN, sync level and clear tagName so headings use `level`.
-							// if ( next && next.startsWith && next.startsWith( 'h' ) ) {
-							// 	const parsed = parseInt( next.substr( 1 ), 10 );
-							// 	setAttributes( { level: isNaN( parsed ) ? level : parsed, tagName: '' } );
-							// } else {
-							// 	setAttributes( { tagName: next } );
-							// }
-						} }
-					/>
-					<SelectControl
-						label={ __( 'Field Provider' ) }
-						value={ '' }
-						options={[
-							{ label: '', value: '-' },
-							{ label: 'ACF', value: 'acf' },
-							{ label: 'Default', value: 'default' },
-							{ label: 'Meta Box', value: 'metabox' },
-							{ label: 'Pods', value: 'pods' },
-							{ label: 'Carbon Field', value: 'carbon_field' }
-						] }
-						onChange={ ( next ) => {
-							// If user picked an hN, sync level and clear tagName so headings use `level`.
-							// if ( next && next.startsWith && next.startsWith( 'h' ) ) {
-							// 	const parsed = parseInt( next.substr( 1 ), 10 );
-							// 	setAttributes( { level: isNaN( parsed ) ? level : parsed, tagName: '' } );
-							// } else {
-							// 	setAttributes( { tagName: next } );
-							// }
-						} }
+					<MetaFieldSelector
+						value={ attributes.metaKey || '' }
+						metaFieldType={ attributes.metaFieldType || 'post_meta' }
+						postType={ attributes.postType || 'post' }
+						onChange={ ( next ) => setAttributes( { metaKey: next } ) }
+						onTypeChange={ ( nextType ) => setAttributes( { metaFieldType: nextType } ) }
+						onPostTypeChange={ ( nextPostType ) => setAttributes( { postType: nextPostType } ) }
+						attributes={ attributes }
+						setAttributes={ setAttributes }
 					/>
 					<SelectControl
 						label={ __( 'HTML tag' ) }
@@ -166,13 +174,14 @@ function MegaFieldEdit( {
 							{ label: 'Div', value: 'div' },
 							{ label: 'Span', value: 'span' },
 						] }
-						onChange={ ( next ) => {
-							// If user picked an hN, sync level and clear tagName so headings use `level`.
-							if ( next && next.startsWith && next.startsWith( 'h' ) ) {
-								const parsed = parseInt( next.substr( 1 ), 10 );
-								setAttributes( { level: isNaN( parsed ) ? level : parsed, tagName: '' } );
+						onChange={(selected) => {
+								// If user picked an hN, sync level and clear tagName so headings use `level`.
+							if ( selected && selected.startsWith && selected.startsWith( 'h' ) ) {
+								const parsed = parseInt(selected.substr(1), 10);
+								const currentLevel = isNaN( parsed ) ? level : parsed;
+								setAttributes( { level: currentLevel, tagName: 'h'+ currentLevel } );
 							} else {
-								setAttributes( { tagName: next } );
+								setAttributes( { tagName: selected } );
 							}
 						} }
 					/>

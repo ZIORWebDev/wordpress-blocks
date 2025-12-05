@@ -7,6 +7,7 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production && wp-scripts build",
         "watch": "cross-env NODE_ENV=development && wp-scripts start",
+        "test": "cross-env NODE_ENV=development && wp-scripts test",
         "package": "rm -f $npm_package_name.zip && mkdir -p $npm_package_name && rsync -av --exclude='.git*' --exclude='node_modules/' --exclude='/src/' --exclude='/tests/' --exclude='/ci/' --exclude='/tools/' --exclude='.stylelintignore' --exclude='.editorconfig' --exclude='eslint.config.js' --exclude='playwright.config.js' --exclude='webpack.config.js' --exclude='*.log' --exclude='*.yml' --exclude='*.md' --exclude='/package.json' --exclude='/.cursorrc.json' --exclude='*.Identifier' --exclude='*.lock' --exclude='*.zip' --exclude=$npm_package_name --exclude='phpcs.xml' ./ $npm_package_name/ && zip -r $npm_package_name.zip $npm_package_name && rm -rf $npm_package_name"
     },
     "devDependencies": {
@@ -35,8 +36,5 @@
         "terser-webpack-plugin": "^5.3.11",
         "webpack": "^5.97.1",
         "webpack-cli": "^6.0.1"
-    },
-    "dependencies": {
-        "@wordpress/core-data": "^7.35.0"
     }
 }

@@ -13,9 +13,9 @@ const { privateApis: blocksPrivateApis } = wp.blocks;
 import initBlock from '../../utils/init-block';
 // import deprecated from './deprecated';
 import edit from './edit';
-import metadata from '../../../php/blocks/meta-field/block.json';
+import metadata from '../../../php/blocks/MetaField/block.json';
 import save from './save';
-import transforms from './transforms';
+// import transforms from './transforms';
 // import variations from './variations';
 // import { unlock } from '../lock-unlock';
 
@@ -61,7 +61,7 @@ export const settings = {
 				  );
 		}
 	},
-	transforms,
+	// transforms,
 	// deprecated,
 	merge( attributes, attributesToMerge ) {
 		return {

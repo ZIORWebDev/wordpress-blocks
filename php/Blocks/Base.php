@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Base Block
  */
-abstract class BaseBlock {
+abstract class Base {
 
 	/**
 	 * The name of the block.
@@ -69,8 +69,8 @@ abstract class BaseBlock {
 	 * @param \WP_REST_Request $request The REST request.
 	 * @return bool
 	 */
-	public function set_permission( $request ) {
-		return current_user_can( 'edit_posts' );
+	public function get_permission( $request ) {
+		return wp_verify_nonce( $request->get_header('X-WP-Nonce'), 'wp_rest' );
 	}
 
 	/**

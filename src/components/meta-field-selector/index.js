@@ -1,49 +1,108 @@
 const { ComboboxControl, SelectControl } = wp.components;
-const { useState, useEffect, useCallback } = wp.element;
+const { useState, useEffect, useCallback, useMemo } = wp.element;
 const apiFetch = wp.apiFetch;
 const { select } = wp.data;
+const { __ } = wp.i18n;
 
-const { debounce } = window.lodash;
+// Safe debounce implementation
+const debounce = (() => {
+    if (typeof window !== 'undefined') {
+        if (window.wp?.lodash?.debounce) return window.wp.lodash.debounce;
+        if (window.lodash?.debounce) return window.lodash.debounce;
+        if (window._?.debounce) return window._.debounce;
+    }
+    return (func, wait = 0) => {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    };
+})();
 
-export default function MetaFieldSelector() {
-    const [metaFieldType, setMetaFieldType] = useState('post_meta');
-    const [postType, setPostType] = useState('post');
-    const [metaKey, setMetaKey] = useState('');
+export default function MetaFieldSelector({
+    value = '',
+    onChange = () => {},
+    onTypeChange = () => {},
+    attributes = {},
+    setAttributes = () => {},
+    metaFieldType: propMetaFieldType = 'post_meta',
+}) {
+    const [metaFieldType, setMetaFieldType] = useState(propMetaFieldType || 'post_meta');
+    const [metaKey, setMetaKey] = useState(value || '');
     const [options, setOptions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Set current post type on editor load
+    // --- Sync props with internal state ---
     useEffect(() => {
-        const currentPost = select('core/editor').getCurrentPost();
-        if (currentPost) setPostType(currentPost.type);
-    }, []);
+        if (propMetaFieldType && propMetaFieldType !== metaFieldType) setMetaFieldType(propMetaFieldType);
+        if (value !== undefined && value !== metaKey) setMetaKey(value || '');
+    }, [propMetaFieldType, value]);
 
-    // Debounced fetch function
+    // --- Notify parent ---
+    useEffect(() => onChange(metaKey), [metaKey, onChange]);
+    useEffect(() => onTypeChange(metaFieldType), [metaFieldType, onTypeChange]);
+
+    // --- Debounced meta key search ---
     const fetchOptions = useCallback(
         debounce((search) => {
+            const provider = attributes.fieldProvider || '';
             apiFetch({
-                path: `/wordpress-blocks/v1/meta-keys?type=${metaFieldType}&post_type=${postType}&search=${search}`,
-            }).then((results) => {
-                setOptions(results.map((key) => ({ label: key, value: key })));
-            });
-        }, 300), // 300ms debounce
-        [metaFieldType, postType]
+                path: `/wordpress-blocks/v1/meta-keys?type=${metaFieldType}&provider=${provider}&search=${search}`,
+                headers: { 'X-WP-Nonce': wpApiSettings.nonce },
+            })
+                .then((results) => setOptions(results.map((key) => ({ label: key, value: key }))))
+                .catch(() => setOptions([]));
+        }, 300),
+        [metaFieldType, attributes.fieldProvider]
     );
 
-    // Trigger fetch when search term changes
+    useEffect(() => fetchOptions(searchTerm), [searchTerm, fetchOptions]);
+
+    // --- Memoized displayed options ---
+    const displayedOptions = useMemo(() => {
+        if (!metaKey) return options;
+        return options.some((o) => o.value === metaKey)
+            ? options
+            : [{ label: metaKey, value: metaKey }, ...options];
+    }, [options, metaKey]);
+
+    // --- Debounced fetch of meta value ---
+    const fetchMetaValue = useCallback(
+        debounce(async (key, fieldType, provider) => {
+            if (!key) return;
+
+            // Get current post ID from editor store
+            const currentPost = select('core/editor')?.getCurrentPost();
+            const postId = currentPost?.id || 0;
+
+            try {
+                const response = await apiFetch({
+                    path: `/wordpress-blocks/v1/meta-value?type=${fieldType}&key=${key}&post_id=${postId}&provider=${provider}`,
+                    headers: { 'X-WP-Nonce': wpApiSettings.nonce },
+                });
+                if (response?.value) setAttributes({ content: response.value });
+            } catch {
+                setAttributes({ content: '' });
+            }
+        }, 300),
+        [setAttributes]
+    );
+
     useEffect(() => {
-        fetchOptions(searchTerm);
-    }, [searchTerm, fetchOptions]);
+        if (!metaKey) return;
+        fetchMetaValue(metaKey, metaFieldType, attributes.fieldProvider || '');
+    }, [metaKey, metaFieldType, attributes.fieldProvider, fetchMetaValue]);
 
     return (
         <>
-            {/* Meta Field Type Dropdown */}
+            {/* Meta Field Type */}
             <SelectControl
-                label="Meta Field Type"
+                label={__('Meta Field Type')}
                 value={metaFieldType}
                 options={[
-                    { label: 'Post Meta', value: 'post_meta' },
-                    { label: 'Options', value: 'options' },
+                    { label: __('Post Meta'), value: 'post_meta' },
+                    { label: __('Options'), value: 'options' },
                 ]}
                 onChange={(value) => {
                     setMetaFieldType(value);
@@ -52,14 +111,28 @@ export default function MetaFieldSelector() {
                 }}
             />
 
-            {/* Meta Key Combobox */}
+            {/* Meta Key */}
             <ComboboxControl
-                label="Meta Key"
+                label={__('Meta Key')}
                 value={metaKey}
-                options={options}
-                onChange={(val) => setMetaKey(val)}
-                onFilterValueChange={(val) => setSearchTerm(val)}
-                placeholder="Type to search meta keys..."
+                options={displayedOptions}
+                onChange={setMetaKey}
+                onFilterValueChange={setSearchTerm}
+                placeholder={__('Type to search meta keys...')}
+            />
+
+            {/* Field Provider */}
+            <SelectControl
+                label={__('Field Provider')}
+                value={attributes.fieldProvider || ''}
+                options={[
+                    { label: '', value: '' },
+                    { label: 'ACF', value: 'acf' },
+                    { label: 'Meta Box', value: 'metabox' },
+                    { label: 'Pods', value: 'pods' },
+                    { label: 'Carbon Field', value: 'carbon_field' },
+                ]}
+                onChange={(selected) => setAttributes({ fieldProvider: selected })}
             />
         </>
     );

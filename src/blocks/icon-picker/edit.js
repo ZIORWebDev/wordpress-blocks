@@ -178,7 +178,6 @@ export function IconPickerEdit(props) {
 				<ToolbarBlockInserter
 					rootClientId={clientId}
 					label="Change Icon"
-					// onSelectOrClose={() => console.log('Block inserted or inserter closed')}
 				/>
 			</BlockControls>
 			<InspectorControls>
