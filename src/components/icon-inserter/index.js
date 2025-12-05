@@ -10,9 +10,6 @@ const { ToolbarButton, Icon } = wp.components;
 // wp.blockEditor
 const { Inserter } = wp.blockEditor;
 
-// wp.icons
-import { brush } from '@wordpress/icons';
-
 // wp.i18n
 const { __ } = wp.i18n;
 
@@ -28,7 +25,7 @@ const { __ } = wp.i18n;
 export default function ToolbarBlockInserter({
     rootClientId,
     label = __('Add block'),
-    icon = brush,
+    icon = 'admin-appearance',
     onSelectOrClose,
 }) {
     const buttonRef = useRef();

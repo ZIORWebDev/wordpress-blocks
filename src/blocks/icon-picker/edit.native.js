@@ -2,16 +2,14 @@
  * External dependencies
  */
 import { View } from 'react-native';
+
 /**
- * WordPress dependencies
+ * WordPress dependencies (global wp object)
  */
-import {
-	InnerBlocks,
-	store as blockEditorStore,
-} from '@wordpress/block-editor';
-import { withDispatch, withSelect } from '@wordpress/data';
-import { useRef, useEffect, useState } from '@wordpress/element';
-import { compose, usePreferredColorSchemeStyle } from '@wordpress/compose';
+const { InnerBlocks, store: blockEditorStore } = wp.blockEditor;
+const { withDispatch, withSelect } = wp.data;
+const { useRef, useEffect, useState } = wp.element;
+const { compose, usePreferredColorSchemeStyle } = wp.compose;
 
 /**
  * Internal dependencies

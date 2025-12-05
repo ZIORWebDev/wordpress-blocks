@@ -15,7 +15,6 @@ const {
 	RichText,
 	useBlockProps,
 	store: blockEditorStore,
-	HeadingLevelDropdown,
 	useBlockEditingMode,
 } = wp.blockEditor;
 const { InspectorControls } = wp.blockEditor;
@@ -127,19 +126,6 @@ function MegaFieldEdit( {
 		<>
 			{ blockEditingMode === 'default' && (
 				<BlockControls group="block">
-					{/* <HeadingLevelDropdown
-						value={level}
-						options={levelOptions}
-						onChange={(selected) => {
-							if ( selected && selected.startsWith && selected.startsWith( 'h' ) ) {
-								const parsed = parseInt(selected.substr(1), 10);
-								const currentLevel = isNaN( parsed ) ? level : parsed;
-								setAttributes( { level: currentLevel, tagName: 'h'+ currentLevel } );
-							} else {
-								setAttributes( { tagName: selected } );
-							}
-						}}
-					/> */}
 					<AlignmentControl
 						value={ textAlign }
 						onChange={ ( nextAlign ) => {

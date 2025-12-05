@@ -1,9 +1,6 @@
 /**
  * WordPress dependencies
  */
-/* WordPress dependencies (use global `wp` instead of module imports) */
-import { heading as icon } from '@wordpress/icons';
-
 const { __, sprintf } = wp.i18n;
 const { privateApis: blocksPrivateApis } = wp.blocks;
 
@@ -11,22 +8,16 @@ const { privateApis: blocksPrivateApis } = wp.blocks;
  * Internal dependencies
  */
 import initBlock from '../../utils/init-block';
-// import deprecated from './deprecated';
 import edit from './edit';
 import metadata from '../../../php/blocks/MetaField/block.json';
 import save from './save';
-// import transforms from './transforms';
-// import variations from './variations';
-// import { unlock } from '../lock-unlock';
-
-// const { fieldsKey, formKey } = unlock( blocksPrivateApis );
 
 const { name } = metadata;
 
 export { metadata, name };
-console.log("metadata", metadata);
+
 export const settings = {
-	icon,
+	icon: 'admin-customizer',
 	example: {
 		attributes: {
 			content: __( 'Code is Poetry' ),
@@ -74,18 +65,5 @@ export const settings = {
 	save,
 	// variations,
 };
-
-if ( window.__experimentalContentOnlyInspectorFields ) {
-	// settings[ fieldsKey ] = [
-	// 	{
-	// 		id: 'content',
-	// 		label: __( 'Content' ),
-	// 		type: 'richtext',
-	// 	},
-	// ];
-	// settings[ formKey ] = {
-	// 	fields: [ 'content' ],
-	// };
-}
 
 export const init = () => initBlock( { name, metadata, settings } );

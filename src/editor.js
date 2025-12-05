@@ -8,7 +8,7 @@ const getAllBlocks = () => {
 	const blocks = [
 		Icon,
 		IconPicker,
-		// IconList
+		// IconList,
 		MetaField
 	];
 

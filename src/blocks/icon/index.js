@@ -4,7 +4,6 @@
 const { 
 	i18n: { __ }
 } = wp;
-import { widget as icon } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -20,7 +19,7 @@ const { name } = metadata;
 export { metadata, name };
 
 export const settings = {
-	icon,
+	icon: 'color-picker',
 	edit,
 	// save,
 	variations,

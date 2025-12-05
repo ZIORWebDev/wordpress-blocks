@@ -4,23 +4,16 @@
 import { View, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
 
 /**
- * WordPress dependencies
+ * WordPress dependencies (global wp object)
  */
-import {
-	BlockControls,
-	store as blockEditorStore,
-} from '@wordpress/block-editor';
-import { useEffect, useState, useRef, useCallback } from '@wordpress/element';
-import {
-	ToolbarGroup,
-	ToolbarButton,
-	LinkSettingsNavigation,
-} from '@wordpress/components';
-import { compose } from '@wordpress/compose';
-import { __, sprintf } from '@wordpress/i18n';
-import { link, Icon } from '@wordpress/icons';
-import { withSelect } from '@wordpress/data';
-import { store as blocksStore } from '@wordpress/blocks';
+const { BlockControls, store: blockEditorStore } = wp.blockEditor;
+const { useEffect, useState, useRef, useCallback } = wp.element;
+const { ToolbarGroup, ToolbarButton, LinkSettingsNavigation } = wp.components;
+const { compose } = wp.compose;
+const { __, sprintf } = wp.i18n;
+import { Icon } from '@wordpress/icons';
+const { withSelect } = wp.data;
+const { store: blocksStore } = wp.blocks;
 
 /**
  * Internal dependencies
@@ -151,7 +144,7 @@ const IconEdit = ( {
 									__( 'Add link to %s' ),
 									iconLinkName
 								) }
-								icon={ link }
+								icon={ 'admin-links' }
 								onClick={ onOpenSettingsSheet }
 								isActive={ url }
 							/>

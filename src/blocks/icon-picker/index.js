@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { tool as icon } from '@wordpress/icons';
-
-/**
  * Internal dependencies
  */
 import initBlock from '../../utils/init-block';
@@ -11,8 +6,7 @@ import deprecated from './deprecated';
 import edit from './edit';
 import metadata from '../../../php/blocks/IconPicker/block.json';
 import save from './save';
-console.log("metadata", metadata);
-console.log("icon", icon);
+
 const { name } = metadata;
 
 export { metadata, name };
@@ -43,7 +37,7 @@ export const settings = {
 			},
 		],
 	},
-	icon,
+	icon: 'admin-appearance',
 	edit,
 	save,
 	deprecated,

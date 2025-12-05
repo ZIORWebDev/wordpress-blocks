@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { tool as icon } from '@wordpress/icons';
-
-/**
  * Internal dependencies
  */
 import initBlock from '../../utils/init-block';
@@ -31,7 +26,7 @@ export const settings = {
 			},
 		],
 	},
-	icon,
+	icon: 'editor-ul',
 	edit,
 	save,
 	deprecated,

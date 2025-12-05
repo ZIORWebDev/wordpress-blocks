@@ -45,9 +45,6 @@ const { useMergeRefs } = wp.compose;
 // i18n
 const { __ } = wp.i18n;
 
-// Icons
-import { keyboardReturn } from '@wordpress/icons';
-
 // Blocks
 const { store: blocksStore } = wp.blocks;
 
@@ -107,7 +104,7 @@ const IconLinkURLPopover = ( {
 						suffix={
 							<InputControlSuffixWrapper variant="control">
 								<Button
-									icon={ keyboardReturn }
+									icon={ 'arrow-right-alt2' }
 									label={ __( 'Apply' ) }
 									type="submit"
 									size="small"

@@ -112,15 +112,27 @@ export default function MetaFieldSelector({
             />
 
             {/* Meta Key */}
-            <ComboboxControl
+            {/* <ComboboxControl
                 label={__('Meta Key')}
                 value={metaKey}
                 options={displayedOptions}
                 onChange={setMetaKey}
                 onFilterValueChange={setSearchTerm}
                 placeholder={__('Type to search meta keys...')}
-            />
-
+            /> */}
+            <div className="components-base-control">
+                <ComboboxControl
+                    label={__('Meta Key')}
+                    value={metaKey}
+                    options={displayedOptions}
+                    onChange={setMetaKey}
+                    onFilterValueChange={setSearchTerm}
+                    placeholder={__('Type to search meta keys...')}
+                />
+                <p className="components-base-control__help">
+                    {__('Only choose meta keys safe for public display. Avoid private values such as user data, tokens, or license keys.')}
+                </p>
+            </div>
             {/* Field Provider */}
             <SelectControl
                 label={__('Field Provider')}

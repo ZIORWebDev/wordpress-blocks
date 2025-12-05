@@ -518,6 +518,7 @@ class Block extends Blocks\Base {
 		);
 
 		$meta_value = $this->get_meta_value( $args );
+		$meta_value = $this->normalize_value( $meta_value );
 
 		return rest_ensure_response( array( 'value' => $meta_value ) );
 	}
@@ -693,11 +694,17 @@ class Block extends Blocks\Base {
 				return implode( ', ', $value );
 			}
 
-			return wp_json_encode( $value );
+			/**
+			 * When the value is nested array, return empty string as we cannot render it.
+			 */
+			return '';
 		}
 
+		/**
+		 * When the value is object, return empty string as we cannot render it.
+		 */
 		if ( is_object( $value ) ) {
-			return wp_json_encode( $value );
+			return '';
 		}
 
 		return $value;

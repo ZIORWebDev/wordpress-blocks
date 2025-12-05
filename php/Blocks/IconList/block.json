@@ -77,21 +77,6 @@
 		},
 		"contentRole": true
 	},
-	"styles": [
-		{
-			"name": "default",
-			"label": "Default",
-			"isDefault": true
-		},
-		{
-			"name": "logos-only",
-			"label": "Logos Only"
-		},
-		{
-			"name": "pill-shape",
-			"label": "Pill Shape"
-		}
-	],
 	"editorStyle": "wp-block-ziorwebdev-icon-list-editor",
 	"style": "wp-block-ziorwebdev-icon-list"
 }
