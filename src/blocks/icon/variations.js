@@ -9,14 +9,20 @@ const { getBlockVariations, registerBlockVariation } = wp.blocks;
 /**
  * Internal dependencies
  */
-import { ChainIcon } from './icons';
+import { ChainIcon, UpworkIcon } from './icons';
 
 const variations = [
   {
     name: 'chain',
     attributes: { service: 'chain' },
-    title: _x('Chain', 'icon block variation name'),
+    title: _x('Chain', 'wordpress-blocks'),
     icon: ChainIcon,
+  },
+  {
+    name: 'upwork',
+    attributes: { service: 'upwork' },
+    title: _x('Upwork', 'wordpress-blocks'),
+    icon: UpworkIcon,
   },
 ];
 

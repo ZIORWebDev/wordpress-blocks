@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { Path, SVG } from '@wordpress/primitives';
+const { SVG, Path } = wp.primitives;
 
 export const ChainIcon = () => (
   <SVG width="24" height="24" viewBox="0 0 24 24" version="1.1">
