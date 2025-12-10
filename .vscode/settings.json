@@ -17,5 +17,6 @@
 		"editor.defaultFormatter": "valeryanm.vscode-phpsab"
 	},
 	"phpsab.snifferMode": "onType",
-	"phpsab.standard": "WordPress"
+	"phpsab.standard": "WordPress",
+	"phpsab.snifferEnable": false
 }

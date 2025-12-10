@@ -24,18 +24,19 @@ final class Load {
 
 	/**
 	 * Class constructor.
-	 * 
 	 */
 	public function __construct() {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_blocks_script' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
 
 		Blocks::get_instance();
+
+		$asda = array( 'asdasd', 'asdasds' );
 	}
 
 	/**
 	 * Enqueue blocks script
-	 * 
+	 *
 	 * @return void
 	 */
 	public function enqueue_blocks_script() {
@@ -53,8 +54,8 @@ final class Load {
 			$dependencies[] = 'wp-edit-widgets';
 		}
 
-		$vendor_js        = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/vendors.min.js';
-		$block_editor_js  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.js';
+		$vendor_js       = plugin_dir_url( __DIR__ ) . 'dist/vendors.min.js';
+		$block_editor_js = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.js';
 
 		// Enqueue vendor JS
 		wp_enqueue_script(
@@ -72,8 +73,8 @@ final class Load {
 			null
 		);
 
-		$block_style_css  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/main.min.css';
-		$block_editor_css = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.css';
+		$block_style_css  = plugin_dir_url( __DIR__ ) . 'dist/blocks/main.min.css';
+		$block_editor_css = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css';
 
 		wp_enqueue_style(
 			'ziorwebdev-wordpress-blocks-editor',
@@ -93,12 +94,12 @@ final class Load {
 
 	/**
 	 * Enqueue blocks styles
-	 * 
+	 *
 	 * @return void
 	 */
 	public function enqueue_frontend_styles() {
-		$block_style_css  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/main.min.css';
-		$block_editor_css = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.css';
+		$block_style_css  = plugin_dir_url( __DIR__ ) . 'dist/blocks/main.min.css';
+		$block_editor_css = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css';
 
 		wp_enqueue_style(
 			'ziorwebdev-wordpress-blocks-editor',
