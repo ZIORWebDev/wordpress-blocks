@@ -37,7 +37,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Renders the `ziorwebdev/icon` block on server.
 	 *
-	 * @since 5.4.0
+	 * @since 1.0.0
 	 *
 	 * @param Array    $attributes The block attributes.
 	 * @param String   $content    InnerBlocks content of the Block.
@@ -47,11 +47,9 @@ class Block extends Blocks\Base {
 	 */
 	public function render( $attributes, $content, $block ) {
 		$open_in_new_tab = isset( $block->context['openInNewTab'] ) ? $block->context['openInNewTab'] : false;
-
 		$text = ! empty( $attributes['label'] ) ? trim( $attributes['label'] ) : '';
-
 		$service     = isset( $attributes['service'] ) ? $attributes['service'] : 'Icon';
-		$url         = isset( $attributes['url'] ) ? $attributes['url'] : false;
+		$url         = isset( $block->context['iconUrl'] ) ? $block->context['iconUrl'] : false;
 		$text        = $text ? $text : $this->get_name( $service );
 		$rel         = isset( $attributes['rel'] ) ? $attributes['rel'] : '';
 		$show_labels = array_key_exists( 'showLabels', $block->context ) ? $block->context['showLabels'] : false;
@@ -81,6 +79,10 @@ class Block extends Blocks\Base {
 		);
 
 		$content  = '<span ' . $wrapper_attributes . '>';
+		
+		/**
+		 * TODO: Fix the styling of the icon even without the achor tag.
+		 */
 		$content .= '<a ';
 
 		if ( ! empty( $url ) ) {
@@ -110,7 +112,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Returns the SVG for icon.
 	 *
-	 * @since 5.4.0
+	 * @since 1.0.0
 	 *
 	 * @param string $service The service icon.
 	 *
@@ -129,7 +131,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Returns the brand name for icon.
 	 *
-	 * @since 5.4.0
+	 * @since 1.0.0
 	 *
 	 * @param string $service The service icon.
 	 *
@@ -148,7 +150,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Returns the SVG for icon.
 	 *
-	 * @since 5.4.0
+	 * @since 1.0.0
 	 *
 	 * @param string $service The service slug to extract data from.
 	 * @param string $field The field ('name', 'icon', etc) to extract for a service.
@@ -425,6 +427,39 @@ class Block extends Blocks\Base {
 		}
 
 		return ' ' . implode( ' ', $classes );
+	}
+
+	/**
+	 * Inject parent icon-picker attributes into child icon context.
+	 *
+	 * @param array $context      The current block context.
+	 * @param array $parsed_block The parsed block array.
+	 * @param object $parent_block The parent block object.
+	 *
+	 * @return array Modified block context.
+	 */
+	public function inject_parent_context( $context, $parsed_block, $parent_block ) {
+		// Only apply to the child block.
+		if ( ! isset( $parsed_block['blockName'] ) || 'ziorwebdev/icon' !== $parsed_block['blockName'] ) {
+			return $context;
+		}
+
+		// Ensure parent exists and is icon-picker.
+		if ( ! isset( $parent_block->parsed_block['blockName'] ) 
+			|| 'ziorwebdev/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
+			return $context;
+		}
+
+		$parent_attrs = $parent_block->parsed_block['attrs'] ?? [];
+
+		// Pass parent attributes into child context.
+		foreach ( [ 'iconUrl', 'iconColorValue', 'iconBackgroundColorValue', 'showLabels', 'size', 'openInNewTab' ] as $key ) {
+			if ( isset( $parent_attrs[ $key ] ) ) {
+				$context[ $key ] = $parent_attrs[ $key ];
+			}
+		}
+
+		return $context;
 	}
 
 	/**

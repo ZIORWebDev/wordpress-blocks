@@ -1,1 +1,749 @@
-.wp-block-ziorwebdev-icon-picker{background:none;box-sizing:border-box;margin-left:0;padding-left:0;padding-right:0;text-indent:0}.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a,.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a:hover{border-bottom:0;box-shadow:none;text-decoration:none}.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon svg{height:1em;width:1em}.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon span:not(.screen-reader-text){font-size:.65em;margin-left:.5em;margin-right:.5em}.wp-block-ziorwebdev-icon-picker.has-small-icon-size{font-size:16px}.wp-block-ziorwebdev-icon-picker,.wp-block-ziorwebdev-icon-picker.has-normal-icon-size{font-size:24px}.wp-block-ziorwebdev-icon-picker.has-large-icon-size{font-size:36px}.wp-block-ziorwebdev-icon-picker.has-huge-icon-size{font-size:48px}.wp-block-ziorwebdev-icon-picker.aligncenter{display:flex;justify-content:center}.wp-block-ziorwebdev-icon-picker.alignright{justify-content:flex-end}.wp-block-ziorwebdev-icon{border-radius:9999px}@media not (prefers-reduced-motion){.wp-block-ziorwebdev-icon{transition:transform .1s ease}}.wp-block-ziorwebdev-icon{height:auto}.wp-block-ziorwebdev-icon a{align-items:center;display:flex;line-height:0}.wp-block-ziorwebdev-icon:hover{transform:scale(1.1)}.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon{display:inline-block;margin:0;padding:0}.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor,.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor svg,.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor:active,.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor:hover,.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor:visited{color:currentColor;fill:currentColor}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon{background-color:#f0f0f0;color:#444}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-amazon{background-color:#f90;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-bandcamp{background-color:#1ea0c3;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-behance{background-color:#0757fe;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-bluesky{background-color:#0a7aff;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-codepen{background-color:#1e1f26;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-deviantart{background-color:#02e49b;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-discord{background-color:#5865f2;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-dribbble{background-color:#e94c89;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-dropbox{background-color:#4280ff;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-etsy{background-color:#f45800;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-facebook{background-color:#0866ff;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-fivehundredpx{background-color:#000;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-flickr{background-color:#0461dd;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-foursquare{background-color:#e65678;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-github{background-color:#24292d;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-goodreads{background-color:#eceadd;color:#382110}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-google{background-color:#ea4434;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-gravatar{background-color:#1d4fc4;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-instagram{background-color:#f00075;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-lastfm{background-color:#e21b24;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-linkedin{background-color:#0d66c2;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-mastodon{background-color:#3288d4;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-medium{background-color:#000;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-meetup{background-color:#f6405f;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-patreon{background-color:#000;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-pinterest{background-color:#e60122;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-pocket{background-color:#ef4155;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-reddit{background-color:#ff4500;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-skype{background-color:#0478d7;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-snapchat{background-color:#fefc00;color:#fff;stroke:#000}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-soundcloud{background-color:#ff5600;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-spotify{background-color:#1bd760;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-telegram{background-color:#2aabee;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-threads{background-color:#000;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-tiktok{background-color:#000;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-tumblr{background-color:#011835;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-twitch{background-color:#6440a4;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-twitter{background-color:#1da1f2;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-vimeo{background-color:#1eb7ea;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-vk{background-color:#4680c2;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-wordpress{background-color:#3499cd;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-whatsapp{background-color:#25d366;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-x{background-color:#000;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-yelp{background-color:#d32422;color:#fff}:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-youtube{background-color:red;color:#fff}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon{background:none}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon svg{height:1.25em;width:1.25em}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-amazon{color:#f90}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-bandcamp{color:#1ea0c3}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-behance{color:#0757fe}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-bluesky{color:#0a7aff}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-codepen{color:#1e1f26}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-deviantart{color:#02e49b}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-discord{color:#5865f2}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-dribbble{color:#e94c89}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-dropbox{color:#4280ff}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-etsy{color:#f45800}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-facebook{color:#0866ff}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-fivehundredpx{color:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-flickr{color:#0461dd}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-foursquare{color:#e65678}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-github{color:#24292d}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-goodreads{color:#382110}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-google{color:#ea4434}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-gravatar{color:#1d4fc4}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-instagram{color:#f00075}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-lastfm{color:#e21b24}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-linkedin{color:#0d66c2}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-mastodon{color:#3288d4}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-medium{color:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-meetup{color:#f6405f}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-patreon{color:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-pinterest{color:#e60122}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-pocket{color:#ef4155}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-reddit{color:#ff4500}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-skype{color:#0478d7}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-snapchat{color:#fff;stroke:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-soundcloud{color:#ff5600}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-spotify{color:#1bd760}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-telegram{color:#2aabee}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-threads{color:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-tiktok{color:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-tumblr{color:#011835}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-twitch{color:#6440a4}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-twitter{color:#1da1f2}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-vimeo{color:#1eb7ea}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-vk{color:#4680c2}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-whatsapp{color:#25d366}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-wordpress{color:#3499cd}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-x{color:#000}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-yelp{color:#d32422}:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-youtube{color:red}.wp-block-ziorwebdev-icon-picker.is-style-pill-shape .wp-ziorwebdev-icon{width:auto}:root :where(.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a){padding:.25em}:root :where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only .wp-ziorwebdev-icon a){padding:0}:root :where(.wp-block-ziorwebdev-icon-picker.is-style-pill-shape .wp-ziorwebdev-icon a){padding-left:.6666666667em;padding-right:.6666666667em}.wp-block-ziorwebdev-icon-picker:not(.has-icon-color):not(.has-icon-background-color) .wp-ziorwebdev-icon-snapchat .wp-block-ziorwebdev-icon-label{color:#000}:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media(-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+/*!*****************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/style.scss ***!
+  \*****************************************************************************************************************************************************************/
+.wp-block-ziorwebdev-icon-picker {
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+  text-indent: 0;
+  margin-left: 0;
+  background: none;
+}
+.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a,
+.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a:hover {
+  text-decoration: none;
+  border-bottom: 0;
+  box-shadow: none;
+}
+.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon svg {
+  width: 1em;
+  height: 1em;
+}
+.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon span:not(.screen-reader-text) {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  font-size: 0.65em;
+}
+.wp-block-ziorwebdev-icon-picker.has-small-icon-size {
+  font-size: 16px;
+}
+.wp-block-ziorwebdev-icon-picker, .wp-block-ziorwebdev-icon-picker.has-normal-icon-size {
+  font-size: 24px;
+}
+.wp-block-ziorwebdev-icon-picker.has-large-icon-size {
+  font-size: 36px;
+}
+.wp-block-ziorwebdev-icon-picker.has-huge-icon-size {
+  font-size: 48px;
+}
+.wp-block-ziorwebdev-icon-picker.aligncenter {
+  justify-content: center;
+  display: flex;
+}
+.wp-block-ziorwebdev-icon-picker.alignright {
+  justify-content: flex-end;
+}
+
+.wp-block-ziorwebdev-icon {
+  /* display: block; */
+  border-radius: 9999px;
+}
+@media not (prefers-reduced-motion) {
+  .wp-block-ziorwebdev-icon {
+    transition: transform 0.1s ease;
+  }
+}
+.wp-block-ziorwebdev-icon {
+  height: auto;
+}
+.wp-block-ziorwebdev-icon a {
+  align-items: center;
+  display: flex;
+  line-height: 0;
+}
+.wp-block-ziorwebdev-icon:hover {
+  transform: scale(1.1);
+}
+
+.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor, .wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor:hover, .wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor:active, .wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor:visited,
+.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon .wp-block-ziorwebdev-icon-anchor svg {
+  color: currentColor;
+  fill: currentColor;
+}
+
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon {
+  background-color: #f0f0f0;
+  color: #444;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-amazon {
+  background-color: #f90;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-bandcamp {
+  background-color: #1ea0c3;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-behance {
+  background-color: #0757fe;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-bluesky {
+  background-color: #0a7aff;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-codepen {
+  background-color: #1e1f26;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-deviantart {
+  background-color: #02e49b;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-discord {
+  background-color: #5865f2;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-dribbble {
+  background-color: #e94c89;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-dropbox {
+  background-color: #4280ff;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-etsy {
+  background-color: #f45800;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-facebook {
+  background-color: #0866ff;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-fivehundredpx {
+  background-color: #000;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-flickr {
+  background-color: #0461dd;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-foursquare {
+  background-color: #e65678;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-github {
+  background-color: #24292d;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-goodreads {
+  background-color: #eceadd;
+  color: #382110;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-google {
+  background-color: #ea4434;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-gravatar {
+  background-color: #1d4fc4;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-instagram {
+  background-color: #f00075;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-lastfm {
+  background-color: #e21b24;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-linkedin {
+  background-color: #0d66c2;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-mastodon {
+  background-color: #3288d4;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-medium {
+  background-color: #000;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-meetup {
+  background-color: #f6405f;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-patreon {
+  background-color: #000;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-pinterest {
+  background-color: #e60122;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-pocket {
+  background-color: #ef4155;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-reddit {
+  background-color: #ff4500;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-skype {
+  background-color: #0478d7;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-snapchat {
+  background-color: #fefc00;
+  color: #fff;
+  stroke: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-soundcloud {
+  background-color: #ff5600;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-spotify {
+  background-color: #1bd760;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-telegram {
+  background-color: #2aabee;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-threads {
+  background-color: #000;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-tiktok {
+  background-color: #000;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-tumblr {
+  background-color: #011835;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-twitch {
+  background-color: #6440a4;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-twitter {
+  background-color: #1da1f2;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-vimeo {
+  background-color: #1eb7ea;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-vk {
+  background-color: #4680c2;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-wordpress {
+  background-color: #3499cd;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-whatsapp {
+  background-color: #25d366;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-x {
+  background-color: #000;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-yelp {
+  background-color: #d32422;
+  color: #fff;
+}
+:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) .wp-ziorwebdev-icon-youtube {
+  background-color: #f00;
+  color: #fff;
+}
+
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon {
+  background: none;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon svg {
+  width: 1.25em;
+  height: 1.25em;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-amazon {
+  color: #f90;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-bandcamp {
+  color: #1ea0c3;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-behance {
+  color: #0757fe;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-bluesky {
+  color: #0a7aff;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-codepen {
+  color: #1e1f26;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-deviantart {
+  color: #02e49b;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-discord {
+  color: #5865f2;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-dribbble {
+  color: #e94c89;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-dropbox {
+  color: #4280ff;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-etsy {
+  color: #f45800;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-facebook {
+  color: #0866ff;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-fivehundredpx {
+  color: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-flickr {
+  color: #0461dd;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-foursquare {
+  color: #e65678;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-github {
+  color: #24292d;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-goodreads {
+  color: #382110;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-google {
+  color: #ea4434;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-gravatar {
+  color: #1d4fc4;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-instagram {
+  color: #f00075;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-lastfm {
+  color: #e21b24;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-linkedin {
+  color: #0d66c2;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-mastodon {
+  color: #3288d4;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-medium {
+  color: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-meetup {
+  color: #f6405f;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-patreon {
+  color: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-pinterest {
+  color: #e60122;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-pocket {
+  color: #ef4155;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-reddit {
+  color: #ff4500;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-skype {
+  color: #0478d7;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-snapchat {
+  color: #fff;
+  stroke: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-soundcloud {
+  color: #ff5600;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-spotify {
+  color: #1bd760;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-telegram {
+  color: #2aabee;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-threads {
+  color: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-tiktok {
+  color: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-tumblr {
+  color: #011835;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-twitch {
+  color: #6440a4;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-twitter {
+  color: #1da1f2;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-vimeo {
+  color: #1eb7ea;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-vk {
+  color: #4680c2;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-whatsapp {
+  color: #25d366;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-wordpress {
+  color: #3499cd;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-x {
+  color: #000;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-yelp {
+  color: #d32422;
+}
+:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) .wp-ziorwebdev-icon-youtube {
+  color: #f00;
+}
+
+.wp-block-ziorwebdev-icon-picker.is-style-pill-shape .wp-ziorwebdev-icon {
+  width: auto;
+}
+
+:root :where(.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a) {
+  padding: 0.25em;
+}
+
+:root :where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only .wp-ziorwebdev-icon a) {
+  padding: 0;
+}
+
+:root :where(.wp-block-ziorwebdev-icon-picker.is-style-pill-shape .wp-ziorwebdev-icon a) {
+  padding-left: 0.6666666667em;
+  padding-right: 0.6666666667em;
+}
+
+.wp-block-ziorwebdev-icon-picker:not(.has-icon-color):not(.has-icon-background-color) .wp-ziorwebdev-icon-snapchat .wp-block-ziorwebdev-icon-label {
+  color: #000;
+}
+
+/**
+ * Colors
+ */
+/**
+ * Typography
+ */
+/**
+ * SCSS Variables.
+ *
+ * Please use variables from this sheet to ensure consistency across the UI.
+ * Don't add to this sheet unless you're pretty sure the value will be reused in many places.
+ * For example, don't add rules to this sheet that affect block visuals. It's purely for UI.
+ */
+/**
+ * Fonts & basic variables.
+ */
+/**
+ * Typography
+ */
+/**
+ * Grid System.
+ * https://make.wordpress.org/design/2019/10/31/proposal-a-consistent-spacing-system-for-wordpress/
+ */
+/**
+ * Radius scale.
+ */
+/**
+ * Elevation scale.
+ */
+/**
+ * Dimensions.
+ */
+/**
+ * Mobile specific styles
+ */
+/**
+ * Editor styles.
+ */
+/**
+ * Block & Editor UI.
+ */
+/**
+ * Block paddings.
+ */
+/**
+ * React Native specific.
+ * These variables do not appear to be used anywhere else.
+ */
+/**
+ * Breakpoints & Media Queries
+ */
+/**
+*  Converts a hex value into the rgb equivalent.
+*
+* @param {string} hex - the hexadecimal value to convert
+* @return {string} comma separated rgb values
+*/
+/**
+ * Long content fade mixin
+ *
+ * Creates a fading overlay to signify that the content is longer
+ * than the space allows.
+ */
+/**
+ * Breakpoint mixins
+ */
+/**
+ * Focus styles.
+ */
+/**
+ * Applies editor left position to the selector passed as argument
+ */
+/**
+ * Styles that are reused verbatim in a few places
+ */
+/**
+ * Allows users to opt-out of animations via OS-level preferences.
+ */
+/**
+ * Reset default styles for JavaScript UI based pages.
+ * This is a WP-admin agnostic reset
+ */
+/**
+ * Reset the WP Admin page styles for Gutenberg-like pages.
+ */
+:root {
+  --wp-block-synced-color: #7a00df;
+  --wp-block-synced-color--rgb: 122, 0, 223;
+  --wp-bound-block-color: var(--wp-block-synced-color);
+  --wp-editor-canvas-background: #ddd;
+  --wp-admin-theme-color: #007cba;
+  --wp-admin-theme-color--rgb: 0, 124, 186;
+  --wp-admin-theme-color-darker-10: rgb(0, 107, 160.5);
+  --wp-admin-theme-color-darker-10--rgb: 0, 107, 160.5;
+  --wp-admin-theme-color-darker-20: #005a87;
+  --wp-admin-theme-color-darker-20--rgb: 0, 90, 135;
+  --wp-admin-border-width-focus: 2px;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  :root {
+    --wp-admin-border-width-focus: 1.5px;
+  }
+}
+
+/**
+ * Element styles.
+ */
+.wp-element-button {
+  cursor: pointer;
+}
+
+:root .has-very-light-gray-background-color {
+  background-color: #eee;
+}
+:root .has-very-dark-gray-background-color {
+  background-color: #313131;
+}
+:root .has-very-light-gray-color {
+  color: #eee;
+}
+:root .has-very-dark-gray-color {
+  color: #313131;
+}
+:root {
+  /* stylelint-disable @stylistic/function-comma-space-after -- We can not use spacing because of WP multi site kses rule. */
+}
+:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background {
+  background: linear-gradient(135deg, rgb(0, 208, 132) 0%, rgb(6, 147, 227) 100%);
+}
+:root .has-purple-crush-gradient-background {
+  background: linear-gradient(135deg, rgb(52, 226, 228) 0%, rgb(71, 33, 251) 50%, rgb(171, 29, 254) 100%);
+}
+:root .has-hazy-dawn-gradient-background {
+  background: linear-gradient(135deg, rgb(250, 172, 168) 0%, rgb(218, 208, 236) 100%);
+}
+:root .has-subdued-olive-gradient-background {
+  background: linear-gradient(135deg, rgb(250, 250, 225) 0%, rgb(103, 166, 113) 100%);
+}
+:root .has-atomic-cream-gradient-background {
+  background: linear-gradient(135deg, rgb(253, 215, 154) 0%, rgb(0, 74, 89) 100%);
+}
+:root .has-nightshade-gradient-background {
+  background: linear-gradient(135deg, rgb(51, 9, 104) 0%, rgb(49, 205, 207) 100%);
+}
+:root .has-midnight-gradient-background {
+  background: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 100%);
+}
+:root {
+  /* stylelint-enable @stylistic/function-comma-space-after */
+  --wp--preset--font-size--normal: 16px;
+  --wp--preset--font-size--huge: 42px;
+}
+
+.has-regular-font-size {
+  font-size: 1em;
+}
+
+.has-larger-font-size {
+  font-size: 2.625em;
+}
+
+.has-normal-font-size {
+  font-size: var(--wp--preset--font-size--normal);
+}
+
+.has-huge-font-size {
+  font-size: var(--wp--preset--font-size--huge);
+}
+
+:root .has-text-align-center {
+  text-align: center;
+}
+
+:root .has-text-align-left {
+  /*rtl:ignore*/
+  text-align: left;
+}
+
+:root .has-text-align-right {
+  /*rtl:ignore*/
+  text-align: right;
+}
+
+.has-fit-text {
+  white-space: nowrap !important;
+}
+
+#end-resizable-editor-section {
+  display: none;
+}
+
+.aligncenter {
+  clear: both;
+}
+
+.items-justified-left {
+  justify-content: flex-start;
+}
+
+.items-justified-center {
+  justify-content: center;
+}
+
+.items-justified-right {
+  justify-content: flex-end;
+}
+
+.items-justified-space-between {
+  justify-content: space-between;
+}
+
+.screen-reader-text {
+  border: 0;
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+  background-color: #ddd;
+  clip-path: none;
+  color: #444;
+  display: block;
+  font-size: 1em;
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000;
+}
+
+/**
+ * The following provide a simple means of applying a default border style when
+ * a user first makes a selection in the border block support panel.
+ * This prevents issues such as where the user could set a border width
+ * and see no border due there being no border style set.
+ *
+ * This is intended to be removed once intelligent defaults can be set while
+ * making border selections via the block support.
+ *
+ * See: https://github.com/WordPress/gutenberg/pull/33743
+ */
+html :where(.has-border-color) {
+  border-style: solid;
+}
+
+html :where([style*=border-top-color]) {
+  border-top-style: solid;
+}
+
+html :where([style*=border-right-color]) {
+  border-right-style: solid;
+}
+
+html :where([style*=border-bottom-color]) {
+  border-bottom-style: solid;
+}
+
+html :where([style*=border-left-color]) {
+  border-left-style: solid;
+}
+
+html :where([style*=border-width]) {
+  border-style: solid;
+}
+
+html :where([style*=border-top-width]) {
+  border-top-style: solid;
+}
+
+html :where([style*=border-right-width]) {
+  border-right-style: solid;
+}
+
+html :where([style*=border-bottom-width]) {
+  border-bottom-style: solid;
+}
+
+html :where([style*=border-left-width]) {
+  border-left-style: solid;
+}
+
+/**
+ * Provide baseline responsiveness for images.
+ */
+html :where(img[class*=wp-image-]) {
+  height: auto;
+  max-width: 100%;
+}
+
+/**
+ * Reset user agent styles for figure element margins.
+ */
+:where(figure) {
+  margin: 0 0 1em 0;
+}
+
+html :where(.is-position-sticky) {
+  /* stylelint-disable length-zero-no-unit -- 0px is set explicitly so that it can be used in a calc value. */
+  --wp-admin--admin-bar--position-offset: var(--wp-admin--admin-bar--height, 0px);
+  /* stylelint-enable length-zero-no-unit */
+}
+
+@media screen and (max-width: 600px) {
+  html :where(.is-position-sticky) {
+    /* stylelint-disable length-zero-no-unit -- 0px is set explicitly so that it can be used in a calc value. */
+    --wp-admin--admin-bar--position-offset: 0px;
+    /* stylelint-enable length-zero-no-unit */
+  }
+}
+
+/*# sourceMappingURL=main.min.css.map*/

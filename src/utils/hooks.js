@@ -24,16 +24,16 @@ const { useViewportMatch } = wp.compose;
  * @param {string} name     Entity name.
  * @param {string} recordId Record's id.
  */
-export function useCanEditEntity( kind, name, recordId ) {
-	return useSelect(
-		( select ) =>
-			select( coreStore ).canUser( 'update', {
-				kind,
-				name,
-				id: recordId,
-			} ),
-		[ kind, name, recordId ]
-	);
+export function useCanEditEntity(kind, name, recordId) {
+  return useSelect(
+    (select) =>
+      select(coreStore).canUser('update', {
+        kind,
+        name,
+        id: recordId,
+      }),
+    [kind, name, recordId]
+  );
 }
 
 /**
@@ -45,81 +45,78 @@ export function useCanEditEntity( kind, name, recordId ) {
  * @param {Function} args.onChange     Function called when the media is uploaded.
  * @param {Function} args.onError      Function called when an error happens.
  */
-export function useUploadMediaFromBlobURL( args = {} ) {
-	const latestArgsRef = useRef( args );
-	const hasUploadStartedRef = useRef( false );
-	const { getSettings } = useSelect( blockEditorStore );
+export function useUploadMediaFromBlobURL(args = {}) {
+  const latestArgsRef = useRef(args);
+  const hasUploadStartedRef = useRef(false);
+  const { getSettings } = useSelect(blockEditorStore);
 
-	useLayoutEffect( () => {
-		latestArgsRef.current = args;
-	} );
+  useLayoutEffect(() => {
+    latestArgsRef.current = args;
+  });
 
-	useEffect( () => {
-		// Uploading is a special effect that can't be canceled via the cleanup method.
-		// The extra check avoids duplicate uploads in development mode (React.StrictMode).
-		if ( hasUploadStartedRef.current ) {
-			return;
-		}
-		if (
-			! latestArgsRef.current.url ||
-			! isBlobURL( latestArgsRef.current.url )
-		) {
-			return;
-		}
+  useEffect(() => {
+    // Uploading is a special effect that can't be canceled via the cleanup method.
+    // The extra check avoids duplicate uploads in development mode (React.StrictMode).
+    if (hasUploadStartedRef.current) {
+      return;
+    }
+    if (!latestArgsRef.current.url || !isBlobURL(latestArgsRef.current.url)) {
+      return;
+    }
 
-		const file = getBlobByURL( latestArgsRef.current.url );
-		if ( ! file ) {
-			return;
-		}
+    const file = getBlobByURL(latestArgsRef.current.url);
+    if (!file) {
+      return;
+    }
 
-		const { url, allowedTypes, onChange, onError } = latestArgsRef.current;
-		const { mediaUpload } = getSettings();
+    const { url, allowedTypes, onChange, onError } = latestArgsRef.current;
+    const { mediaUpload } = getSettings();
 
-		if ( ! mediaUpload ) {
-			return;
-		}
+    if (!mediaUpload) {
+      return;
+    }
 
-		hasUploadStartedRef.current = true;
+    hasUploadStartedRef.current = true;
 
-		mediaUpload( {
-			filesList: [ file ],
-			allowedTypes,
-			onFileChange: ( [ media ] ) => {
-				if ( isBlobURL( media?.url ) ) {
-					return;
-				}
+    mediaUpload({
+      filesList: [file],
+      allowedTypes,
+      onFileChange: ([media]) => {
+        if (isBlobURL(media?.url)) {
+          return;
+        }
 
-				revokeBlobURL( url );
-				onChange( media );
-				hasUploadStartedRef.current = false;
-			},
-			onError: ( message ) => {
-				revokeBlobURL( url );
-				onError( message );
-				hasUploadStartedRef.current = false;
-			},
-		} );
-	}, [ getSettings ] );
+        revokeBlobURL(url);
+        onChange(media);
+        hasUploadStartedRef.current = false;
+      },
+      onError: (message) => {
+        revokeBlobURL(url);
+        onError(message);
+        hasUploadStartedRef.current = false;
+      },
+    });
+  }, [getSettings]);
 }
 
 export function useDefaultAvatar() {
-	const { avatarURL: defaultAvatarUrl } = useSelect( ( select ) => {
-		const { getSettings } = select( blockEditorStore );
-		const { __experimentalDiscussionSettings } = getSettings();
-		return __experimentalDiscussionSettings;
-	} );
-	return defaultAvatarUrl;
+  const { avatarURL: defaultAvatarUrl } = useSelect((select) => {
+    const { getSettings } = select(blockEditorStore);
+    const { __experimentalDiscussionSettings } = getSettings();
+    return __experimentalDiscussionSettings;
+  });
+  return defaultAvatarUrl;
 }
 
 export function useToolsPanelDropdownMenuProps() {
-	const isMobile = useViewportMatch( 'medium', '<' );
-	return ! isMobile
-		? {
-				popoverProps: {
-					placement: 'left-start',
-					// For non-mobile, inner sidebar width (248px) - button width (24px) - border (1px) + padding (16px) + spacing (20px)
-					offset: 259,
-				},
-		  }
-		: {};
+  const isMobile = useViewportMatch('medium', '<');
+  return !isMobile
+    ? {
+        popoverProps: {
+          placement: 'left-start',
+          // For non-mobile, inner sidebar width (248px) - button width (24px) - border (1px) + padding (16px) + spacing (20px)
+          offset: 259,
+        },
+      }
+    : {};
 }

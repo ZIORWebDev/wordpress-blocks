@@ -7,7 +7,7 @@
  */
 namespace ZiorWebDev\WordPressBlocks;
 
-use ZiorWebDev\WordPressBlocks\Integration;
+// use ZiorWebDev\WordPressBlocks\Integration;
 /**
  * Class Blocks
  *
@@ -38,10 +38,11 @@ final class Blocks {
 	 */
 	public function __construct() {
 		Blocks\Icon\Block::get_instance();
+		Blocks\IconPicker\Block::get_instance();
+		Blocks\IconListItem\Block::get_instance();
+		Blocks\IconList\Block::get_instance();
 		Blocks\MetaField\Block::get_instance();
-		Controllers\CarbonFields::get_instance();
 
-		add_filter( 'render_block_context', array( $this, 'inject_parent_context' ), 10, 3 );
 		add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
 	}
 
@@ -64,39 +65,6 @@ final class Blocks {
 				$route['args']
 			);
 		}
-	}
-
-	/**
-	 * Inject parent icon-picker attributes into child icon context.
-	 *
-	 * @param array $context      The current block context.
-	 * @param array $parsed_block The parsed block array.
-	 * @param object $parent_block The parent block object.
-	 *
-	 * @return array Modified block context.
-	 */
-	public function inject_parent_context( $context, $parsed_block, $parent_block ) {
-		// Only apply to the child block.
-		if ( ! isset( $parsed_block['blockName'] ) || 'ziorwebdev/icon' !== $parsed_block['blockName'] ) {
-			return $context;
-		}
-
-		// Ensure parent exists and is icon-picker.
-		if ( ! isset( $parent_block->parsed_block['blockName'] ) 
-			|| 'ziorwebdev/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
-			return $context;
-		}
-
-		$parent_attrs = $parent_block->parsed_block['attrs'] ?? [];
-
-		// Pass parent attributes into child context.
-		foreach ( [ 'iconColorValue', 'iconBackgroundColorValue', 'showLabels', 'size' ] as $key ) {
-			if ( isset( $parent_attrs[ $key ] ) ) {
-				$context[ $key ] = $parent_attrs[ $key ];
-			}
-		}
-
-		return $context;
 	}
 
 	/**

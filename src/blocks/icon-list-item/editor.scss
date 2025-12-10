@@ -1,0 +1,19 @@
+.wp-block-ziorwebdev-icon-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px; // spacing between icon and content
+
+    >.wp-block-ziorwebdev-icon-picker,
+    >.block-editor-rich-text__editable {
+        flex-shrink: 0; // prevent shrinking
+    }
+
+    >.block-editor-rich-text__editable {
+        flex-grow: 1; // take remaining horizontal space
+
+        p {
+            margin: 0;
+            white-space: normal;
+        }
+    }
+}

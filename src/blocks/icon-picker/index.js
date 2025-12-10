@@ -12,35 +12,35 @@ const { name } = metadata;
 export { metadata, name };
 
 export const settings = {
-	example: {
-		innerBlocks: [
-			{
-				name: 'ziorwebdev/icon',
-				attributes: {
-					service: 'wordpress',
-					url: 'https://wordpress.org',
-				},
-			},
-			{
-				name: 'ziorwebdev/icon',
-				attributes: {
-					service: 'facebook',
-					url: 'https://www.facebook.com/WordPress/',
-				},
-			},
-			{
-				name: 'ziorwebdev/icon',
-				attributes: {
-					service: 'twitter',
-					url: 'https://twitter.com/WordPress',
-				},
-			},
-		],
-	},
-	icon: 'admin-appearance',
-	edit,
-	save,
-	deprecated,
+  example: {
+    innerBlocks: [
+      {
+        name: 'ziorwebdev/icon',
+        attributes: {
+          service: 'wordpress',
+          url: 'https://wordpress.org',
+        },
+      },
+      {
+        name: 'ziorwebdev/icon',
+        attributes: {
+          service: 'facebook',
+          url: 'https://www.facebook.com/WordPress/',
+        },
+      },
+      {
+        name: 'ziorwebdev/icon',
+        attributes: {
+          service: 'twitter',
+          url: 'https://twitter.com/WordPress',
+        },
+      },
+    ],
+  },
+  icon: 'admin-customizer',
+  edit,
+  save,
+  deprecated,
 };
 
-export const init = () => initBlock( { name, metadata, settings } );
+export const init = () => initBlock({ name, metadata, settings });

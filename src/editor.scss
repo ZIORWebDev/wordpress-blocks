@@ -1,12 +1,14 @@
 @use "@wordpress/base-styles/mixins" as *;
 @use "./blocks/icon/editor.scss" as *;
 @use "./blocks/icon-picker/editor.scss" as *;
+@use "./blocks/icon-list-item/editor.scss" as *;
+@use "./blocks/icon-list/editor.scss" as *;
 @use "./editor-elements.scss" as *;
 
 :root .editor-styles-wrapper {
-    @include background-colors-deprecated();
-    @include foreground-colors-deprecated();
-    @include gradient-colors-deprecated();
+  @include background-colors-deprecated();
+  @include foreground-colors-deprecated();
+  @include gradient-colors-deprecated();
 }
 
 // Font sizes (not used now, kept because of backward compatibility).
@@ -14,11 +16,11 @@
 // The reason we add the editor class wrapper here is
 // to avoid enqueuing the classes twice: here and in ./editor.scss
 :where(.editor-styles-wrapper) .has-regular-font-size {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 :where(.editor-styles-wrapper) .has-larger-font-size {
-    font-size: 42px;
+  font-size: 42px;
 }
 
 /**
@@ -30,5 +32,5 @@
 
 // Remove the browser default border for iframe in Custom HTML block, Embed block, etc.
 :where(.editor-styles-wrapper) iframe:not([frameborder]) {
-    border: 0;
+  border: 0;
 }

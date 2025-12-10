@@ -2,9 +2,9 @@
  * Element styles for the editor
  */
 .wp-element-button {
-	cursor: revert;
+  cursor: revert;
 
-	&[role="textbox"] {
-		cursor: text;
-	}
+  &[role="textbox"] {
+    cursor: text;
+  }
 }

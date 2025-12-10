@@ -1,0 +1,33 @@
+{
+  "plugins": ["@prettier/plugin-php"],
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "semi": true,
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": "*.php",
+      "options": {
+        "parser": "php",
+        "tabWidth": 4,
+        "useTabs": true
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "options": {
+        "tabWidth": 2,
+        "singleQuote": true,
+        "semi": true
+      }
+    },
+    {
+      "files": ["*.css", "*.scss", "*.sass"],
+      "options": {
+        "tabWidth": 2,
+        "singleQuote": false
+      }
+    }
+  ]
+}

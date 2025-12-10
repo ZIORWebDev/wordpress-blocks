@@ -1,289 +1,83 @@
-/**
- * External dependencies
- */
-import clsx from 'clsx';
-
-/**
- * WordPress dependencies
- */
-// wp.element
-const { useEffect } = wp.element;
-
-// wp.blockEditor
-const {
-	useInnerBlocksProps,
-	useBlockProps,
-	InspectorControls,
-	ContrastChecker,
-	withColors,
-	__experimentalColorGradientSettingsDropdown: ColorGradientSettingsDropdown,
-	__experimentalUseMultipleOriginColorsAndGradients: useMultipleOriginColorsAndGradients,
-	store: blockEditorStore,
-} = wp.blockEditor;
-
-// wp.components
-const {
-	ToggleControl,
-	SelectControl,
-	__experimentalToolsPanel: ToolsPanel,
-	__experimentalToolsPanelItem: ToolsPanelItem,
-} = wp.components;
-
-// wp.i18n
 const { __ } = wp.i18n;
+const { useBlockProps, useInnerBlocksProps, InspectorControls } =
+  wp.blockEditor;
+const { createBlock } = wp.blocks;
+const { PanelBody, SelectControl } = wp.components;
 
-// wp.data
-const { useSelect } = wp.data;
+export default function IconListEdit({ attributes, setAttributes, clientId }) {
+  const { listType = 'ul' } = attributes;
 
-// wp.blockEditor
-const { BlockControls } = wp.blockEditor;
+  // Custom appender for the InnerBlocks
+  const IconListItemAppender = () => {
+    const handleAddItem = () => {
+      const iconPicker = createBlock('ziorwebdev/icon-picker');
+      const paragraph = createBlock('core/paragraph');
 
-/**
- * Internal dependencies
- */
-import { useToolsPanelDropdownMenuProps } from '../../utils/hooks';
-import ToolbarBlockInserter from '../../components/icon-inserter';
+      const listItem = createBlock('ziorwebdev/icon-list-item', {}, [
+        iconPicker,
+        paragraph,
+      ]);
 
-const sizeOptions = [
-	{ label: __( 'Default' ), value: '' },
-	{ label: __( 'Small' ), value: 'has-small-icon-size' },
-	{ label: __( 'Normal' ), value: 'has-normal-icon-size' },
-	{ label: __( 'Large' ), value: 'has-large-icon-size' },
-	{ label: __( 'Huge' ), value: 'has-huge-icon-size' },
-];
+      wp.data
+        .dispatch('core/block-editor')
+        .insertBlocks(listItem, undefined, clientId);
+    };
 
-export function IconListEdit(props) {
-	const {
-		clientId,
-		attributes,
-		iconBackgroundColor,
-		iconColor,
-		isSelected,
-		setAttributes,
-		setIconBackgroundColor,
-		setIconColor,
-	} = props;
+    return (
+      <button
+        type="button"
+        className="components-button components-icon-button"
+        onClick={handleAddItem}
+      >
+        {__('Add Item', 'wordpress-blocks')}
+      </button>
+    );
+  };
 
-	const {
-		iconBackgroundColorValue,
-		iconColorValue,
-		openInNewTab,
-		showLabels,
-		size,
-	} = attributes;
+  // Inspector Controls for list type
+  const inspectorControls = (
+    <InspectorControls>
+      <PanelBody
+        title={__('List Settings', 'wordpress-blocks')}
+        initialOpen={true}
+      >
+        <SelectControl
+          label={__('List Type', 'wordpress-blocks')}
+          value={listType}
+          options={[
+            { label: __('Unordered', 'wordpress-blocks'), value: 'ul' },
+            { label: __('Ordered', 'wordpress-blocks'), value: 'ol' },
+          ]}
+          onChange={(value) => setAttributes({ listType: value })}
+        />
+      </PanelBody>
+    </InspectorControls>
+  );
 
-	const { hasIcons, hasSelectedChild } = useSelect(
-		( select ) => {
-			const { getBlockCount, hasSelectedInnerBlock } =
-				select( blockEditorStore );
-			return {
-				hasIcons: getBlockCount( clientId ) > 0,
-				hasSelectedChild: hasSelectedInnerBlock( clientId ),
-			};
-		},
-		[ clientId ]
-	);
+  const blockProps = useBlockProps({ className: 'ziorweb-icon-list' });
+  const innerBlocksProps = useInnerBlocksProps(blockProps, {
+    template: [
+      [
+        'ziorwebdev/icon-list-item',
+        {},
+        [
+          ['ziorwebdev/icon-picker', {}],
+          ['core/paragraph', {}],
+        ],
+      ],
+    ],
+    templateLock: false,
+    __experimentalAppenderTagName: 'li',
+    renderAppender: IconListItemAppender,
+  });
 
-	const hasAnySelected = isSelected || hasSelectedChild;
+  // Render <ul> or <ol> based on listType
+  const ListTag = listType;
 
-	const logosOnly = attributes.className?.includes( 'is-style-logos-only' );
-
-	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
-
-	// Remove icon background color when logos only style is selected or
-	// restore it when any other style is selected.
-	useEffect( () => {
-		if ( logosOnly ) {
-			let restore;
-			setAttributes( ( prev ) => {
-				restore = {
-					iconBackgroundColor: prev.iconBackgroundColor,
-					iconBackgroundColorValue: prev.iconBackgroundColorValue,
-					customIconBackgroundColor: prev.customIconBackgroundColor,
-				};
-				return {
-					iconBackgroundColor: undefined,
-					iconBackgroundColorValue: undefined,
-					customIconBackgroundColor: undefined,
-				};
-			} );
-
-			return () => setAttributes( { ...restore } );
-		}
-	}, [ logosOnly, setAttributes ] );
-
-	// Fallback color values are used maintain selections in case switching
-	// themes and named colors in palette do not match.
-	const className = clsx( size, {
-		'has-visible-labels': showLabels,
-		'has-icon-color': iconColor.color || iconColorValue,
-		'has-icon-background-color':
-			iconBackgroundColor.color || iconBackgroundColorValue,
-	} );
-
-	const blockProps = useBlockProps({ className });
-	// useReplaceIconOnInsert(clientId);
-
-	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		template: [
-			[ 'ziorwebdev/icon-picker', {} ],
-			[ 'core/paragraph', { placeholder: __( 'Add content...' ) } ],
-		],
-		renderAppender: true,
-	} );
-
-	const colorSettings = [
-		{
-			// Use custom attribute as fallback to prevent loss of named color selection when
-			// switching themes to a new theme that does not have a matching named color.
-			value: iconColor.color || iconColorValue,
-			onChange: ( colorValue ) => {
-				setIconColor( colorValue );
-				setAttributes( { iconColorValue: colorValue } );
-			},
-			label: __( 'Icon color' ),
-			resetAllFilter: () => {
-				setIconColor( undefined );
-				setAttributes( { iconColorValue: undefined } );
-			},
-		},
-	];
-
-	if ( ! logosOnly ) {
-		colorSettings.push( {
-			// Use custom attribute as fallback to prevent loss of named color selection when
-			// switching themes to a new theme that does not have a matching named color.
-			value: iconBackgroundColor.color || iconBackgroundColorValue,
-			onChange: ( colorValue ) => {
-				setIconBackgroundColor( colorValue );
-				setAttributes( {
-					iconBackgroundColorValue: colorValue,
-				} );
-			},
-			label: __( 'Icon background' ),
-			resetAllFilter: () => {
-				setIconBackgroundColor( undefined );
-				setAttributes( { iconBackgroundColorValue: undefined } );
-			},
-		} );
-	}
-
-	const colorGradientSettings = useMultipleOriginColorsAndGradients();
-
-	return (
-		<>
-			<BlockControls>
-				<ToolbarBlockInserter
-					rootClientId={clientId}
-					label="Change Icon"
-				/>
-			</BlockControls>
-			<InspectorControls>
-				<ToolsPanel
-					label={ __( 'Settings' ) }
-					resetAll={ () => {
-						setAttributes( {
-							openInNewTab: false,
-							showLabels: false,
-							size: undefined,
-						} );
-					} }
-					dropdownMenuProps={ dropdownMenuProps }
-				>
-					<ToolsPanelItem
-						isShownByDefault
-						hasValue={ () => !! size }
-						label={ __( 'Icon size' ) }
-						onDeselect={ () =>
-							setAttributes( { size: undefined } )
-						}
-					>
-						<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							label={ __( 'Icon size' ) }
-							onChange={ ( newSize ) => {
-								setAttributes( {
-									size: newSize === '' ? undefined : newSize,
-								} );
-							} }
-							value={ size ?? '' }
-							options={ sizeOptions }
-						/>
-					</ToolsPanelItem>
-					<ToolsPanelItem
-						isShownByDefault
-						label={ __( 'Show text' ) }
-						hasValue={ () => !! showLabels }
-						onDeselect={ () =>
-							setAttributes( { showLabels: false } )
-						}
-					>
-						<ToggleControl
-							__nextHasNoMarginBottom
-							label={ __( 'Show text' ) }
-							checked={ showLabels }
-							onChange={ () =>
-								setAttributes( { showLabels: ! showLabels } )
-							}
-						/>
-					</ToolsPanelItem>
-					<ToolsPanelItem
-						isShownByDefault
-						label={ __( 'Open links in new tab' ) }
-						hasValue={ () => !! openInNewTab }
-						onDeselect={ () =>
-							setAttributes( { openInNewTab: false } )
-						}
-					>
-						<ToggleControl
-							__nextHasNoMarginBottom
-							label={ __( 'Open links in new tab' ) }
-							checked={ openInNewTab }
-							onChange={ () =>
-								setAttributes( {
-									openInNewTab: ! openInNewTab,
-								} )
-							}
-						/>
-					</ToolsPanelItem>
-				</ToolsPanel>
-			</InspectorControls>
-			{ colorGradientSettings.hasColorsOrGradients && (
-				<InspectorControls group="color">
-					{ colorSettings.map(
-						( { onChange, label, value, resetAllFilter } ) => (
-							<ColorGradientSettingsDropdown
-								key={ `icon-picker-color-${ label }` }
-								__experimentalIsRenderedInSidebar
-								settings={ [
-									{
-										colorValue: value,
-										label,
-										onColorChange: onChange,
-										isShownByDefault: true,
-										resetAllFilter,
-										enableAlpha: true,
-										clearable: true,
-									},
-								] }
-								panelId={ clientId }
-								{ ...colorGradientSettings }
-							/>
-						)
-					) }
-					{ ! logosOnly && (
-						<ContrastChecker
-							{ ...{
-								textColor: iconColorValue,
-								backgroundColor: iconBackgroundColorValue,
-							} }
-							isLargeText={ false }
-						/>
-					) }
-				</InspectorControls>
-			) }
-			<span {...innerBlocksProps} />
-		</>
-	);
+  return (
+    <>
+      {inspectorControls}
+      <ListTag {...innerBlocksProps} />
+    </>
+  );
 }

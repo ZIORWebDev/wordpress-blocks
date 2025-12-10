@@ -546,7 +546,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Renders the `ziorwebdev/meta-field` block on server.
 	 *
-	 * @since 5.4.0
+	 * @since 1.0.0
 	 *
 	 * @param Array    $attributes The block attributes.
 	 * @param String   $content    InnerBlocks content of the Block.

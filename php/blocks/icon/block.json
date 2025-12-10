@@ -10,10 +10,6 @@
 		"ziorwebdev/icon-picker"
 	],
 	"attributes": {
-		"url": {
-			"type": "string",
-			"role": "content"
-		},
 		"service": {
 			"type": "string"
 		},
@@ -31,9 +27,11 @@
 		"iconColor",
 		"iconColorValue",
 		"iconBackgroundColor",
-		"iconBackgroundColorValue"
+		"iconBackgroundColorValue",
+		"iconUrl"
 	],
 	"supports": {
+		"align": [],
 		"reusable": false,
 		"html": false,
 		"interactivity": {

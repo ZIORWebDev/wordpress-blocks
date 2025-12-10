@@ -1,117 +1,110 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
-	"name": "ziorwebdev/meta-field",
-	"title": "Meta Field",
-	"category": "widgets",
-	"description": "Display meta field value.",
-	"keywords": [
-		"meta",
-		"field",
-		"option"
-	],
-	"textdomain": "default",
-	"attributes": {
-		"textAlign": {
-			"type": "string"
-		},
-		"content": {
-			"type": "rich-text",
-			"source": "rich-text",
-			"selector": "h1,h2,h3,h4,h5,h6,p,div,span",
-			"role": "content"
-		},
-		"level": {
-			"type": "number",
-			"default": 2
-		},
-		"levelOptions": {
-			"type": "array"
-		},
-		"placeholder": {
-			"type": "string"
-		},
-		"tagName": {
-			"type": "string",
-			"default": "h2"
-		},
-		"postType": {
-			"type": "string",
-			"default": "page"
-		},
-		"metaKey": {
-			"type": "string",
-			"default": ""
-		},
-		"metaFieldType": {
-			"type": "string",
-			"default": "post_meta"
-		},
-		"fieldProvider": {
-			"type": "string",
-			"default": ""
-		},
-		"link": {
-			"type": "object",
-			"default": {
-				"href": "",
-				"target": "",
-				"rel": "",
-				"class": ""
-			}
-		}
-	},
-	"supports": {
-		"align": [
-			"wide",
-			"full"
-		],
-		"anchor": true,
-		"className": true,
-		"splitting": true,
-		"__experimentalBorder": {
-			"color": true,
-			"radius": true,
-			"style": true,
-			"width": true
-		},
-		"color": {
-			"gradients": true,
-			"link": true,
-			"__experimentalDefaultControls": {
-				"background": true,
-				"text": true
-			}
-		},
-		"spacing": {
-			"margin": true,
-			"padding": true,
-			"__experimentalDefaultControls": {
-				"margin": false,
-				"padding": false
-			}
-		},
-		"typography": {
-			"fontSize": true,
-			"lineHeight": true,
-			"__experimentalFontFamily": true,
-			"__experimentalFontStyle": true,
-			"__experimentalFontWeight": true,
-			"__experimentalLetterSpacing": true,
-			"__experimentalTextTransform": true,
-			"__experimentalTextDecoration": true,
-			"__experimentalWritingMode": true,
-			"fitText": true,
-			"__experimentalDefaultControls": {
-				"fontSize": true
-			}
-		},
-		"__unstablePasteTextInline": true,
-		"__experimentalSlashInserter": true,
-		"interactivity": {
-			"clientNavigation": true
-		}
-	},
-	"editorStyle": "wp-block-ziorwebdev-meta-field-editor",
-	"style": "wp-block-ziorwebdev-meta-field"
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ziorwebdev/meta-field",
+  "title": "Meta Field",
+  "category": "widgets",
+  "description": "Display meta field value.",
+  "keywords": ["meta", "field", "option"],
+  "textdomain": "default",
+  "attributes": {
+    "textAlign": {
+      "type": "string"
+    },
+    "content": {
+      "type": "rich-text",
+      "source": "rich-text",
+      "selector": "h1,h2,h3,h4,h5,h6,p,div,span",
+      "role": "content"
+    },
+    "level": {
+      "type": "number",
+      "default": 2
+    },
+    "levelOptions": {
+      "type": "array"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "tagName": {
+      "type": "string",
+      "default": "h2"
+    },
+    "postType": {
+      "type": "string",
+      "default": "page"
+    },
+    "metaKey": {
+      "type": "string",
+      "default": ""
+    },
+    "metaFieldType": {
+      "type": "string",
+      "default": "post_meta"
+    },
+    "fieldProvider": {
+      "type": "string",
+      "default": ""
+    },
+    "link": {
+      "type": "object",
+      "default": {
+        "href": "",
+        "target": "",
+        "rel": "",
+        "class": ""
+      }
+    }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "className": true,
+    "splitting": true,
+    "__experimentalBorder": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    },
+    "color": {
+      "gradients": true,
+      "link": true,
+      "__experimentalDefaultControls": {
+        "background": true,
+        "text": true
+      }
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "__experimentalDefaultControls": {
+        "margin": false,
+        "padding": false
+      }
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "__experimentalFontFamily": true,
+      "__experimentalFontStyle": true,
+      "__experimentalFontWeight": true,
+      "__experimentalLetterSpacing": true,
+      "__experimentalTextTransform": true,
+      "__experimentalTextDecoration": true,
+      "__experimentalWritingMode": true,
+      "fitText": true,
+      "__experimentalDefaultControls": {
+        "fontSize": true
+      }
+    },
+    "__unstablePasteTextInline": true,
+    "__experimentalSlashInserter": true,
+    "interactivity": {
+      "clientNavigation": true
+    }
+  },
+  "editorStyle": "wp-block-ziorwebdev-meta-field-editor",
+  "style": "wp-block-ziorwebdev-meta-field"
 }
