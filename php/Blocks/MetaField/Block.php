@@ -36,7 +36,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get option name by field ID.
-	 * 
+	 *
 	 * @param string $field_id Field ID.
 	 * @return string|null
 	 */
@@ -60,7 +60,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get pod name by field name.
-	 * 
+	 *
 	 * @param string $field_name Field name.
 	 * @return string|null
 	 */
@@ -80,7 +80,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Sanitize meta keys.
-	 * 
+	 *
 	 * @param array $meta_keys Meta keys.
 	 * @return array
 	 */
@@ -109,7 +109,7 @@ class Block extends Blocks\Base {
 	 * @return string
 	 */
 	private function wrap_with_href_tag( $value, $attributes ) {
-		$link = $attributes['link'] ?? [];
+		$link = $attributes['link'] ?? array();
 
 		$href = $link['href'] ?? '';
 
@@ -119,12 +119,12 @@ class Block extends Blocks\Base {
 		}
 
 		// Build attributes as an associative array
-		$attrs = [
-			'href'  => esc_url( $href ),
-			'target'=> $link['target'] ?? '',
-			'rel'   => $link['rel'] ?? '',
-			'class' => $link['class'] ?? '',
-		];
+		$attrs = array(
+			'href'   => esc_url( $href ),
+			'target' => $link['target'] ?? '',
+			'rel'    => $link['rel'] ?? '',
+			'class'  => $link['class'] ?? '',
+		);
 
 		// Filter out empty attributes
 		$attrs = array_filter( $attrs );
@@ -140,8 +140,39 @@ class Block extends Blocks\Base {
 	}
 
 	/**
+	 * Replace the deepest text node in the HTML with the given value.
+	 *
+	 * @param string $html Original HTML.
+	 * @param string $value Value to replace.
+	 * @return string Modified HTML.
+	 */
+	private function replace_text_node( $html, $value ) {
+		if ( trim( $html ) === '' ) {
+			return $html;
+		}
+
+		libxml_use_internal_errors( true );
+
+		$dom = new \DOMDocument( '1.0', 'UTF-8' );
+		$dom->loadHTML(
+			'<?xml encoding="utf-8" ?>' . $html,
+			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		);
+
+		$xpath = new \DOMXPath( $dom );
+
+		// Find the deepest text node
+		foreach ( $xpath->query( '//text()[normalize-space()]' ) as $text_node ) {
+			$text_node->nodeValue = esc_html( $value );
+			break;
+		}
+
+		return $dom->saveHTML();
+	}
+
+	/**
 	 * Get meta keys for post meta.
-	 * 
+	 *
 	 * @param string $search Search term.
 	 * @param string $post_type Post type.
 	 * @return array
@@ -152,7 +183,7 @@ class Block extends Blocks\Base {
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_limit', 15 );
+		$limit = absint( apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_limit', 15 ) );
 
 		// Get meta keys for the given post type
 		$query = $wpdb->prepare(
@@ -176,7 +207,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get meta keys for options.
-	 * 
+	 *
 	 * @param string $search Search term.
 	 * @return array
 	 */
@@ -202,16 +233,16 @@ class Block extends Blocks\Base {
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_limit', 15 );
+		$limit = absint( apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_limit', 15 ) );
 
 		// Build NOT LIKE SQL conditions
 		$not_like_sql = array();
 
 		foreach ( $excludes as $pattern ) {
-			$not_like_sql[] = $wpdb->prepare( "option_name NOT LIKE %s", $pattern );
+			$not_like_sql[] = $wpdb->prepare( 'option_name NOT LIKE %s', $pattern );
 		}
 
-		$not_like_sql = implode( ' AND ', $not_like_sql );
+		$where = implode( ' AND ', $not_like_sql );
 
 		// Add search filter
 		$search_like = '%' . $wpdb->esc_like( $search ) . '%';
@@ -220,7 +251,7 @@ class Block extends Blocks\Base {
 		$query = $wpdb->prepare(
 			"SELECT option_name
 			FROM {$wpdb->options}
-			WHERE {$not_like_sql}
+			WHERE {$where}
 			AND option_name LIKE %s
 			ORDER BY option_name ASC
 			LIMIT {$limit}",
@@ -262,7 +293,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get ACF option value.
-	 * 
+	 *
 	 * @param mixed  $option_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -285,7 +316,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get carbon field option value.
-	 * 
+	 *
 	 * @param mixed  $option_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -314,7 +345,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get metabox option value.
-	 * 
+	 *
 	 * @param mixed  $option_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -343,7 +374,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get pods option value.
-	 * 
+	 *
 	 * @param mixed  $option_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -373,7 +404,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get ACF postmeta value.
-	 * 
+	 *
 	 * @param mixed  $option_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -396,7 +427,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get carbon field postmeta value.
-	 * 
+	 *
 	 * @param mixed  $meta_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -425,7 +456,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get metabox postmeta value.
-	 * 
+	 *
 	 * @param mixed  $meta_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -445,7 +476,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get pods postmeta value.
-	 * 
+	 *
 	 * @param mixed  $meta_value Default option value.
 	 * @param string $meta_key Meta key.
 	 * @return mixed
@@ -466,7 +497,7 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Add REST API routes.
-	 * 
+	 *
 	 * @param array $routes Existing routes.
 	 * @return array
 	 */
@@ -477,8 +508,8 @@ class Block extends Blocks\Base {
 			'args'      => array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_meta_keys' ),
-				'permission_callback' => array( $this, 'get_permission' )
-			)
+				'permission_callback' => array( $this, 'get_permission' ),
+			),
 		);
 
 		$routes[] = array(
@@ -487,8 +518,8 @@ class Block extends Blocks\Base {
 			'args'      => array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_meta_value_callback' ),
-				'permission_callback' => array( $this, 'get_permission' )
-			)
+				'permission_callback' => array( $this, 'get_permission' ),
+			),
 		);
 
 		return $routes;
@@ -496,15 +527,15 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get meta value callback for REST API.
-	 * 
+	 *
 	 * @param \WP_REST_Request $request The REST request.
 	 * @return mixed
 	 */
 	public function get_meta_value_callback( $request ) {
-		$meta_key = $request->get_param('key') ?: '';
-		$type     = $request->get_param('type') ?: '';
-		$provider = $request->get_param('provider') ?: '';
-		$post_id  = $request->get_param('post_id') ?: '';
+		$meta_key = $request->get_param( 'key' ) ?: '';
+		$type     = $request->get_param( 'type' ) ?: '';
+		$provider = $request->get_param( 'provider' ) ?: '';
+		$post_id  = $request->get_param( 'post_id' ) ?: '';
 
 		if ( empty( $meta_key ) ) {
 			return rest_ensure_response( array( 'value' => '' ) );
@@ -525,13 +556,13 @@ class Block extends Blocks\Base {
 
 	/**
 	 * Get meta keys.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_meta_keys( $request ) {
-		$type      = $request->get_param('type') ?: 'post_meta';
-		$search    = $request->get_param('search') ?: '';
-		$post_type = $request->get_param('post_type') ?: 'page';
+		$type      = $request->get_param( 'type' ) ?: 'post_meta';
+		$search    = $request->get_param( 'search' ) ?: '';
+		$post_type = $request->get_param( 'post_type' ) ?: 'page';
 		$meta_keys = apply_filters(
 			"ziorwebdev_wordpress_blocks_meta_field_{$type}_keys",
 			array(),
@@ -563,7 +594,7 @@ class Block extends Blocks\Base {
 		}
 
 		$meta_value = $this->get_meta_value( $attributes );
-		$meta_value = apply_filters( "ziorwebdev_wordpress_blocks_meta_field_value", $meta_value, $meta_key, $attributes );
+		$meta_value = apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_value', $meta_value, $meta_key, $attributes );
 
 		/**
 		 * Filter specific meta key.
@@ -590,12 +621,9 @@ class Block extends Blocks\Base {
 		$sanitized_value = $this->wrap_with_href_tag( $sanitized_value, $attributes );
 
 		/**
-		 * Get classes and styles.
+		 * Preserve the content formatting, classes, and styles but replace the content with meta value.
 		 */
-		$classes = $this->get_classes( $attributes );
-		$styles  = $this->get_tyles( $attributes );
-
-		return $this->render_tag( $tag, $sanitized_value, $classes . $styles );
+		return $this->replace_text_node( $content, $sanitized_value );
 	}
 
 	/**
@@ -640,7 +668,7 @@ class Block extends Blocks\Base {
 		}
 
 		$post_id = get_the_ID();
-	
+
 		return $post_id ? (int) $post_id : null;
 	}
 
@@ -768,7 +796,7 @@ class Block extends Blocks\Base {
 	private function get_tyles( $attributes ) {
 		$inline_styles = array();
 
-		$convert_preset_var = static function( $val ) {
+		$convert_preset_var = static function ( $val ) {
 			if ( ! is_string( $val ) || $val === '' ) {
 				return '';
 			}

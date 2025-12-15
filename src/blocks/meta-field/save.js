@@ -21,7 +21,8 @@ export default function save({ attributes }) {
   // to the server render callback via block attributes.
   const dataAttrs = {
     className: className,
-    'data-link-url': (attributes?.link && attributes.link.url) || attributes?.url || '',
+    'data-link-url':
+      (attributes?.link && attributes.link.url) || attributes?.url || '',
   };
 
   return (
