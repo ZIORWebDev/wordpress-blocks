@@ -55,6 +55,10 @@
         "rel": "",
         "class": ""
       }
+    },
+    "showMetaSelector": {
+      "type": "boolean",
+      "default": true
     }
   },
   "supports": {

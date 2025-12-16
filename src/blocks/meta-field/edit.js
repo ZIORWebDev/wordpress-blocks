@@ -7,8 +7,8 @@ import clsx from 'clsx';
  * WordPress dependencies (use global `wp` instead of module imports)
  */
 const { __ } = wp.i18n;
-const { useEffect, Platform } = wp.element;
-const { useDispatch, useSelect } = wp.data;
+const { useEffect, Platform, useCallback } = wp.element;
+const { useDispatch, useSelect, select } = wp.data;
 const {
   AlignmentControl,
   BlockControls,
@@ -19,7 +19,7 @@ const {
 } = wp.blockEditor;
 const { InspectorControls } = wp.blockEditor;
 const { PanelBody, SelectControl } = wp.components;
-
+const apiFetch = wp.apiFetch;
 /**
  * Internal dependencies
  */
@@ -34,8 +34,18 @@ function MegaFieldEdit({
   style,
   clientId,
 }) {
-  const { textAlign, content, level, placeholder, anchor, tagName, link } =
-    attributes;
+  const {
+    textAlign,
+    content,
+    level,
+    placeholder,
+    anchor,
+    tagName,
+    link,
+    metaKey,
+    metaFieldType,
+    fieldProvider,
+  } = attributes;
   const effectiveTag = tagName && tagName.length ? tagName : 'h' + level;
   const blockProps = useBlockProps({
     className: clsx({
@@ -107,6 +117,34 @@ function MegaFieldEdit({
     };
   }
 
+  const fetchMetaValue = useCallback(
+    async (metaKey, metaFieldType, fieldProvider) => {
+      if (!metaKey) return;
+
+      const currentPost = select('core/editor')?.getCurrentPost();
+      const postId = currentPost?.id || 0;
+
+      try {
+        const response = await apiFetch({
+          path: `/wordpress-blocks/v1/meta-value?type=${metaFieldType}&key=${metaKey}&post_id=${postId}&provider=${fieldProvider}`,
+          headers: { 'X-WP-Nonce': wpApiSettings.nonce },
+        });
+
+        setAttributes({ content: response?.value ?? '' });
+        console.log('Fetched meta value:', response?.value ?? '');
+      } catch (error) {
+        console.error('Meta fetch failed:', error);
+        setAttributes({ content: '' });
+      }
+    },
+    [setAttributes],
+  );
+
+  useEffect(() => {
+    if (!metaKey) return;
+    fetchMetaValue(metaKey, metaFieldType, fieldProvider || '');
+  }, [metaKey, metaFieldType, fieldProvider, fetchMetaValue]);
+
   useEffect(() => {
     const linkAttrs = extractLinkAttributes(content);
     // Only update if different
@@ -132,22 +170,25 @@ function MegaFieldEdit({
           />
         </BlockControls>
       )}
+
       <InspectorControls>
         <PanelBody title={__('Meta Field Settings')} initialOpen={true}>
-          <MetaFieldSelector
-            value={attributes.metaKey || ''}
-            metaFieldType={attributes.metaFieldType || 'post_meta'}
-            postType={attributes.postType || 'post'}
-            onChange={(next) => setAttributes({ metaKey: next })}
-            onTypeChange={(nextType) =>
-              setAttributes({ metaFieldType: nextType })
-            }
-            onPostTypeChange={(nextPostType) =>
-              setAttributes({ postType: nextPostType })
-            }
-            attributes={attributes}
-            setAttributes={setAttributes}
-          />
+          {attributes.showMetaSelector && (
+            <MetaFieldSelector
+              value={attributes.metaKey || ''}
+              metaFieldType={attributes.metaFieldType || 'post_meta'}
+              postType={attributes.postType || 'post'}
+              onChange={(next) => setAttributes({ metaKey: next })}
+              onTypeChange={(nextType) =>
+                setAttributes({ metaFieldType: nextType })
+              }
+              onPostTypeChange={(nextPostType) =>
+                setAttributes({ postType: nextPostType })
+              }
+              attributes={attributes}
+              setAttributes={setAttributes}
+            />
+          )}
           <SelectControl
             label={__('HTML tag')}
             value={effectiveTag}
@@ -178,6 +219,7 @@ function MegaFieldEdit({
           />
         </PanelBody>
       </InspectorControls>
+
       <RichText
         identifier="content"
         tagName={effectiveTag}

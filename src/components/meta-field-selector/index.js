@@ -1,7 +1,6 @@
 const { ComboboxControl, SelectControl } = wp.components;
 const { useState, useEffect, useCallback, useMemo } = wp.element;
 const apiFetch = wp.apiFetch;
-const { select } = wp.data;
 const { __ } = wp.i18n;
 
 // Safe debounce implementation
@@ -46,12 +45,10 @@ export default function MetaFieldSelector({
   useEffect(() => onChange(metaKey), [metaKey, onChange]);
   useEffect(() => onTypeChange(metaFieldType), [metaFieldType, onTypeChange]);
 
-  // --- Debounced meta key search ---
   const fetchOptions = useCallback(
     debounce((search) => {
-      const provider = attributes.fieldProvider || '';
       apiFetch({
-        path: `/wordpress-blocks/v1/meta-keys?type=${metaFieldType}&provider=${provider}&search=${search}`,
+        path: `/wordpress-blocks/v1/meta-keys?type=${metaFieldType}&search=${search}`,
         headers: { 'X-WP-Nonce': wpApiSettings.nonce },
       })
         .then((results) =>
@@ -59,7 +56,7 @@ export default function MetaFieldSelector({
         )
         .catch(() => setOptions([]));
     }, 300),
-    [metaFieldType, attributes.fieldProvider],
+    [metaFieldType],
   );
 
   useEffect(() => fetchOptions(searchTerm), [searchTerm, fetchOptions]);
@@ -71,33 +68,6 @@ export default function MetaFieldSelector({
       ? options
       : [{ label: metaKey, value: metaKey }, ...options];
   }, [options, metaKey]);
-
-  // --- Debounced fetch of meta value ---
-  const fetchMetaValue = useCallback(
-    debounce(async (key, fieldType, provider) => {
-      if (!key) return;
-
-      // Get current post ID from editor store
-      const currentPost = select('core/editor')?.getCurrentPost();
-      const postId = currentPost?.id || 0;
-
-      try {
-        const response = await apiFetch({
-          path: `/wordpress-blocks/v1/meta-value?type=${fieldType}&key=${key}&post_id=${postId}&provider=${provider}`,
-          headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-        });
-        if (response?.value) setAttributes({ content: response.value });
-      } catch {
-        setAttributes({ content: '' });
-      }
-    }, 300),
-    [setAttributes],
-  );
-
-  useEffect(() => {
-    if (!metaKey) return;
-    fetchMetaValue(metaKey, metaFieldType, attributes.fieldProvider || '');
-  }, [metaKey, metaFieldType, attributes.fieldProvider, fetchMetaValue]);
 
   return (
     <>
