@@ -59,7 +59,7 @@ abstract class Base {
 
 	/**
 	 * Register the block.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function register() {
@@ -78,14 +78,14 @@ abstract class Base {
 	 * @return bool
 	 */
 	public function get_permission( $request ) {
-		return wp_verify_nonce( $request->get_header('X-WP-Nonce'), 'wp_rest' );
+		return wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'wp_rest' );
 	}
 
 	/**
 	 * Inject parent icon-picker attributes into child icon context.
 	 *
-	 * @param array $context      The current block context.
-	 * @param array $parsed_block The parsed block array.
+	 * @param array  $context      The current block context.
+	 * @param array  $parsed_block The parsed block array.
 	 * @param object $parent_block The parent block object.
 	 *
 	 * @return array Modified block context.
@@ -95,12 +95,12 @@ abstract class Base {
 	}
 
 	/**
-	* Render the block.
-	*
-	* @param array  $attributes Block attributes.
-	* @param string $content    Inner block HTML.
-	* @param array  $block      Block data.
-	* @return string
-	*/
+	 * Render the block.
+	 *
+	 * @param array  $attributes Block attributes.
+	 * @param string $content    Inner block HTML.
+	 * @param array  $block      Block data.
+	 * @return string
+	 */
 	abstract public function render( $attributes, $content, $block );
 }

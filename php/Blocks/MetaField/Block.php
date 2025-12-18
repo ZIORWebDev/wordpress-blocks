@@ -102,44 +102,6 @@ class Block extends Blocks\Base {
 	}
 
 	/**
-	 * Wrap value with href tag.
-	 *
-	 * @param string $value      Value to wrap.
-	 * @param array  $attributes Block attributes.
-	 * @return string
-	 */
-	private function wrap_with_href_tag( $value, $attributes ) {
-		$link = $attributes['link'] ?? array();
-
-		$href = $link['href'] ?? '';
-
-		// Nothing to do or avoid nesting anchors.
-		if ( empty( $href ) || strpos( $value, '<a' ) !== false ) {
-			return $value;
-		}
-
-		// Build attributes as an associative array
-		$attrs = array(
-			'href'   => esc_url( $href ),
-			'target' => $link['target'] ?? '',
-			'rel'    => $link['rel'] ?? '',
-			'class'  => $link['class'] ?? '',
-		);
-
-		// Filter out empty attributes
-		$attrs = array_filter( $attrs );
-
-		// Convert array to HTML attributes string
-		$attr_string = '';
-
-		foreach ( $attrs as $key => $val ) {
-			$attr_string .= sprintf( ' %s="%s"', $key, esc_attr( $val ) );
-		}
-
-		return '<a' . $attr_string . '>' . $value . '</a>';
-	}
-
-	/**
 	 * Replace the deepest text node in the HTML with the given value.
 	 *
 	 * @param string $html Original HTML.
@@ -151,23 +113,13 @@ class Block extends Blocks\Base {
 			return $html;
 		}
 
-		libxml_use_internal_errors( true );
-
-		$dom = new \DOMDocument( '1.0', 'UTF-8' );
-		$dom->loadHTML(
-			'<?xml encoding="utf-8" ?>' . $html,
-			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		return preg_replace_callback(
+			'/>([^<>]+)</',
+			function ( $matches ) use ( $value ) {
+				return '>' . $value . '<';
+			},
+			$html
 		);
-
-		$xpath = new \DOMXPath( $dom );
-
-		// Find the deepest text node
-		foreach ( $xpath->query( '//text()[normalize-space()]' ) as $text_node ) {
-			$text_node->nodeValue = esc_html( $value );
-			break;
-		}
-
-		return $dom->saveHTML();
 	}
 
 	/**
@@ -532,10 +484,12 @@ class Block extends Blocks\Base {
 	 * @return mixed
 	 */
 	public function get_meta_value_callback( $request ) {
-		$meta_key = $request->get_param( 'key' ) ?: '';
-		$type     = $request->get_param( 'type' ) ?: '';
-		$provider = $request->get_param( 'provider' ) ?: '';
-		$post_id  = $request->get_param( 'post_id' ) ?: '';
+		$meta_key      = $request->get_param( 'key' ) ?: '';
+		$type          = $request->get_param( 'type' ) ?: '';
+		$provider      = $request->get_param( 'provider' ) ?: '';
+		$post_id       = $request->get_param( 'post_id' ) ?: '';
+		$return_format = $request->get_param( 'return_format' ) ?: '';
+		$data_index	   = $request->get_param( 'index' ) ?: 0;
 
 		if ( empty( $meta_key ) ) {
 			return rest_ensure_response( array( 'value' => '' ) );
@@ -546,6 +500,8 @@ class Block extends Blocks\Base {
 			'metaFieldType' => $type,
 			'fieldProvider' => $provider,
 			'postId'        => $post_id,
+			'returnFormat'  => $return_format,
+			'dataIndex'     => $data_index,
 		);
 
 		$meta_value = $this->get_meta_value( $args );
@@ -597,11 +553,6 @@ class Block extends Blocks\Base {
 		$meta_value = apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_value', $meta_value, $meta_key, $attributes );
 
 		/**
-		 * Filter specific meta key.
-		 */
-		$meta_value = apply_filters( "ziorwebdev_wordpress_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
-
-		/**
 		 * Return original content if value is empty.
 		 */
 		if ( empty( $meta_value ) ) {
@@ -613,12 +564,11 @@ class Block extends Blocks\Base {
 		/**
 		 * Sanitize value.
 		 */
-		$sanitized_value = is_string( $normalized_value ) && strpos( $normalized_value, '<' ) !== false ? wp_kses_post( $normalized_value ) : esc_html( (string) $normalized_value );
-
-		/**
-		 * Wrap with link if applicable.
-		 */
-		$sanitized_value = $this->wrap_with_href_tag( $sanitized_value, $attributes );
+		if ( is_string( $normalized_value ) && strpos( $normalized_value, '<' ) !== false ) {
+			$sanitized_value = wp_kses_post( $normalized_value );
+		} else {
+			$sanitized_value = esc_html( (string) $normalized_value );
+		}
 
 		/**
 		 * Preserve the content formatting, classes, and styles but replace the content with meta value.
@@ -633,9 +583,10 @@ class Block extends Blocks\Base {
 	 * @return mixed
 	 */
 	private function get_meta_value( $attributes ) {
-		$meta_key = isset( $attributes['metaKey'] ) ? $attributes['metaKey'] : '';
-		$type     = isset( $attributes['metaFieldType'] ) ? $attributes['metaFieldType'] : 'post_meta';
-		$provider = isset( $attributes['fieldProvider'] ) ? $attributes['fieldProvider'] : '';
+		$meta_key   = isset( $attributes['metaKey'] ) ? $attributes['metaKey'] : '';
+		$type       = isset( $attributes['metaFieldType'] ) ? $attributes['metaFieldType'] : 'post_meta';
+		$provider   = isset( $attributes['fieldProvider'] ) ? $attributes['fieldProvider'] : '';
+		$meta_value = '';
 
 		if ( 'post_meta' === $type ) {
 			$post_id = $this->get_post_id( $attributes );
@@ -644,10 +595,17 @@ class Block extends Blocks\Base {
 				return null;
 			}
 
-			return $this->get_post_meta_by_provider( $provider, $post_id, $meta_key );
+			$meta_value = $this->get_post_meta_by_provider( $provider, $post_id, $meta_key );
+		} else {
+			$meta_value = $this->get_option_by_provider( $provider, $meta_key );
 		}
 
-		return $this->get_option_by_provider( $provider, $meta_key );
+		/**
+		 * Filter specific meta key.
+		 */
+		$meta_value = apply_filters( "ziorwebdev_wordpress_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
+
+		return $meta_value;
 	}
 
 	/**
@@ -736,125 +694,6 @@ class Block extends Blocks\Base {
 		}
 
 		return $value;
-	}
-
-	/**
-	 * Build class attribute string from attributes.
-	 *
-	 * @param array $attributes Block attributes.
-	 * @return string
-	 */
-	private function get_classes( $attributes ) {
-		$classes = array();
-
-		// Custom className may contain multiple classes.
-		if ( ! empty( $attributes['className'] ) ) {
-			$custom = preg_split( '/\s+/', (string) $attributes['className'], -1, PREG_SPLIT_NO_EMPTY );
-
-			foreach ( $custom as $c ) {
-				$c = sanitize_html_class( $c );
-				if ( $c !== '' ) {
-					$classes[] = $c;
-				}
-			}
-		}
-
-		if ( ! empty( $attributes['textAlign'] ) ) {
-			$classes[] = 'has-text-align-' . sanitize_html_class( (string) $attributes['textAlign'] );
-		}
-
-		if ( ! empty( $attributes['textColor'] ) ) {
-			$color = sanitize_html_class( (string) $attributes['textColor'] );
-			if ( $color !== '' ) {
-				$classes[] = 'has-text-color';
-				$classes[] = 'has-' . $color . '-color';
-			}
-		}
-
-		if ( ! empty( $attributes['fontSize'] ) ) {
-			$size = sanitize_html_class( (string) $attributes['fontSize'] );
-			if ( $size !== '' ) {
-				$classes[] = 'has-' . $size . '-font-size';
-			}
-		}
-
-		$classes = array_filter( array_map( 'trim', $classes ) );
-
-		if ( empty( $classes ) ) {
-			return '';
-		}
-
-		return ' class="' . esc_attr( implode( ' ', $classes ) ) . '"';
-	}
-
-	/**
-	 * Build inline style attribute from attributes (limited mapping).
-	 *
-	 * @param array $attributes Block attributes.
-	 * @return string Inline style attribute or empty string.
-	 */
-	private function get_tyles( $attributes ) {
-		$inline_styles = array();
-
-		$convert_preset_var = static function ( $val ) {
-			if ( ! is_string( $val ) || $val === '' ) {
-				return '';
-			}
-
-			if ( strpos( $val, 'var:preset|' ) !== 0 ) {
-				return $val;
-			}
-
-			$parts = explode( '|', $val );
-			if ( count( $parts ) < 3 ) {
-				return '';
-			}
-
-			$type = sanitize_html_class( $parts[1] );
-			$name = sanitize_html_class( $parts[2] );
-
-			return 'var(--wp--preset--' . $type . '--' . $name . ')';
-		};
-
-		if ( empty( $attributes['style'] ) || ! is_array( $attributes['style'] ) ) {
-			return '';
-		}
-
-		$style = $attributes['style'];
-
-		// Text color.
-		if ( ! empty( $style['color']['text'] ) ) {
-			$val = $convert_preset_var( $style['color']['text'] );
-			if ( $val !== '' ) {
-				$inline_styles[] = 'color: ' . $val . ';';
-			}
-		}
-
-		// Link color inside elements.
-		if ( ! empty( $style['elements']['link']['color']['text'] ) ) {
-			$val = $convert_preset_var( $style['elements']['link']['color']['text'] );
-			if ( $val !== '' ) {
-				$inline_styles[] = 'color: ' . $val . ';';
-			}
-		}
-
-		if ( empty( $inline_styles ) ) {
-			return '';
-		}
-
-		return ' style="' . esc_attr( implode( ' ', $inline_styles ) ) . '"';
-	}
-
-	/**
-	 * Render final tag with attributes.
-	 *
-	 * @param string $tag Tag name.
-	 * @param string $content Inner HTML.
-	 * @param string $attrs Attributes string (class/style already formatted).
-	 * @return string
-	 */
-	private function render_tag( $tag, $content, $attrs ) {
-		return sprintf( '<%1$s%3$s>%2$s</%1$s>', esc_html( $tag ), $content, $attrs );
 	}
 
 	/**

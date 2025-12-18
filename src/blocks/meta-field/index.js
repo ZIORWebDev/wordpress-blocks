@@ -17,7 +17,7 @@ const { name } = metadata;
 export { metadata, name };
 
 export const settings = {
-  icon: 'admin-customizer',
+  icon: 'welcome-write-blog',
   example: {
     attributes: {
       content: __('Code is Poetry'),
@@ -42,18 +42,16 @@ export const settings = {
         ? sprintf(
             /* translators: accessibility text. %s: heading level. */
             __('Level %s. Empty.'),
-            level
+            level,
           )
         : sprintf(
             /* translators: accessibility text. 1: heading level. 2: heading content. */
             __('Level %1$s. %2$s'),
             level,
-            content
+            content,
           );
     }
   },
-  // transforms,
-  // deprecated,
   merge(attributes, attributesToMerge) {
     return {
       content: (attributes.content || '') + (attributesToMerge.content || ''),
@@ -61,7 +59,6 @@ export const settings = {
   },
   edit: edit,
   save,
-  // variations,
 };
 
 export const init = () => initBlock({ name, metadata, settings });

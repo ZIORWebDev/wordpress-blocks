@@ -18,7 +18,12 @@ const {
   useBlockEditingMode,
 } = wp.blockEditor;
 const { InspectorControls } = wp.blockEditor;
-const { PanelBody, SelectControl } = wp.components;
+const {
+  PanelBody,
+  SelectControl,
+  TextControl,
+  __experimentalNumberControl: NumberControl,
+} = wp.components;
 const apiFetch = wp.apiFetch;
 /**
  * Internal dependencies
@@ -41,10 +46,15 @@ function MegaFieldEdit({
     placeholder,
     anchor,
     tagName,
-    link,
     metaKey,
     metaFieldType,
     fieldProvider,
+    showMetaSelector,
+    postType,
+    returnFormat,
+    showReturnFormat,
+    dataIndex,
+    showDataIndex,
   } = attributes;
   const effectiveTag = tagName && tagName.length ? tagName : 'h' + level;
   const blockProps = useBlockProps({
@@ -54,7 +64,6 @@ function MegaFieldEdit({
     style,
   });
   const blockEditingMode = useBlockEditingMode();
-
   const { canGenerateAnchors } = useSelect((select) => {
     const { getGlobalBlockCount, getSettings } = select(blockEditorStore);
     const settings = getSettings();
@@ -100,25 +109,8 @@ function MegaFieldEdit({
     setAttributes(newAttrs);
   };
 
-  function extractLinkAttributes(html) {
-    if (!html) return {};
-
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-
-    const link = tempDiv.querySelector('a');
-    if (!link) return { href: '', target: '', rel: '', class: '' };
-
-    return {
-      href: link.getAttribute('href') || '',
-      target: link.getAttribute('target') || '',
-      rel: link.getAttribute('rel') || '',
-      class: link.getAttribute('class') || '',
-    };
-  }
-
   const fetchMetaValue = useCallback(
-    async (metaKey, metaFieldType, fieldProvider) => {
+    async (metaKey, metaFieldType, fieldProvider, returnFormat, dataIndex) => {
       if (!metaKey) return;
 
       const currentPost = select('core/editor')?.getCurrentPost();
@@ -126,14 +118,14 @@ function MegaFieldEdit({
 
       try {
         const response = await apiFetch({
-          path: `/wordpress-blocks/v1/meta-value?type=${metaFieldType}&key=${metaKey}&post_id=${postId}&provider=${fieldProvider}`,
+          path: `/wordpress-blocks/v1/meta-value?type=${metaFieldType}&key=${metaKey}&index${dataIndex}&post_id=${postId}&provider=${fieldProvider}&return_format=${encodeURIComponent(
+            returnFormat || '',
+          )}`,
           headers: { 'X-WP-Nonce': wpApiSettings.nonce },
         });
 
         setAttributes({ content: response?.value ?? '' });
-        console.log('Fetched meta value:', response?.value ?? '');
       } catch (error) {
-        console.error('Meta fetch failed:', error);
         setAttributes({ content: '' });
       }
     },
@@ -142,21 +134,21 @@ function MegaFieldEdit({
 
   useEffect(() => {
     if (!metaKey) return;
-    fetchMetaValue(metaKey, metaFieldType, fieldProvider || '');
-  }, [metaKey, metaFieldType, fieldProvider, fetchMetaValue]);
-
-  useEffect(() => {
-    const linkAttrs = extractLinkAttributes(content);
-    // Only update if different
-    if (
-      linkAttrs.href !== link.href ||
-      linkAttrs.target !== link.target ||
-      linkAttrs.rel !== link.rel ||
-      linkAttrs.class !== link.class
-    ) {
-      setAttributes({ link: linkAttrs });
-    }
-  }, [content]);
+    fetchMetaValue(
+      metaKey,
+      metaFieldType,
+      fieldProvider,
+      returnFormat,
+      dataIndex,
+    );
+  }, [
+    metaKey,
+    metaFieldType,
+    fieldProvider,
+    // fetchMetaValue,
+    returnFormat,
+    dataIndex,
+  ]);
 
   return (
     <>
@@ -173,11 +165,11 @@ function MegaFieldEdit({
 
       <InspectorControls>
         <PanelBody title={__('Meta Field Settings')} initialOpen={true}>
-          {attributes.showMetaSelector && (
+          {showMetaSelector && (
             <MetaFieldSelector
-              value={attributes.metaKey || ''}
-              metaFieldType={attributes.metaFieldType || 'post_meta'}
-              postType={attributes.postType || 'post'}
+              value={metaKey || ''}
+              metaFieldType={metaFieldType || 'post_meta'}
+              postType={postType || 'post'}
               onChange={(next) => setAttributes({ metaKey: next })}
               onTypeChange={(nextType) =>
                 setAttributes({ metaFieldType: nextType })
@@ -187,6 +179,28 @@ function MegaFieldEdit({
               }
               attributes={attributes}
               setAttributes={setAttributes}
+            />
+          )}
+          {showReturnFormat && (
+            <TextControl
+              label={__('Template Tokens')}
+              help={__(
+                'Define the output format using dynamic tokens such as {street_address}.',
+              )}
+              value={returnFormat || ''}
+              onChange={(value) => setAttributes({ returnFormat: value })}
+              placeholder="{field_key}"
+            />
+          )}
+          {showDataIndex && (
+            <NumberControl
+              label={__('Data Index')}
+              help={__(
+                'Enter the index of the data for array-type meta fields',
+              )}
+              value={dataIndex ?? 0}
+              onChange={(value) => setAttributes({ dataIndex: value })}
+              placeholder="0"
             />
           )}
           <SelectControl

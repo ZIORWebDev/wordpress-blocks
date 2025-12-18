@@ -47,18 +47,25 @@
       "type": "string",
       "default": ""
     },
-    "link": {
-      "type": "object",
-      "default": {
-        "href": "",
-        "target": "",
-        "rel": "",
-        "class": ""
-      }
-    },
     "showMetaSelector": {
       "type": "boolean",
       "default": true
+    },
+    "returnFormat": {
+      "type": "string",
+      "default": ""
+    },
+      "showReturnFormat": {
+      "type": "boolean",
+      "default": false
+    },
+    "dataIndex": {
+      "type": "integer",
+      "default": 0
+    },
+    "showDataIndex": {
+    "type": "boolean",
+    "default": false
     }
   },
   "supports": {

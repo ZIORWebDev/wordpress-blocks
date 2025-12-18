@@ -24,28 +24,28 @@ final class Load {
 
 	/**
 	 * Class constructor.
-	 * 
 	 */
 	public function __construct() {
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_blocks_script' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ) );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_assets' ) );
 
 		Blocks::get_instance();
 	}
 
 	/**
 	 * Enqueue blocks script
-	 * 
+	 *
 	 * @return void
 	 */
-	public function enqueue_blocks_script() {
+	public function enqueue_editor_assets() {
 		if ( ! is_admin() ) {
 			return;
 		}
 
 		// Determine dependency
-		$screen       = get_current_screen();
-		$dependencies = array( 'wp-blocks', 'wp-dom-ready' );
+
+			$screen       = get_current_screen();
+			$dependencies = array( 'wp-blocks', 'wp-dom-ready' );
 
 		if ( $screen->base === 'post' ) {
 			$dependencies[] = 'wp-edit-post';
@@ -53,8 +53,8 @@ final class Load {
 			$dependencies[] = 'wp-edit-widgets';
 		}
 
-		$vendor_js        = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/vendors.min.js';
-		$block_editor_js  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.js';
+		$vendor_js       = plugin_dir_url( __DIR__ ) . 'dist/vendors.min.js';
+		$block_editor_js = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.js';
 
 		// Enqueue vendor JS
 		wp_enqueue_script(
@@ -72,33 +72,17 @@ final class Load {
 			null
 		);
 
-		$block_style_css  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/main.min.css';
-		$block_editor_css = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.css';
-
-		wp_enqueue_style(
-			'ziorwebdev-wordpress-blocks-editor',
-			$block_editor_css,
-			array(), // dependencies
-			null
-		);
-
-		// Enqueue block CSS
-		wp_enqueue_style(
-			'ziorwebdev-wordpress-blocks-style',
-			$block_style_css,
-			array(), // dependencies
-			null
-		);
+		wp_enqueue_style( 'dashicons' );
 	}
 
 	/**
-	 * Enqueue blocks styles
-	 * 
+	 * Enqueue block assets
+	 *
 	 * @return void
 	 */
-	public function enqueue_frontend_styles() {
-		$block_style_css  = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/main.min.css';
-		$block_editor_css = plugin_dir_url( dirname( __FILE__ ) ) . 'dist/blocks/editor.min.css';
+	public function enqueue_block_assets() {
+		$block_style_css  = plugin_dir_url( __DIR__ ) . 'dist/blocks/main.min.css';
+		$block_editor_css = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css';
 
 		wp_enqueue_style(
 			'ziorwebdev-wordpress-blocks-editor',
