@@ -14,17 +14,17 @@ A utility block that allows users to select and insert icons directly into the e
 
 **Features**
 
-* Supports Dashicons (WordPress core icons)
-* Supports social icons
-* Can be reused inside other blocks
-* Outputs editor-safe markup compatible with both editor and frontend
+- Supports Dashicons (WordPress core icons)
+- Supports social icons
+- Can be reused inside other blocks
+- Outputs editor-safe markup compatible with both editor and frontend
 
 **Use cases**
 
-* Buttons
-* Feature lists
-* Callouts
-* Social links
+- Buttons
+- Feature lists
+- Callouts
+- Social links
 
 ---
 
@@ -34,24 +34,25 @@ A flexible list block powered by the Icon Picker.
 
 **Features**
 
-* Add, remove, and reorder list items
-* Each list item includes:
+- Add, remove, and reorder list items
+- Each list item includes:
 
-  * An Icon Picker
-  * A fully insertable inner block
+  - An Icon Picker
+  - A fully insertable inner block
 
-    * Paragraph
-    * Heading
-    * Meta Field
-    * Any other allowed block
-* Built using InnerBlocks for maximum flexibility
+    - Paragraph
+    - Heading
+    - Meta Field
+    - Any other allowed block
+
+- Built using InnerBlocks for maximum flexibility
 
 **Use cases**
 
-* Feature lists
-* Services lists
-* Benefits sections
-* Custom content lists with icons
+- Feature lists
+- Services lists
+- Benefits sections
+- Custom content lists with icons
 
 ---
 
@@ -61,31 +62,31 @@ A dynamic block that allows users to insert values from WordPress data sources d
 
 **Features**
 
-* Insert values from:
+- Insert values from:
 
-  * wp_options
-  * Post meta
-* Dynamic rendering
-* Supports return format templates using placeholder tokens
-* Works in both editor preview and frontend output
+  - wp_options
+  - Post meta
+
+- Dynamic rendering
+- Supports return format templates using placeholder tokens
+- Works in both editor preview and frontend output
 
 **Use cases**
 
-* Display custom fields
-* Output site options such as address or contact information
-* Build dynamic layouts without writing PHP templates
+- Display custom fields
+- Output site options such as address or contact information
+- Build dynamic layouts without writing PHP templates
 
 ---
 
 ## How to Use
+
 Include the package into your project.
+
 ### Via Composer
 
 ```bash
 composer require ziorwebdev/wordpress-blocks
 ```
+
 After installation, the blocks will be available for your projects.
-
-
-After Zior Web Dev
-[https://github.com/ziorwebdev](https://github.com/ziorwebdev)
