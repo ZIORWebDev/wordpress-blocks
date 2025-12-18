@@ -85,5 +85,7 @@ Include the package into your project.
 composer require ziorwebdev/wordpress-blocks
 ```
 After installation, the blocks will be available for your projects.
+
+
 After Zior Web Dev
 [https://github.com/ziorwebdev](https://github.com/ziorwebdev)
