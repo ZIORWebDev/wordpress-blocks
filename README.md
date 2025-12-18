@@ -1,94 +1,89 @@
-WordPress Blocks
+# WordPress Blocks
 
 A collection of custom Gutenberg blocks designed to extend the WordPress block editor with icons, dynamic data, and flexible content composition.
 
-This project focuses on reusable, composable blocks that integrate naturally with the WordPress editor while remaining developer-friendly.
+This project focuses on reusable and composable blocks that integrate naturally with the WordPress editor while remaining developer-friendly.
 
-📦 Included Blocks
-1. Icon Picker Block
+---
+
+## Included Blocks
+
+### Icon Picker Block
 
 A utility block that allows users to select and insert icons directly into the editor.
 
-Features
+**Features**
 
-Supports Dashicons (WordPress core icons)
+* Supports Dashicons (WordPress core icons)
+* Supports social icons
+* Can be reused inside other blocks
+* Outputs editor-safe markup compatible with both editor and frontend
 
-Supports social icons
+**Use cases**
 
-Designed to be reusable and embeddable inside other blocks
+* Buttons
+* Feature lists
+* Callouts
+* Social links
 
-Outputs editor-safe markup compatible with both editor and frontend
+---
 
-Use cases
-
-Buttons
-
-Feature lists
-
-Callouts
-
-Social links
-
-2. Icon List Block
+### Icon List Block
 
 A flexible list block powered by the Icon Picker.
 
-Features
+**Features**
 
-Add, remove, and reorder list items
+* Add, remove, and reorder list items
+* Each list item includes:
 
-Each list item includes:
+  * An Icon Picker
+  * A fully insertable inner block
 
-An Icon Picker
+    * Paragraph
+    * Heading
+    * Meta Field
+    * Any other allowed block
+* Built using InnerBlocks for maximum flexibility
 
-A fully insertable inner block
+**Use cases**
 
-Paragraph
+* Feature lists
+* Services lists
+* Benefits sections
+* Custom content lists with icons
 
-Heading
+---
 
-Meta Field block
-
-Any other allowed block
-
-Built using InnerBlocks for maximum flexibility
-
-Use cases
-
-Feature lists
-
-Services lists
-
-Benefits sections
-
-Custom content lists with icons
-
-3. Meta Field Block
+### Meta Field Block
 
 A dynamic block that allows users to insert values from WordPress data sources directly into the editor.
 
-Features
+**Features**
 
-Insert values from:
+* Insert values from:
 
-wp_options
+  * wp_options
+  * Post meta
+* Dynamic rendering
+* Supports return format templates using placeholder tokens
+* Works in both editor preview and frontend output
 
-Post meta
+**Use cases**
 
-Dynamic rendering
+* Display custom fields
+* Output site options such as address or contact information
+* Build dynamic layouts without writing PHP templates
 
-Supports template/return formats using placeholder tokens
+---
 
-Designed for both editor preview and frontend output
+## How to Use
+Include the package into your project.
+### Via Composer
 
-Use cases
-
-Display custom fields
-
-Output site options (e.g. address, contact info)
-
-Build dynamic layouts without writing PHP templates
-
-Node.js 18+ (for development)
-
-PHP 7.4+
+```bash
+composer require ziorwebdev/wordpress-blocks
+```
+After installation, the blocks will be available for your projects.
+After Zior Web Dev
+[https://github.com/ziorwebdev](https://github.com/ziorwebdev)
