@@ -26,8 +26,8 @@ final class Load {
 	 * Class constructor.
 	 */
 	public function __construct() {
-		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ) );
-		add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_assets' ) );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ), 50 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 
 		Blocks::get_instance();
 	}

@@ -66,6 +66,10 @@
     "showDataIndex": {
     "type": "boolean",
     "default": false
+    },
+    "helpText": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {

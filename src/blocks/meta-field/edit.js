@@ -23,6 +23,7 @@ const {
   SelectControl,
   TextControl,
   __experimentalNumberControl: NumberControl,
+  __experimentalText: Text,
 } = wp.components;
 const apiFetch = wp.apiFetch;
 /**
@@ -55,6 +56,7 @@ function MegaFieldEdit({
     showReturnFormat,
     dataIndex,
     showDataIndex,
+    helpText,
   } = attributes;
   const effectiveTag = tagName && tagName.length ? tagName : 'h' + level;
   const blockProps = useBlockProps({
@@ -165,6 +167,14 @@ function MegaFieldEdit({
 
       <InspectorControls>
         <PanelBody title={__('Meta Field Settings')} initialOpen={true}>
+          {helpText && (
+            <Text
+              variant="small"
+              style={{ marginBottom: '12px', display: 'block' }}
+            >
+              {helpText}
+            </Text>
+          )}
           {showMetaSelector && (
             <MetaFieldSelector
               value={metaKey || ''}
