@@ -127,10 +127,7 @@ function MegaFieldEdit({
       outputFormat,
       timeFormat,
       showDataIndex,
-      showReturnFormat,
-      showTimeControls,
       dateFormat,
-      showDateControls,
     } = attributes;
 
     const params = new URLSearchParams({
@@ -144,16 +141,19 @@ function MegaFieldEdit({
       params.set('dataIndex', dataIndex);
     }
 
-    if (showReturnFormat && returnFormat) {
+    if (returnFormat) {
       params.set('returnFormat', returnFormat);
     }
 
-    if (showTimeControls) {
+    if (outputFormat) {
       params.set('outputFormat', outputFormat);
+    }
+
+    if (timeFormat) {
       params.set('timeFormat', timeFormat);
     }
 
-    if (showDateControls) {
+    if (dateFormat) {
       params.set('dateFormat', dateFormat);
     }
 
