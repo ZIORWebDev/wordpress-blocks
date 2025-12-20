@@ -16,6 +16,13 @@ namespace ZiorWebDev\WordPressBlocks;
 final class Load {
 
 	/**
+	 * Package version.
+	 *
+	 * @var string
+	 */
+	protected static $package_version = '1.0.0';
+
+	/**
 	 * Singleton instance of the Plugin class.
 	 *
 	 * @var Load
@@ -61,7 +68,7 @@ final class Load {
 			'ziorwebdev-wordpress-blocks-vendor',
 			$vendor_js,
 			array(),
-			null
+			self::$package_version
 		);
 
 		// Enqueue editor JS
@@ -69,7 +76,7 @@ final class Load {
 			'ziorwebdev-wordpress-blocks-editor',
 			$block_editor_js,
 			$dependencies,
-			null
+			self::$package_version
 		);
 	}
 
@@ -88,7 +95,7 @@ final class Load {
 			'ziorwebdev-wordpress-blocks-editor',
 			$block_editor_css,
 			array(), // dependencies
-			null
+			self::$package_version
 		);
 
 		// Enqueue block CSS
@@ -96,7 +103,7 @@ final class Load {
 			'ziorwebdev-wordpress-blocks-style',
 			$block_style_css,
 			array(), // dependencies
-			null
+			self::$package_version
 		);
 	}
 
