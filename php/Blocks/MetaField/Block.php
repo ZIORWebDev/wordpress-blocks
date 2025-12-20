@@ -108,17 +108,16 @@ class Block extends Blocks\Base {
 	 * @param string $value Value to replace.
 	 * @return string Modified HTML.
 	 */
-	private function replace_text_node( $html, $value ) {
+	private function replace_inner_html( $html, $value ) {
 		if ( trim( $html ) === '' ) {
 			return $html;
 		}
 
-		return preg_replace_callback(
-			'/>([^<>]+)</',
-			function ( $matches ) use ( $value ) {
-				return '>' . $value . '<';
-			},
-			$html
+		return preg_replace(
+			'/<([^\/>\s]+)([^>]*)>\s*<\/\1>/',
+			'<$1$2>' . $value . '</$1>',
+			$html,
+			1
 		);
 	}
 
@@ -135,7 +134,7 @@ class Block extends Blocks\Base {
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_limit', 15 ) );
+		$limit = absint( apply_filters( 'wordpress_blocks_meta_field_limit', 15 ) );
 
 		// Get meta keys for the given post type
 		$query = $wpdb->prepare(
@@ -180,12 +179,12 @@ class Block extends Blocks\Base {
 		/**
 		 * Filter the list of excluded option name patterns.
 		 */
-		$excludes = apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_keys_excluded', $default_excludes );
+		$excludes = apply_filters( 'wordpress_blocks_meta_field_keys_excluded', $default_excludes );
 
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_limit', 15 ) );
+		$limit = absint( apply_filters( 'wordpress_blocks_meta_field_limit', 15 ) );
 
 		// Build NOT LIKE SQL conditions
 		$not_like_sql = array();
@@ -222,25 +221,25 @@ class Block extends Blocks\Base {
 	public function __construct() {
 		parent::__construct();
 
-		add_filter( 'ziorwebdev_wordpress_blocks_routes', array( $this, 'add_routes' ) );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_post_meta_keys', array( $this, 'get_post_meta_keys' ), 10, 4 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_options_keys', array( $this, 'get_option_meta_keys' ), 10, 4 );
+		add_filter( 'wordpress_blocks_routes', array( $this, 'add_routes' ) );
+		add_filter( 'wordpress_blocks_meta_field_post_meta_keys', array( $this, 'get_post_meta_keys' ), 10, 4 );
+		add_filter( 'wordpress_blocks_meta_field_options_keys', array( $this, 'get_option_meta_keys' ), 10, 4 );
 
 		/**
 		 * Filters to get meta/option values based on field providers.
 		 */
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_option_acf_value', array( $this, 'get_acf_option_value' ), 10, 2 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_option_carbon_field_value', array( $this, 'get_carbon_field_option_value' ), 10, 2 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_option_metabox_value', array( $this, 'get_metabox_option_value' ), 10, 2 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_option_pods_value', array( $this, 'get_pods_option_value' ), 10, 2 );
+		add_filter( 'wordpress_blocks_meta_field_option_acf_value', array( $this, 'get_acf_option_value' ), 10, 2 );
+		add_filter( 'wordpress_blocks_meta_field_option_carbon_field_value', array( $this, 'get_carbon_field_option_value' ), 10, 2 );
+		add_filter( 'wordpress_blocks_meta_field_option_metabox_value', array( $this, 'get_metabox_option_value' ), 10, 2 );
+		add_filter( 'wordpress_blocks_meta_field_option_pods_value', array( $this, 'get_pods_option_value' ), 10, 2 );
 
 		/**
 		 * Filters to get post meta values based on field providers.
 		 */
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_post_meta_acf_value', array( $this, 'get_acf_post_meta_value' ), 10, 3 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_post_meta_carbon_field_value', array( $this, 'get_carbon_field_post_meta_value' ), 10, 3 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_post_meta_metabox_value', array( $this, 'get_metabox_post_meta_value' ), 10, 3 );
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_post_meta_pods_value', array( $this, 'get_pods_post_meta_value' ), 10, 3 );
+		add_filter( 'wordpress_blocks_meta_field_post_meta_acf_value', array( $this, 'get_acf_post_meta_value' ), 10, 3 );
+		add_filter( 'wordpress_blocks_meta_field_post_meta_carbon_field_value', array( $this, 'get_carbon_field_post_meta_value' ), 10, 3 );
+		add_filter( 'wordpress_blocks_meta_field_post_meta_metabox_value', array( $this, 'get_metabox_post_meta_value' ), 10, 3 );
+		add_filter( 'wordpress_blocks_meta_field_post_meta_pods_value', array( $this, 'get_pods_post_meta_value' ), 10, 3 );
 	}
 
 	/**
@@ -484,27 +483,11 @@ class Block extends Blocks\Base {
 	 * @return mixed
 	 */
 	public function get_meta_value_callback( $request ) {
-		$meta_key      = $request->get_param( 'key' ) ?: '';
-		$type          = $request->get_param( 'type' ) ?: '';
-		$provider      = $request->get_param( 'provider' ) ?: '';
-		$post_id       = $request->get_param( 'post_id' ) ?: '';
-		$return_format = $request->get_param( 'return_format' ) ?: '';
-		$data_index	   = $request->get_param( 'index' ) ?: 0;
-
-		if ( empty( $meta_key ) ) {
+		if ( empty( $request->get_param( 'metaKey' ) ) ) {
 			return rest_ensure_response( array( 'value' => '' ) );
 		}
 
-		$args = array(
-			'metaKey'       => $meta_key,
-			'metaFieldType' => $type,
-			'fieldProvider' => $provider,
-			'postId'        => $post_id,
-			'returnFormat'  => $return_format,
-			'dataIndex'     => $data_index,
-		);
-
-		$meta_value = $this->get_meta_value( $args );
+		$meta_value = $this->get_meta_value( $request->get_params() );
 		$meta_value = $this->normalize_value( $meta_value );
 
 		return rest_ensure_response( array( 'value' => $meta_value ) );
@@ -520,7 +503,7 @@ class Block extends Blocks\Base {
 		$search    = $request->get_param( 'search' ) ?: '';
 		$post_type = $request->get_param( 'post_type' ) ?: 'page';
 		$meta_keys = apply_filters(
-			"ziorwebdev_wordpress_blocks_meta_field_{$type}_keys",
+			"wordpress_blocks_meta_field_{$type}_keys",
 			array(),
 			$type,
 			$search,
@@ -550,7 +533,7 @@ class Block extends Blocks\Base {
 		}
 
 		$meta_value = $this->get_meta_value( $attributes );
-		$meta_value = apply_filters( 'ziorwebdev_wordpress_blocks_meta_field_value', $meta_value, $meta_key, $attributes );
+		$meta_value = apply_filters( 'wordpress_blocks_meta_field_value', $meta_value, $meta_key, $attributes );
 
 		/**
 		 * Return original content if value is empty.
@@ -573,7 +556,7 @@ class Block extends Blocks\Base {
 		/**
 		 * Preserve the content formatting, classes, and styles but replace the content with meta value.
 		 */
-		return $this->replace_text_node( $content, $sanitized_value );
+		return $this->replace_inner_html( $content, $sanitized_value );
 	}
 
 	/**
@@ -603,7 +586,7 @@ class Block extends Blocks\Base {
 		/**
 		 * Filter specific meta key.
 		 */
-		$meta_value = apply_filters( "ziorwebdev_wordpress_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
+		$meta_value = apply_filters( "wordpress_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
 
 		return $meta_value;
 	}
@@ -640,7 +623,7 @@ class Block extends Blocks\Base {
 	 */
 	private function get_post_meta_by_provider( $provider, $post_id, $meta_key ) {
 		$default_value = get_post_meta( $post_id, $meta_key, true );
-		$meta_value    = apply_filters( "ziorwebdev_wordpress_blocks_meta_field_post_meta_{$provider}_value", $default_value, $post_id, $meta_key );
+		$meta_value    = apply_filters( "wordpress_blocks_meta_field_post_meta_{$provider}_value", $default_value, $post_id, $meta_key );
 
 		return $meta_value;
 	}
@@ -654,7 +637,7 @@ class Block extends Blocks\Base {
 	 */
 	private function get_option_by_provider( $provider, $meta_key ) {
 		$default_value = get_option( $meta_key );
-		$meta_value    = apply_filters( "ziorwebdev_wordpress_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
+		$meta_value    = apply_filters( "wordpress_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
 
 		return $meta_value;
 	}

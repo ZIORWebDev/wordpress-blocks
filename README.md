@@ -36,7 +36,6 @@ A flexible list block powered by the Icon Picker.
 
 - Add, remove, and reorder list items
 - Each list item includes:
-
   - An Icon Picker
   - A fully insertable inner block
     - Paragraph
@@ -62,7 +61,6 @@ A dynamic block that allows users to insert values from WordPress data sources d
 **Features**
 
 - Insert values from:
-
   - wp_options
   - Post meta
 

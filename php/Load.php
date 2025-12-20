@@ -71,8 +71,6 @@ final class Load {
 			$dependencies,
 			null
 		);
-
-		wp_enqueue_style( 'dashicons' );
 	}
 
 	/**
@@ -83,6 +81,8 @@ final class Load {
 	public function enqueue_block_assets() {
 		$block_style_css  = plugin_dir_url( __DIR__ ) . 'dist/blocks/main.min.css';
 		$block_editor_css = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css';
+
+		wp_enqueue_style( 'dashicons' );
 
 		wp_enqueue_style(
 			'ziorwebdev-wordpress-blocks-editor',

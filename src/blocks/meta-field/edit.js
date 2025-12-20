@@ -21,7 +21,7 @@ const { InspectorControls } = wp.blockEditor;
 const {
   PanelBody,
   SelectControl,
-  TextControl,
+  TextareaControl,
   __experimentalNumberControl: NumberControl,
   __experimentalText: Text,
 } = wp.components;
@@ -31,6 +31,7 @@ const apiFetch = wp.apiFetch;
  */
 import { generateAnchor, setAnchor } from './autogenerate-anchors';
 import MetaFieldSelector from '../../components/meta-field-selector';
+import TimeFormatControls from '../../components/time-format-controls';
 
 function MegaFieldEdit({
   attributes,
@@ -57,6 +58,11 @@ function MegaFieldEdit({
     dataIndex,
     showDataIndex,
     helpText,
+    showTimeControls,
+    timeFormat,
+    outputFormat,
+    showDateControls,
+    dateFormat,
   } = attributes;
   const effectiveTag = tagName && tagName.length ? tagName : 'h' + level;
   const blockProps = useBlockProps({
@@ -111,18 +117,65 @@ function MegaFieldEdit({
     setAttributes(newAttrs);
   };
 
+  function getParameters(attributes, postId) {
+    const {
+      metaFieldType,
+      metaKey,
+      fieldProvider,
+      dataIndex,
+      returnFormat,
+      outputFormat,
+      timeFormat,
+      showDataIndex,
+      showReturnFormat,
+      showTimeControls,
+      dateFormat,
+      showDateControls,
+    } = attributes;
+
+    const params = new URLSearchParams({
+      metaFieldType: metaFieldType,
+      metaKey: metaKey,
+      postId: postId,
+      fieldProvider: fieldProvider,
+    });
+
+    if (showDataIndex) {
+      params.set('dataIndex', dataIndex);
+    }
+
+    if (showReturnFormat && returnFormat) {
+      params.set('returnFormat', returnFormat);
+    }
+
+    if (showTimeControls) {
+      params.set('outputFormat', outputFormat);
+      params.set('timeFormat', timeFormat);
+    }
+
+    if (showDateControls) {
+      params.set('dateFormat', dateFormat);
+    }
+
+    return params;
+  }
+
   const fetchMetaValue = useCallback(
-    async (metaKey, metaFieldType, fieldProvider, returnFormat, dataIndex) => {
+    async (attributes) => {
+      const { metaKey } = attributes;
+
       if (!metaKey) return;
 
       const currentPost = select('core/editor')?.getCurrentPost();
       const postId = currentPost?.id || 0;
 
       try {
+        const path = `/wordpress-blocks/v1/meta-value?${getParameters(
+          attributes,
+          postId,
+        ).toString()}`;
         const response = await apiFetch({
-          path: `/wordpress-blocks/v1/meta-value?type=${metaFieldType}&key=${metaKey}&index${dataIndex}&post_id=${postId}&provider=${fieldProvider}&return_format=${encodeURIComponent(
-            returnFormat || '',
-          )}`,
+          path: path,
           headers: { 'X-WP-Nonce': wpApiSettings.nonce },
         });
 
@@ -136,22 +189,17 @@ function MegaFieldEdit({
 
   useEffect(() => {
     if (!metaKey) return;
-    fetchMetaValue(
-      metaKey,
-      metaFieldType,
-      fieldProvider,
-      returnFormat,
-      dataIndex,
-    );
+    fetchMetaValue(attributes);
   }, [
     metaKey,
     metaFieldType,
     fieldProvider,
-    // fetchMetaValue,
     returnFormat,
     dataIndex,
+    timeFormat,
+    outputFormat,
+    dateFormat,
   ]);
-
   return (
     <>
       {blockEditingMode === 'default' && (
@@ -192,11 +240,9 @@ function MegaFieldEdit({
             />
           )}
           {showReturnFormat && (
-            <TextControl
+            <TextareaControl
               label={__('Template Tokens')}
-              help={__(
-                'Define the output format using dynamic tokens such as {street_address}.',
-              )}
+              help={__('Define the output format using dynamic tokens.')}
               value={returnFormat || ''}
               onChange={(value) => setAttributes({ returnFormat: value })}
               placeholder="{field_key}"
@@ -211,6 +257,15 @@ function MegaFieldEdit({
               value={dataIndex ?? 0}
               onChange={(value) => setAttributes({ dataIndex: value })}
               placeholder="0"
+            />
+          )}
+          {showTimeControls && (
+            <TimeFormatControls
+              timeFormat={timeFormat}
+              outputFormat={outputFormat}
+              showDateControls={showDateControls}
+              dateFormat={dateFormat}
+              onChange={setAttributes}
             />
           )}
           <SelectControl

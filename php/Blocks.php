@@ -29,7 +29,7 @@ final class Blocks {
 	 * @return array
 	 */
 	private function get_routes() {
-		return apply_filters( 'ziorwebdev_wordpress_blocks_routes', array() );
+		return apply_filters( 'wordpress_blocks_routes', array() );
 	}
 
 	/**

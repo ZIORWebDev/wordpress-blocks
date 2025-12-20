@@ -13,6 +13,10 @@ export default function save({ attributes }) {
   const { textAlign, content, level, tagName } = attributes;
   const HtmlTag = tagName && tagName.length ? tagName : 'h' + level;
 
+  if (!attributes.saveContent) {
+    return <HtmlTag {...useBlockProps.save()}></HtmlTag>;
+  }
+
   const className = clsx({
     [`has-text-align-${textAlign}`]: textAlign,
   });

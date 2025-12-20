@@ -70,6 +70,30 @@
     "helpText": {
       "type": "string",
       "default": ""
+    },
+    "showTimeControls": {
+      "type": "boolean",
+      "default": false
+    },
+    "timeFormat": {
+      "type": "string",
+      "default": "g:i a"
+    },
+    "outputFormat": {
+      "type": "string",
+      "default": "summarized"
+    },
+    "saveContent": {
+      "type": "boolean",
+      "default": true
+    },
+    "showDateControls": {
+      "type": "boolean",
+      "default": false
+    },
+    "dateFormat": {
+      "type": "string",
+      "default": "F d, Y"
     }
   },
   "supports": {

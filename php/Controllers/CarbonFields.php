@@ -24,31 +24,30 @@ class CarbonFields {
 
 	/**
 	 * Class constructor.
-	 * 
 	 */
 	public function __construct() {
-		add_filter( 'ziorwebdev_wordpress_blocks_meta_field_meta_keys', array( $this, 'filter_meta_keys' ), 10, 4 );
+		add_filter( 'wordpress_blocks_meta_field_meta_keys', array( $this, 'filter_meta_keys' ), 10, 4 );
 	}
 
 	/**
 	 * CabonFields save meta keys for complex fields in pipe delimited format.
 	 * Only retrieve parent field for complex fields.
-	 * 
-	 * @param array $meta_keys Existing meta keys.
+	 *
+	 * @param array  $meta_keys Existing meta keys.
 	 * @param string $type 'post_meta' or 'options'
 	 * @param string $search Search term.
 	 * @param string $post_type Post type.
 	 * @return array
 	 */
 	public function filter_meta_keys( $meta_keys, $type, $search, $post_type ) {
-		foreach( $meta_keys as $key => $meta_key ) {
+		foreach ( $meta_keys as $key => $meta_key ) {
 			if ( strpos( $meta_key, '|' ) !== false ) {
-				$parts = explode( '|', $meta_key );
+				$parts             = explode( '|', $meta_key );
 				$meta_keys[ $key ] = trim( $parts[0] );
 			}
 		}
 
-		return  array_values( array_unique( $meta_keys, SORT_REGULAR ) );
+		return array_values( array_unique( $meta_keys, SORT_REGULAR ) );
 	}
 
 	/**
