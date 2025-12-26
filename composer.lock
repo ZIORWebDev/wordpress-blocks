@@ -4,12 +4,177 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "677e7b2f8a9f71b548703efdedf65ac8",
-    "packages": [],
+    "content-hash": "a402ef020c40ce4ee7a6abc2b4257aac",
+    "packages": [
+        {
+            "name": "nikic/php-parser",
+            "version": "v5.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "dca41cd15c2ac9d055ad70dbfd011130757d1f82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/dca41cd15c2ac9d055ad70dbfd011130757d1f82",
+                "reference": "dca41cd15c2ac9d055ad70dbfd011130757d1f82",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.7.0"
+            },
+            "time": "2025-12-06T11:56:16+00:00"
+        },
+        {
+            "name": "regex-guard/regex-guard",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marcioAlmada/regex-guard.git",
+                "reference": "dc9a8199f4ebef4c21603ad1f6a8cb53542e7d29"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marcioAlmada/regex-guard/zipball/dc9a8199f4ebef4c21603ad1f6a8cb53542e7d29",
+                "reference": "dc9a8199f4ebef4c21603ad1f6a8cb53542e7d29",
+                "shasum": ""
+            },
+            "require-dev": {
+                "mockery/mockery": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RegexGuard\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Márcio Almada",
+                    "email": "marcio3w@gmail.com",
+                    "homepage": "https://github.com/marcioAlmada/"
+                }
+            ],
+            "description": "A wrapper that allows you to validate regular expressions and handle normally uncatchable PCRE compilation warnings",
+            "keywords": [
+                "PCRE",
+                "preg",
+                "regex",
+                "regexp",
+                "support",
+                "utils"
+            ],
+            "support": {
+                "issues": "https://github.com/marcioAlmada/regex-guard/issues",
+                "source": "https://github.com/marcioAlmada/regex-guard/tree/master"
+            },
+            "time": "2014-09-17T18:04:00+00:00"
+        },
+        {
+            "name": "ziorwebdev/annotations",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ziorwebdev/annotations.git",
+                "reference": "d912859fa4dc38da88696a69ad894f5dff360a6d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ziorwebdev/annotations/zipball/d912859fa4dc38da88696a69ad894f5dff360a6d",
+                "reference": "d912859fa4dc38da88696a69ad894f5dff360a6d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nikic/php-parser": "^5.0",
+                "php": ">=8.0.0",
+                "regex-guard/regex-guard": "~1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "phpunit/phpunit": ">=8.5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Minime\\Annotations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rey C",
+                    "email": "reygcalantaol@gmail.com",
+                    "homepage": "https://github.com/ziorwebdev/"
+                }
+            ],
+            "description": "The KISS PHP annotations library",
+            "keywords": [
+                "annotations",
+                "docblock",
+                "metadata",
+                "php",
+                "reflection"
+            ],
+            "support": {
+                "source": "https://github.com/ziorwebdev/annotations/tree/master"
+            },
+            "time": "2025-09-22T08:20:18+00:00"
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "ziorwebdev/annotations": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
