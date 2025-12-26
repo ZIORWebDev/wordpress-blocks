@@ -11,8 +11,8 @@ export default {
   devtool: isProduction ? false : 'source-map',
 
   entry: {
-    'blocks/editor': './src/editor.js',
-    'blocks/main': './src/main.js',
+    'blocks/editor': './resources/editor.js',
+    'blocks/main': './resources/main.js',
   },
 
   externals: { jquery: 'jQuery' },
@@ -77,7 +77,11 @@ export default {
     },
   },
 
-  performance: { hints: 'warning', maxEntrypointSize: 512000, maxAssetSize: 1024000 },
+  performance: {
+    hints: 'warning',
+    maxEntrypointSize: 512000,
+    maxAssetSize: 1024000,
+  },
 
   plugins: [
     new webpack.ProvidePlugin({ $: 'jquery' }),

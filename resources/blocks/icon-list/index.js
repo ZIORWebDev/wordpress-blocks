@@ -3,7 +3,7 @@
  */
 import initBlock from '../../utils/init-block';
 import edit from './edit';
-import metadata from '../../../php/blocks/IconListItem/block.json';
+import metadata from '../../../src/blocks/IconList/block.json';
 import save from './save';
 
 const { name } = metadata;
@@ -25,7 +25,7 @@ export const settings = {
       },
     ],
   },
-  icon: 'minus',
+  icon: 'editor-ul',
   edit,
   save,
 };

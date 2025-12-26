@@ -4,7 +4,7 @@
 import initBlock from '../../utils/init-block';
 import deprecated from './deprecated';
 import edit from './edit';
-import metadata from '../../../php/blocks/IconPicker/block.json';
+import metadata from '../../../src/blocks/IconPicker/block.json';
 import save from './save';
 
 const { name } = metadata;

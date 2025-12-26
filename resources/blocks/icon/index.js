@@ -11,7 +11,7 @@ const {
 import initBlock from '../../utils/init-block';
 import edit from './edit';
 import save from './save';
-import metadata from '../../../php/blocks/Icon/block.json';
+import metadata from '../../../src/blocks/Icon/block.json';
 import variations from './variations';
 
 const { name } = metadata;

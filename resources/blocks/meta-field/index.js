@@ -9,7 +9,7 @@ const { privateApis: blocksPrivateApis } = wp.blocks;
  */
 import initBlock from '../../utils/init-block';
 import edit from './edit';
-import metadata from '../../../php/blocks/MetaField/block.json';
+import metadata from '../../../src/blocks/MetaField/block.json';
 import save from './save';
 
 const { name } = metadata;
