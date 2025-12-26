@@ -1,157 +1,52 @@
-name: Create Release Archive
+name: Publish Release
 
 on:
   push:
     branches:
       - main
-  release:
-    types: [published]
+
+permissions:
+  contents: write
 
 jobs:
-  build-and-upload-archive:
+  release:
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: Checkout code
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      # Step 2: Install Node dependencies
-      - name: Install Node dependencies
-        run: npm ci
-
-      # Step 3: Run build
-      - name: Run npm build
-        run: npm run build
-
-      # Step 4: Install composer dependencies for production
-      - name: Composer install
-        run: composer install --no-dev --optimize-autoloader
-
-      # Step 5: Remove unnecessary files and folders
-      - name: Clean repo for release
+      - name: Read version from composer.json
+        id: version
         run: |
-          rm -rf .github src node_modules
-          rm -f .gitignore LICENSE README.md readme.txt .cursorrc.json
-          rm -f *.lock *.js *.xml *.json
+          VERSION=$(jq -r '.version' composer.json)
 
-      # Step 6: Generate manifest.json and extract $VERSION
-      - name: Generate manifest.json
-        id: generate_manifest
-        run: |
-          MAIN_FILE=$(grep -rl "Plugin Name:" --include="*.php" . | head -n 1)
-          echo "Main plugin file: $MAIN_FILE"
+          if [ "$VERSION" = "null" ] || [ -z "$VERSION" ]; then
+            echo "❌ Version not found in composer.json"
+            exit 1
+          fi
 
-          parse_field() {
-            grep -i "$1:" "$MAIN_FILE" | head -n1 \
-              | sed -E "s/^\s*\*\s*//" \
-              | sed -E "s|$1:[[:space:]]*||i" \
-              | xargs
-          }
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
 
-          PLUGIN_NAME="$(parse_field 'Plugin Name')"
-          PLUGIN_URI="$(parse_field 'Plugin URI')"
-          DESCRIPTION="$(parse_field 'Description')"
-          AUTHOR="$(parse_field 'Author')"
-          AUTHOR_URI="$(parse_field 'Author URI')"
-          VERSION="$(parse_field 'Version')"
-          REQUIRES_PHP="$(parse_field 'Requires PHP')"
-          REQUIRES_WP="$(parse_field 'Requires at least')"
-          LICENSE="$(parse_field 'License')"
-          LICENSE_URI="$(parse_field 'License URI')"
-          TEXT_DOMAIN="$(parse_field 'Text Domain')"
-          DOMAIN_PATH="$(parse_field 'Domain Path')"
-          TESTED_UP_TO="$(parse_field 'Tested up to')"
-
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-          cat > manifest.json <<EOF
-          {
-            "plugin_name": "$PLUGIN_NAME",
-            "plugin_uri": "$PLUGIN_URI",
-            "description": "$DESCRIPTION",
-            "author": "$AUTHOR",
-            "author_uri": "$AUTHOR_URI",
-            "version": "$VERSION",
-            "requires_php": "$REQUIRES_PHP",
-            "requires_wp": "$REQUIRES_WP",
-            "license": "$LICENSE",
-            "license_uri": "$LICENSE_URI",
-            "text_domain": "$TEXT_DOMAIN",
-            "domain_path": "$DOMAIN_PATH",
-            "tested_up_to": "$TESTED_UP_TO"
-          }
-          EOF
-
-      # Step 7: Create custom zip archive
-      - name: Create custom archive
-        run: |
-          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
-          CUSTOM_ARCHIVE_NAME="${REPO_NAME}.zip"
-
-          # Move one level up and zip the repository folder
-          cd ..
-          zip -r "$CUSTOM_ARCHIVE_NAME" "$REPO_NAME" -x "$REPO_NAME/.git/*" "$REPO_NAME/.github/*"
-
-          # Move the zip back to the original workflow directory
-          mv "$CUSTOM_ARCHIVE_NAME" "$GITHUB_WORKSPACE/"
-
-          # Set the zip file name as environment variable for later steps
-          echo "CUSTOM_ARCHIVE_NAME=$CUSTOM_ARCHIVE_NAME" >> "$GITHUB_ENV"
-
-      # Step 8: Get last commit message (push events only)
-      - name: Get last commit message
-        if: github.event_name == 'push'
-        id: last_commit
-        run: |
-          LAST_COMMIT_MESSAGE="$(git log -1 --pretty=%B)"
-          {
-            echo "LAST_COMMIT_MESSAGE<<EOF"
-            echo "$LAST_COMMIT_MESSAGE"
-            echo "EOF"
-          } >> $GITHUB_ENV
-
-      # Step 9: Ensure tag exists on remote (push events only)
-      - name: Ensure tag exists
-        if: github.event_name == 'push'
+      - name: Delete existing release and tag if they exist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG=v${{ env.VERSION }}
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$TAG"
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git "$TAG"
+          TAG="${{ steps.version.outputs.version }}"
 
-      # Step 10: Create GitHub release (push events)
-      - name: Create GitHub release (push)
-        if: github.event_name == 'push'
-        id: create_release_push
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "⚠️ Release $TAG already exists. Deleting..."
+            gh release delete "$TAG" --yes
+            git push --delete origin "$TAG" || true
+          else
+            echo "✅ No existing release for $TAG"
+          fi
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.VERSION }}
-          name: Version ${{ env.VERSION }}
-          body: ${{ env.LAST_COMMIT_MESSAGE }}
-          files: |
-            ${{ env.CUSTOM_ARCHIVE_NAME }}
-            manifest.json
-          overwrite_files: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 11: Create GitHub release (release events)
-      - name: Create GitHub release (release)
-        if: github.event_name == 'release'
-        id: create_release_event
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
-          name: Release ${{ github.event.release.tag_name }}
-          body: ${{ github.event.release.body }}
-          files: |
-            ${{ env.CUSTOM_ARCHIVE_NAME }}
-            manifest.json
-          overwrite_files: true
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Release ${{ steps.version.outputs.version }}
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

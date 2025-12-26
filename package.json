@@ -1,6 +1,6 @@
 {
   "name": "wordpress-blocks",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": "https://github.com/ZIORWebDev/wordpress-blocks.git",
   "license": "MIT",
   "main": "dist/index.js",
