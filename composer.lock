@@ -4,56 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6239e0ec893b78239abdfee85227000f",
-    "packages": [
-        {
-            "name": "ascteam/mimey",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/AcesseSeuCondominio/mimey.git",
-                "reference": "db85278a1c5ea92ba12657fc488c5582d3344142"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/AcesseSeuCondominio/mimey/zipball/db85278a1c5ea92ba12657fc488c5582d3344142",
-                "reference": "db85278a1c5ea92ba12657fc488c5582d3344142",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpunit/phpunit": "^10.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Mimey\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lucas Ferro",
-                    "email": "lucasferrobrandao@gmail.com"
-                },
-                {
-                    "name": "Ralph Khattar",
-                    "email": "ralph.khattar@gmail.com"
-                }
-            ],
-            "description": "PHP package for converting file extensions to MIME types and vice versa.",
-            "support": {
-                "source": "https://github.com/AcesseSeuCondominio/mimey/tree/3.0.0"
-            },
-            "time": "2024-11-20T22:49:54+00:00"
-        }
-    ],
+    "content-hash": "948ea4771f0688dd420bc9dcd2fd5d91",
+    "packages": [],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
