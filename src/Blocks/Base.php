@@ -2,10 +2,10 @@
 /**
  * Base Block
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  */
 
-namespace ZiorWebDev\WordPressBlocks\Blocks;
+namespace ZIORWebDev\WordPressBlocks\Blocks;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {

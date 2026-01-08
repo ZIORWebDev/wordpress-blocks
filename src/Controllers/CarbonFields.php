@@ -2,15 +2,15 @@
 /**
  * Carbon Fields class
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
-namespace ZiorWebDev\WordPressBlocks\Controllers;
+namespace ZIORWebDev\WordPressBlocks\Controllers;
 
 /**
  * Carbon Fields Blocks
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
 class CarbonFields {

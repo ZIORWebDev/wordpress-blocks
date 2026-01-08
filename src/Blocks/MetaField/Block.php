@@ -2,17 +2,17 @@
 /**
  * Server-side rendering of the `ziorwebdev/meta-field` blocks.
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  */
 
-namespace ZiorWebDev\WordPressBlocks\Blocks\MetaField;
+namespace ZIORWebDev\WordPressBlocks\Blocks\MetaField;
 
-use ZiorWebDev\WordPressBlocks\Blocks;
+use ZIORWebDev\WordPressBlocks\Blocks;
 
 /**
  * Meta Field class
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
 class Block extends Blocks\Base {

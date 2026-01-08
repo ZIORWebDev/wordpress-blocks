@@ -5,7 +5,7 @@
   "type": "library",
   "autoload": {
     "psr-4": {
-      "ZiorWebDev\\WordPressBlocks\\": "src/"
+      "ZIORWebDev\\WordPressBlocks\\": "src/"
     }
   },
   "require": {

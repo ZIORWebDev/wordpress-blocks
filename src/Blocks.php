@@ -2,16 +2,16 @@
 /**
  * Blocks class
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
-namespace ZiorWebDev\WordPressBlocks;
+namespace ZIORWebDev\WordPressBlocks;
 
-// use ZiorWebDev\WordPressBlocks\Integration;
+// use ZIORWebDev\WordPressBlocks\Integration;
 /**
  * Class Blocks
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
 final class Blocks {

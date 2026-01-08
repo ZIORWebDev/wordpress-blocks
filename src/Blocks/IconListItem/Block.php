@@ -2,17 +2,17 @@
 /**
  * Server-side rendering of the `ziorwebdev/icon-list` blocks.
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  */
 
-namespace ZiorWebDev\WordPressBlocks\Blocks\IconListItem;
+namespace ZIORWebDev\WordPressBlocks\Blocks\IconListItem;
 
-use ZiorWebDev\WordPressBlocks\Blocks;
+use ZIORWebDev\WordPressBlocks\Blocks;
 
 /**
  * Icon Picker class
  *
- * @package ZiorWebDev\WordPressBlocks
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
 class Block extends Blocks\Base {
