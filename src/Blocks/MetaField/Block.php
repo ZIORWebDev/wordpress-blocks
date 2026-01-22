@@ -114,7 +114,7 @@ class Block extends Blocks\Base {
 		}
 
 		return preg_replace(
-			'/<([^\/>\s]+)([^>]*)>\s*<\/\1>/',
+			'/<([^\/>\s]+)([^>]*)>.*?<\/\1>/s',
 			'<$1$2>' . $value . '</$1>',
 			$html,
 			1
