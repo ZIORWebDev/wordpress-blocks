@@ -214,7 +214,7 @@ function MegaFieldEdit({
       )}
 
       <InspectorControls>
-        <PanelBody title={__('Meta Field Settings')} initialOpen={true}>
+        <PanelBody title={__('Settings')} initialOpen={true}>
           {helpText && (
             <Text
               variant="small"

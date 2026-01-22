@@ -4,8 +4,12 @@
   "name": "ziorwebdev/meta-field",
   "title": "Meta Field",
   "category": "widgets",
-  "description": "Display meta field value.",
-  "keywords": ["meta", "field", "option"],
+  "description": "Display postmeta/options value.",
+  "keywords": [
+    "meta",
+    "field",
+    "option"
+  ],
   "textdomain": "default",
   "attributes": {
     "textAlign": {
@@ -55,7 +59,7 @@
       "type": "string",
       "default": ""
     },
-      "showReturnFormat": {
+    "showReturnFormat": {
       "type": "boolean",
       "default": false
     },
@@ -64,8 +68,8 @@
       "default": 0
     },
     "showDataIndex": {
-    "type": "boolean",
-    "default": false
+      "type": "boolean",
+      "default": false
     },
     "helpText": {
       "type": "string",
@@ -97,7 +101,10 @@
     }
   },
   "supports": {
-    "align": ["wide", "full"],
+    "align": [
+      "wide",
+      "full"
+    ],
     "anchor": true,
     "className": true,
     "splitting": true,
