@@ -109,8 +109,8 @@ class Block extends Blocks\Base {
 	 * @return string Modified HTML.
 	 */
 	private function replace_inner_html( $html, $value ) {
-		if ( trim( $html ) === '' ) {
-			return $html;
+		if ( empty( trim( $html ) ) ) {
+			return $value;
 		}
 
 		return preg_replace(
