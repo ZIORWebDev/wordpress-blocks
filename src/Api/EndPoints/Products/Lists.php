@@ -8,7 +8,7 @@
 namespace ZIORWebDev\WordPressBlocks\Api\EndPoints\Products;
 
 use ZIORWebDev\WordPressBlocks\Api\EndPoints;
-use ZIORWebDev\WordPressBlocks\Models\Products as ProductsModel;
+use ZIORWebDev\WordPressBlocks\Controllers\Products as ProductsController;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,7 +28,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'products/lists';
+	protected $route_path = 'products/lists';
 
 	/**
 	 * Callback
@@ -36,11 +36,10 @@ class Lists extends EndPoints\Base {
 	 * @param \WP_REST_Request $request The request.
 	 * @return array The response.
 	 */
-	public static function callback( \WP_REST_Request $request ) {
-		$path     = self::get_rest_path();
+	public function callback( \WP_REST_Request $request ) {
+		$path     = $this->get_rest_path();
 		$params   = $request->get_params();
-		$model    = new ProductsModel();
-		$products = $model->get_products( $path, $params );
+		$products = ProductsController::get_products( $path, $params );
 
 		return rest_ensure_response(
 			array(
@@ -54,7 +53,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @return array The REST args.
 	 */
-	public static function get_rest_args() {
+	public function get_rest_args() {
 		return array(
 			'search' => array(
 				'type'              => 'string',
@@ -69,7 +68,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @return string The REST method.
 	 */
-	public static function get_rest_method() {
+	public function get_rest_method() {
 		return \WP_REST_Server::READABLE;
 	}
 }

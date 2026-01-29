@@ -9,6 +9,8 @@ namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
 
 use ZIORWebDev\WordPressBlocks\utils;
 use ZIORWebDev\WordPressBlocks\Api\EndPoints;
+use ZIORWebDev\WordPressBlocks\Controllers\Options as OptionsController;
+
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,7 +30,7 @@ class Value extends EndPoints\Base {
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'options/value';
+	protected $route_path = 'options/value';
 
 	/**
 	 * Callback
@@ -36,35 +38,11 @@ class Value extends EndPoints\Base {
 	 * @param \WP_REST_Request $request The request.
 	 * @return array The response.
 	 */
-	public static function callback( \WP_REST_Request $request ) {
-		$meta_value = self::get_option_value( $request->get_params() );
+	public function callback( \WP_REST_Request $request ) {
+		$meta_value = OptionsController::get_value( $request->get_params() );
 		$meta_value = Utils\Helper::normalize_value( $meta_value );
 
 		return rest_ensure_response( array( 'value' => $meta_value ) );
-	}
-
-	/**
-	 * Get meta/option value based on attributes.
-	 *
-	 * @param array $attributes Block attributes.
-	 * @return mixed
-	 */
-	private static function get_option_value( $attributes ) {
-		$meta_key   = isset( $attributes['metaKey'] ) ? $attributes['metaKey'] : '';
-		$provider   = isset( $attributes['fieldProvider'] ) ? $attributes['fieldProvider'] : '';
-		$meta_value = get_option( $meta_key );
-
-		/**
-		 * If field provider is set, get the value by provider.
-		 */
-		$meta_value = apply_filters( "wordpress_blocks_option_provider_{$provider}_value", $meta_value, $meta_key );
-
-		/**
-		 * Filter specific meta key.
-		 */
-		$meta_value = apply_filters( "wordpress_blocks_option_{$meta_key}_value", $meta_value, $attributes );
-
-		return $meta_value;
 	}
 
 	/**
@@ -72,7 +50,7 @@ class Value extends EndPoints\Base {
 	 *
 	 * @return array The REST args.
 	 */
-	public static function get_rest_args() {
+	public function get_rest_args() {
 		return array(
 			'metaKey' => array(
 				'type'              => 'string',
@@ -92,7 +70,7 @@ class Value extends EndPoints\Base {
 	 *
 	 * @return string The REST method.
 	 */
-	public static function get_rest_method() {
+	public function get_rest_method() {
 		return \WP_REST_Server::READABLE;
 	}
 }

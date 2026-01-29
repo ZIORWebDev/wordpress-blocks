@@ -28,7 +28,7 @@ abstract class Base implements Interface\Route {
 	 *
 	 * @var string
 	 */
-	protected static $route_path = null;
+	protected $route_path = null;
 
 	/**
 	 * Check if the Nonce is valid
@@ -36,7 +36,7 @@ abstract class Base implements Interface\Route {
 	 * @param \WP_REST_Request $request
 	 * @return boolean
 	 */
-	protected static function is_valid_nonce( \WP_REST_Request $request ): bool {
+	protected function is_valid_nonce( \WP_REST_Request $request ): bool {
 		$nonce = $request->get_header( 'x-wp-nonce' );
 
 		return $nonce && wp_verify_nonce( $nonce, 'wp_rest' );
@@ -50,12 +50,12 @@ abstract class Base implements Interface\Route {
 	public function __construct() {
 		register_rest_route(
 			Routes::get_namespace(),
-			static::get_rest_path(),
+			$this->get_rest_path(),
 			array(
-				'args'                => static::get_rest_args(),
-				'methods'             => static::get_rest_method(),
-				'callback'            => array( static::class, 'callback' ),
-				'permission_callback' => array( static::class, 'get_rest_permission' ),
+				'args'                => $this->get_rest_args(),
+				'methods'             => $this->get_rest_method(),
+				'callback'            => array( $this, 'callback' ),
+				'permission_callback' => array( $this, 'get_rest_permission' ),
 			)
 		);
 	}
@@ -65,9 +65,9 @@ abstract class Base implements Interface\Route {
 	 *
 	 * @return string
 	 */
-	public static function get_name() {
-		$path   = static::get_rest_path();
-		$method = strtolower( static::get_rest_method() );
+	public function get_name() {
+		$path   = $this->get_rest_path();
+		$method = strtolower( $this->get_rest_method() );
 
 		return "$path/$method";
 	}
@@ -78,8 +78,8 @@ abstract class Base implements Interface\Route {
 	 * @since 1.0.0
 	 * @return string
 	 */
-	public static function get_rest_path() {
-		return static::$route_path;
+	public function get_rest_path() {
+		return $this->route_path;
 	}
 
 	/**
@@ -88,7 +88,7 @@ abstract class Base implements Interface\Route {
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public static function get_rest_args() {
+	public function get_rest_args() {
 		return array();
 	}
 
@@ -98,10 +98,10 @@ abstract class Base implements Interface\Route {
 	 * @since 1.0.0
 	 * @return string
 	 */
-	public static function get_rest_url() {
+	public function get_rest_url() {
 		$blog_id   = get_current_blog_id();
 		$namespace = Routes::get_namespace();
-		$path      = static::get_rest_path();
+		$path      = $this->get_rest_path();
 
 		return get_rest_url( $blog_id, "{$namespace}/$path" );
 	}
@@ -112,8 +112,8 @@ abstract class Base implements Interface\Route {
 	 * @since 1.0.0
 	 * @return boolean|\WP_Error
 	 */
-	public static function get_rest_permission( \WP_REST_Request $request ) {
-		if ( self::is_valid_nonce( $request ) ) {
+	public function get_rest_permission( \WP_REST_Request $request ) {
+		if ( $this->is_valid_nonce( $request ) ) {
 			return true;
 		}
 

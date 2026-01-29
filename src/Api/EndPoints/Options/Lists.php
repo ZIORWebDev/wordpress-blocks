@@ -8,7 +8,7 @@
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
 
 use ZIORWebDev\WordPressBlocks\Api\EndPoints;
-use ZIORWebDev\WordPressBlocks\Models\Options as OptionsModel;
+use ZIORWebDev\WordPressBlocks\Controllers\Options as OptionsController;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,7 +28,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'options/lists';
+	protected $route_path = 'options/lists';
 
 	/**
 	 * Callback
@@ -36,11 +36,10 @@ class Lists extends EndPoints\Base {
 	 * @param \WP_REST_Request $request The request.
 	 * @return array The response.
 	 */
-	public static function callback( \WP_REST_Request $request ) {
-		$path    = self::get_rest_path();
+	public function callback( \WP_REST_Request $request ) {
+		$path    = $this->get_rest_path();
 		$params  = $request->get_params();
-		$model   = new OptionsModel();
-		$options = $model->get_option_keys( $path, $params );
+		$options = OptionsController::get_keys( $path, $params );
 
 		return rest_ensure_response(
 			array(
@@ -55,16 +54,12 @@ class Lists extends EndPoints\Base {
 	 * @since 1.0.0
 	 * @return boolean|\WP_Error
 	 */
-	public static function get_rest_permission( \WP_REST_Request $request ) {
-		if ( self::is_valid_nonce( $request ) ) {
-			return true;
-		}
-
+	public function get_rest_permission( \WP_REST_Request $request ) {
 		/**
 		 * For security reasons, only return the list of options keys when
-		 * the logged in user is an administrator.
+		 * the logged in user is an administrator and nonce is valid.
 		 */
-		if ( current_user_can( 'manage_options' ) ) {
+		if ( $this->is_valid_nonce( $request ) && current_user_can( 'manage_options' ) ) {
 			return true;
 		}
 
@@ -76,7 +71,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @return array The REST args.
 	 */
-	public static function get_rest_args() {
+	public function get_rest_args() {
 		return array(
 			'search' => array(
 				'type'              => 'string',
@@ -91,7 +86,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @return string The REST method.
 	 */
-	public static function get_rest_method() {
+	public function get_rest_method() {
 		return \WP_REST_Server::READABLE;
 	}
 }
