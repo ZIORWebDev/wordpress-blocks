@@ -20,7 +20,7 @@ final class Load {
 	 *
 	 * @var string
 	 */
-	protected static $package_version = '1.0.0';
+	protected static $package_version = '1.1.4';
 
 	/**
 	 * Singleton instance of the Plugin class.
@@ -36,7 +36,9 @@ final class Load {
 		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ), 50 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 
+		Routes::get_instance();
 		Blocks::get_instance();
+		Hooks\Meta::get_instance();
 	}
 
 	/**
@@ -50,9 +52,8 @@ final class Load {
 		}
 
 		// Determine dependency
-
-			$screen       = get_current_screen();
-			$dependencies = array( 'wp-blocks', 'wp-dom-ready' );
+		$screen       = get_current_screen();
+		$dependencies = array( 'wp-blocks', 'wp-dom-ready' );
 
 		if ( $screen->base === 'post' ) {
 			$dependencies[] = 'wp-edit-post';
@@ -60,16 +61,7 @@ final class Load {
 			$dependencies[] = 'wp-edit-widgets';
 		}
 
-		$vendor_js       = plugin_dir_url( __DIR__ ) . 'dist/vendors.min.js';
 		$block_editor_js = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.js';
-
-		// Enqueue vendor JS
-		wp_enqueue_script(
-			'ziorwebdev-wordpress-blocks-vendor',
-			$vendor_js,
-			array(),
-			self::$package_version
-		);
 
 		// Enqueue editor JS
 		wp_enqueue_script(
@@ -77,6 +69,17 @@ final class Load {
 			$block_editor_js,
 			$dependencies,
 			self::$package_version
+		);
+
+		$rest_namespace = Routes::get_namespace();
+
+		wp_localize_script(
+			'ziorwebdev-wordpress-blocks-editor',
+			'ZIORWebDevWordPressBlocks',
+			array(
+				'restUrl' => esc_url( rest_url( $rest_namespace ) ),
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
+			)
 		);
 	}
 

@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ziorwebdev/add-to-cart",
+	"title": "Add to Cart",
+	"category": "design",
+	"description": "Display WooCommerce add to cart button.",
+	"textdomain": "default",
+	"attributes": {
+		"productId": {
+			"type": "string"
+		}
+	},
+	"editorStyle": "wp-block-ziorwebdev-wc-add-to-cart-editor"
+}

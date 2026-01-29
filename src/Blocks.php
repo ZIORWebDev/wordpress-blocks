@@ -41,6 +41,7 @@ final class Blocks {
 		Blocks\IconListItem\Block::get_instance();
 		Blocks\IconList\Block::get_instance();
 		Blocks\MetaField\Block::get_instance();
+		Blocks\AddToCart\Block::get_instance();
 
 		add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
 	}
