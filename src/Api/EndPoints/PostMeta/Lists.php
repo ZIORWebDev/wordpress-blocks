@@ -28,7 +28,7 @@ class Lists extends EndPoints\Base {
 	 *
 	 * @var string
 	 */
-	protected $route_path = 'postmeta/lists';
+	protected $route_path = 'post_meta/lists';
 
 	/**
 	 * Callback

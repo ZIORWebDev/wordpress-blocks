@@ -170,7 +170,7 @@ function MegaFieldEdit({
       const postId = currentPost?.id || 0;
 
       try {
-        const path = `/wordpress-blocks/v1/meta-value?${getParameters(
+        const path = `${ZIORWPBlocks.restUrl}/${metaFieldType}/value/?${getParameters(
           attributes,
           postId,
         ).toString()}`;

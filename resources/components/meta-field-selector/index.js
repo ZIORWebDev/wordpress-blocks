@@ -3,21 +3,7 @@ const { useState, useEffect, useCallback, useMemo } = wp.element;
 const apiFetch = wp.apiFetch;
 const { __ } = wp.i18n;
 
-// Safe debounce implementation
-const debounce = (() => {
-  if (typeof window !== 'undefined') {
-    if (window.wp?.lodash?.debounce) return window.wp.lodash.debounce;
-    if (window.lodash?.debounce) return window.lodash.debounce;
-    if (window._?.debounce) return window._.debounce;
-  }
-  return (func, wait = 0) => {
-    let timeout;
-    return function (...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-  };
-})();
+import { debounce } from '../../utils/debounce';
 
 export default function MetaFieldSelector({
   value = '',
@@ -48,11 +34,11 @@ export default function MetaFieldSelector({
   const fetchOptions = useCallback(
     debounce((search) => {
       apiFetch({
-        path: `/wordpress-blocks/v1/meta-keys?type=${metaFieldType}&search=${search}`,
+        path: `${ZIORWPBlocks.restUrl}/${metaFieldType}/lists/?search=${search}`,
         headers: { 'X-WP-Nonce': wpApiSettings.nonce },
       })
         .then((results) =>
-          setOptions(results.map((key) => ({ label: key, value: key }))),
+          setOptions(results.meta_keys.map((key) => ({ label: key, value: key }))),
         )
         .catch(() => setOptions([]));
     }, 300),

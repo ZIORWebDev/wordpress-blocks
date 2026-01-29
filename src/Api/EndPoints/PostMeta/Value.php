@@ -29,7 +29,7 @@ class Value extends EndPoints\Base {
 	 *
 	 * @var string
 	 */
-	protected $route_path = 'postmeta/value';
+	protected $route_path = 'post_meta/value';
 
 	/**
 	 * Callback
@@ -51,12 +51,12 @@ class Value extends EndPoints\Base {
 	 */
 	public function get_rest_args() {
 		return array(
-			'metaKey' => array(
+			'metaKey'       => array(
 				'type'              => 'string',
 				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			),
-			'postId' => array(
+			'postId'        => array(
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',

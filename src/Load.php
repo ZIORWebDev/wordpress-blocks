@@ -78,8 +78,7 @@ final class Load {
 			'zior-wp-blocks-editor',
 			'ZIORWPBlocks',
 			array(
-				'restUrl' => esc_url( rest_url( $rest_namespace ) ),
-				'nonce'   => wp_create_nonce( 'wp_rest' ),
+				'restUrl' => $rest_namespace,
 			)
 		);
 	}

@@ -22,6 +22,51 @@ class Options {
 	 */
 	protected static $instance;
 
+
+	/**
+	 * Get option name by field ID.
+	 *
+	 * @param string $field_id Field ID.
+	 * @return string|null
+	 */
+	private function get_option_name_by_field_name( $field_id ) {
+		$meta_boxes = apply_filters( 'rwmb_meta_boxes', array() );
+
+		foreach ( $meta_boxes as $meta_box ) {
+			if ( empty( $meta_box['option_name'] ) ) {
+				continue;
+			}
+
+			foreach ( $meta_box['fields'] as $field ) {
+				if ( $field['id'] === $field_id ) {
+					return $meta_box['option_name'];
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get pod name by field name.
+	 *
+	 * @param string $field_name Field name.
+	 * @return string|null
+	 */
+	private function get_pod_name_by_field_name( $field_name ) {
+		$pods = pods_api()->load_pods();
+
+		foreach ( $pods as $name => $pod_def ) {
+			$pod = pods( $name );
+
+			if ( array_key_exists( $field_name, $pod->fields() ) ) {
+				return $name;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Constructor.
 	 */

@@ -1,45 +1,67 @@
 const { ComboboxControl } = wp.components;
-const { useState, useEffect, useMemo } = wp.element;
+const { useState, useEffect, useCallback, useMemo } = wp.element;
 const apiFetch = wp.apiFetch;
 const { __ } = wp.i18n;
 
+import { debounce } from '../../utils/debounce';
+
 export default function ProductSelector({ value = '', onChange = () => {} }) {
+  const [product, setProduct] = useState(value || '');
   const [options, setOptions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const metaKey = value;
-  const setMetaKey = onChange;
-
+  // Sync prop with internal state
   useEffect(() => {
-    const controller = new AbortController();
+    if (value !== undefined && value !== product) {
+      setProduct(value || '');
+    }
+  }, [value]);
 
-    apiFetch({
-      path: `/wp-json/wc/woopress-license-hub/license-products?search=${searchTerm}`,
-      signal: controller.signal,
-    })
-      .then((results) =>
-        setOptions(results.map((key) => ({ label: key, value: key })))
-      )
-      .catch(() => setOptions([]));
+  // Notify parent when product changes
+  useEffect(() => onChange(product), [product, onChange]);
 
-    return () => controller.abort();
-  }, [searchTerm]);
+  // Fetch product options from REST API
+  const fetchOptions = useCallback(
+    debounce((search) => {
+      apiFetch({
+        path: `${ZIORWPBlocks.restUrl}/products/lists/?search=${search}`,
+        headers: { 'X-WP-Nonce': wpApiSettings.nonce },
+      })
+        .then((results) =>
+          setOptions(
+            results.products.map((product) => ({ label: product.name, value: product.id }))
+          )
+        )
+        .catch(() => setOptions([]));
+    }, 300),
+    []
+  );
 
+  useEffect(() => fetchOptions(searchTerm), [searchTerm, fetchOptions]);
+
+  // Ensure selected product is always displayed
   const displayedOptions = useMemo(() => {
-    if (!metaKey) return options;
-    return options.some((o) => o.value === metaKey)
+    if (!product) return options;
+    return options.some((o) => o.value === product)
       ? options
-      : [{ label: metaKey, value: metaKey }, ...options];
-  }, [options, metaKey]);
+      : [{ label: product, value: product }, ...options];
+  }, [options, product]);
 
   return (
-    <ComboboxControl
-      label={__('Product', 'woopress-license-hub')}
-      value={metaKey}
-      options={displayedOptions}
-      onChange={setMetaKey}
-      onFilterValueChange={setSearchTerm}
-      placeholder={__('Type to search products…')}
-    />
+    <div className="components-base-control">
+      <ComboboxControl
+        label={__('Product')}
+        value={product}
+        options={displayedOptions}
+        onChange={setProduct}
+        onFilterValueChange={setSearchTerm}
+        placeholder={__('Type to search products...')}
+      />
+      <p className="components-base-control__help">
+        {__(
+          'Only choose products safe for public display. Avoid private values such as user data or tokens.'
+        )}
+      </p>
+    </div>
   );
 }
