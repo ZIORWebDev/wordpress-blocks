@@ -7,7 +7,7 @@ export function useReplaceIconOnInsert(rootClientId) {
       const innerBlocks = select('core/block-editor').getBlocks(rootClientId);
 
       // Check if more than one icon exists
-      const iconBlocks = innerBlocks.filter((b) => b.name === 'ziorwebdev/icon');
+      const iconBlocks = innerBlocks.filter((b) => b.name === 'zior/icon');
       if (iconBlocks.length > 1) {
         // Keep only the last inserted icon
         const [...toRemove] = iconBlocks.slice(0, -1);

@@ -2,7 +2,7 @@ const { InnerBlocks } = wp.blockEditor;
 
 export default function Edit() {
     return (
-        <div className="ziorwebdev-add-to-cart">
+        <div className="zior-add-to-cart">
             <InnerBlocks
                 allowedBlocks={['core/button']}
                 template={[

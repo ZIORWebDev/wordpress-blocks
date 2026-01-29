@@ -66,7 +66,7 @@ final class Load {
 
 		// Enqueue editor JS
 		wp_enqueue_script(
-			'ziorwebdev-wordpress-blocks-editor',
+			'zior-wp-blocks-editor',
 			$block_editor_js,
 			$dependencies,
 			self::$package_version
@@ -75,8 +75,8 @@ final class Load {
 		$rest_namespace = Routes::get_namespace();
 
 		wp_localize_script(
-			'ziorwebdev-wordpress-blocks-editor',
-			'ZIORWebDevWordPressBlocks',
+			'zior-wp-blocks-editor',
+			'ZIORWPBlocks',
 			array(
 				'restUrl' => esc_url( rest_url( $rest_namespace ) ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
@@ -96,7 +96,7 @@ final class Load {
 		wp_enqueue_style( 'dashicons' );
 
 		wp_enqueue_style(
-			'ziorwebdev-wordpress-blocks-editor',
+			'zior-wp-blocks-editor',
 			$block_editor_css,
 			array(), // dependencies
 			self::$package_version
@@ -104,7 +104,7 @@ final class Load {
 
 		// Enqueue block CSS
 		wp_enqueue_style(
-			'ziorwebdev-wordpress-blocks-style',
+			'zior-wp-blocks-style',
 			$block_style_css,
 			array(), // dependencies
 			self::$package_version

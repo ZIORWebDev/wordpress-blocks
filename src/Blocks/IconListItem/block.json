@@ -1,23 +1,25 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "ziorwebdev/icon-list-item",
+  "name": "zior/icon-list-item",
   "title": "Icon List Item",
   "category": "widgets",
   "description": "Display icon list item.",
-  "parent": ["ziorwebdev/icon-list"],
-	"attributes": {
-		"align": {
-			"type": "string",
-			"role": "content"
-		}
-	},
+  "parent": [
+    "zior/icon-list"
+  ],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "role": "content"
+    }
+  },
   "supports": {
     "html": false,
     "reusable": false,
     "inserter": false
   },
   "textdomain": "default",
-  "editorStyle": "wp-block-ziorwebdev-icon-list-item-editor",
-  "style": "wp-block-ziorwebdev-icon-list-item"
+  "editorStyle": "wp-block-zior-icon-list-item-editor",
+  "style": "wp-block-zior-icon-list-item"
 }

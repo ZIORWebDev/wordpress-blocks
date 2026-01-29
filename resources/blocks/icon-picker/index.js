@@ -15,21 +15,21 @@ export const settings = {
   example: {
     innerBlocks: [
       {
-        name: 'ziorwebdev/icon',
+        name: 'zior/icon',
         attributes: {
           service: 'wordpress',
           url: 'https://wordpress.org',
         },
       },
       {
-        name: 'ziorwebdev/icon',
+        name: 'zior/icon',
         attributes: {
           service: 'facebook',
           url: 'https://www.facebook.com/WordPress/',
         },
       },
       {
-        name: 'ziorwebdev/icon',
+        name: 'zior/icon',
         attributes: {
           service: 'twitter',
           url: 'https://twitter.com/WordPress',

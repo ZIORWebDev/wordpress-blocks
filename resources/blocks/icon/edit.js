@@ -43,18 +43,18 @@ const IconEdit = ({ attributes, context, setAttributes, name, clientId }) => {
   const { selectBlock } = useDispatch('core/block-editor');
 
   const wrapperClasses = clsx(
-    'wp-ziorwebdev-icon',
-    'wp-block-ziorwebdev-icon',
-    'wp-ziorwebdev-icon-' + service,
+    'wp-zior-icon',
+    'wp-block-zior-icon',
+    'wp-zior-icon-' + service,
     {
-      'wp-ziorwebdev-icon__is-incomplete': !url,
+      'wp-zior-icon__is-incomplete': !url,
       [`has-${iconColor}-color`]: iconColor,
       [`has-${iconBackgroundColor}-background-color`]: iconBackgroundColor,
     },
   );
 
   const blockProps = useBlockProps({
-    className: 'wp-block-ziorwebdev-icon-anchor',
+    className: 'wp-block-zior-icon-anchor',
     onClick: (e) => {
       e.stopPropagation(); // Prevent selecting the child
       if (parentClientId) {
@@ -121,7 +121,7 @@ const IconEdit = ({ attributes, context, setAttributes, name, clientId }) => {
         <button {...blockProps} role="button">
           <Icon icon={icon} />
           <span
-            className={clsx('wp-block-ziorwebdev-icon-label', {
+            className={clsx('wp-block-zior-icon-label', {
               'screen-reader-text': !showLabels,
             })}
           >

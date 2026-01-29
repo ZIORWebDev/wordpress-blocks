@@ -30,12 +30,12 @@ class Options extends Base {
 		/**
 		 * If field provider is set, get the value by provider.
 		 */
-		$meta_value = apply_filters( "wordpress_blocks_option_provider_{$provider}_value", $meta_value, $meta_key );
+		$meta_value = apply_filters( "zior_wp_blocks_option_provider_{$provider}_value", $meta_value, $meta_key );
 
 		/**
 		 * Filter specific meta key.
 		 */
-		$meta_value = apply_filters( "wordpress_blocks_option_{$meta_key}_value", $meta_value, $params );
+		$meta_value = apply_filters( "zior_wp_blocks_option_{$meta_key}_value", $meta_value, $params );
 
 		return $meta_value;
 	}
@@ -73,12 +73,12 @@ class Options extends Base {
 		/**
 		 * Filter the list of excluded option name patterns.
 		 */
-		$excludes = apply_filters( 'wordpress_blocks_rest_query_options_keys_excluded', $default_excludes );
+		$excludes = apply_filters( 'zior_wp_blocks_rest_query_options_keys_excluded', $default_excludes );
 
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'wordpress_blocks_rest_query_limit', 50 ) );
+		$limit = absint( apply_filters( 'zior_wp_blocks_rest_query_limit', 50 ) );
 
 		// Build NOT LIKE SQL conditions.
 		$not_like_sql = array();

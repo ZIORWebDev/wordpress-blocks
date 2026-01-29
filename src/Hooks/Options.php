@@ -29,10 +29,10 @@ class Options {
 		/**
 		 * Filters to get meta/option values based on field providers.
 		 */
-		add_filter( 'wordpress_blocks_option_provider_acf_value', array( $this, 'get_acf_option_value' ), 10, 2 );
-		add_filter( 'wordpress_blocks_option_provider_carbon_field_value', array( $this, 'get_carbon_field_option_value' ), 10, 2 );
-		add_filter( 'wordpress_blocks_option_provider_metabox_value', array( $this, 'get_metabox_option_value' ), 10, 2 );
-		add_filter( 'wordpress_blocks_option_provider_pods_value', array( $this, 'get_pods_option_value' ), 10, 2 );
+		add_filter( 'zior_wp_blocks_option_provider_acf_value', array( $this, 'get_acf_option_value' ), 10, 2 );
+		add_filter( 'zior_wp_blocks_option_provider_carbon_field_value', array( $this, 'get_carbon_field_option_value' ), 10, 2 );
+		add_filter( 'zior_wp_blocks_option_provider_metabox_value', array( $this, 'get_metabox_option_value' ), 10, 2 );
+		add_filter( 'zior_wp_blocks_option_provider_pods_value', array( $this, 'get_pods_option_value' ), 10, 2 );
 	}
 
 	/**

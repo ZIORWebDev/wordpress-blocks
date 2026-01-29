@@ -21,12 +21,12 @@ import styles from './editor.scss';
 // Template contains the links that show when start.
 const TEMPLATE = [
 	[
-		'ziorwebdev/icon-wordpress',
+		'zior/icon-wordpress',
 		{ service: 'wordpress', url: 'https://wordpress.org' },
 	],
-	[ 'ziorwebdev/icon-facebook', { service: 'facebook' } ],
-	[ 'ziorwebdev/icon-twitter', { service: 'twitter' } ],
-	[ 'ziorwebdev/icon-instagram', { service: 'instagram' } ],
+	[ 'zior/icon-facebook', { service: 'facebook' } ],
+	[ 'zior/icon-twitter', { service: 'twitter' } ],
+	[ 'zior/icon-instagram', { service: 'instagram' } ],
 ];
 
 function IconPickerEdit( {

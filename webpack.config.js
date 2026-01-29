@@ -63,18 +63,8 @@ export default {
       }),
       new CssMinimizerPlugin(),
     ],
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        common: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          enforce: true,
-          priority: -10,
-        },
-      },
-    },
+    // No splitChunks → all code stays in entry files
+    splitChunks: false,
   },
 
   performance: {

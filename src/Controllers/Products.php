@@ -29,7 +29,7 @@ class Products extends Base {
 		/**
 		 * Check if WC_Product_Query exists.
 		 */
-		if( ! class_exists( 'WC_Product_Query' ) ) {
+		if ( ! class_exists( 'WC_Product_Query' ) ) {
 			return array();
 		}
 
@@ -45,7 +45,7 @@ class Products extends Base {
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'wordpress_blocks_rest_query_limit', 50 ) );
+		$limit = absint( apply_filters( 'zior_wp_blocks_rest_query_limit', 50 ) );
 		$args  = array(
 			'status' => 'publish',
 			'limit'  => $limit,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `ziorwebdev/meta-field` blocks.
+ * Server-side rendering of the `zior/meta-field` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -20,7 +20,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Block name
 	 */
-	protected $block_name = 'ziorwebdev/meta-field';
+	protected $block_name = 'zior/meta-field';
 
 	/**
 	 * Path of the block.json file
@@ -35,7 +35,7 @@ class Block extends Blocks\Base {
 	protected static $instance;
 
 	/**
-	 * Renders the `ziorwebdev/meta-field` block on server.
+	 * Renders the `zior/meta-field` block on server.
 	 *
 	 * @since 1.0.0
 	 *
@@ -54,7 +54,7 @@ class Block extends Blocks\Base {
 		}
 
 		$meta_value = $this->get_meta_value( $attributes );
-		$meta_value = apply_filters( 'wordpress_blocks_meta_field_value', $meta_value, $meta_key, $attributes );
+		$meta_value = apply_filters( 'zior_wp_blocks_meta_field_value', $meta_value, $meta_key, $attributes );
 
 		/**
 		 * Return original content if value is empty.
@@ -127,7 +127,7 @@ class Block extends Blocks\Base {
 		/**
 		 * Filter specific meta key.
 		 */
-		$meta_value = apply_filters( "wordpress_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
+		$meta_value = apply_filters( "zior_wp_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
 
 		return $meta_value;
 	}
@@ -164,7 +164,7 @@ class Block extends Blocks\Base {
 	 */
 	private function get_post_meta_by_provider( $provider, $post_id, $meta_key ) {
 		$default_value = get_post_meta( $post_id, $meta_key, true );
-		$meta_value    = apply_filters( "wordpress_blocks_meta_field_post_meta_{$provider}_value", $default_value, $post_id, $meta_key );
+		$meta_value    = apply_filters( "zior_wp_blocks_meta_field_post_meta_{$provider}_value", $default_value, $post_id, $meta_key );
 
 		return $meta_value;
 	}
@@ -178,7 +178,7 @@ class Block extends Blocks\Base {
 	 */
 	private function get_option_by_provider( $provider, $meta_key ) {
 		$default_value = get_option( $meta_key );
-		$meta_value    = apply_filters( "wordpress_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
+		$meta_value    = apply_filters( "zior_wp_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
 
 		return $meta_value;
 	}

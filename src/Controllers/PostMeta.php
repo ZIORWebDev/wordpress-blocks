@@ -21,9 +21,9 @@ class PostMeta extends Base {
 	 * Get post meta value.
 	 */
 	public static function get_value( $params ): mixed {
-		$meta_key   = isset( $params['metaKey'] ) ? $params['metaKey'] : '';
-		$provider   = isset( $params['fieldProvider'] ) ? $params['fieldProvider'] : '';
-		$post_id    = self::get_post_id( $params );
+		$meta_key = isset( $params['metaKey'] ) ? $params['metaKey'] : '';
+		$provider = isset( $params['fieldProvider'] ) ? $params['fieldProvider'] : '';
+		$post_id  = self::get_post_id( $params );
 
 		if ( empty( $post_id ) ) {
 			return '';
@@ -34,12 +34,12 @@ class PostMeta extends Base {
 		/**
 		 * If field provider is set, get the value by provider.
 		 */
-		$meta_value = apply_filters( "wordpress_blocks_postmeta_provider_{$provider}_value", $meta_value, $post_id, $meta_key );
+		$meta_value = apply_filters( "zior_wp_blocks_postmeta_provider_{$provider}_value", $meta_value, $post_id, $meta_key );
 
 		/**
 		 * Filter specific meta key.
 		 */
-		$meta_value = apply_filters( "wordpress_blocks_postmeta_{$meta_key}_value", $meta_value, $post_id, $attributes );
+		$meta_value = apply_filters( "zior_wp_blocks_postmeta_{$meta_key}_value", $meta_value, $post_id, $attributes );
 
 		return $meta_value;
 	}
@@ -87,7 +87,7 @@ class PostMeta extends Base {
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'wordpress_blocks_rest_query_limit', 50 ) );
+		$limit = absint( apply_filters( 'zior_wp_blocks_rest_query_limit', 50 ) );
 
 		$search_term = $args['search'] ?? '';
 		$post_type   = $args['post_type'] ?? 'page';

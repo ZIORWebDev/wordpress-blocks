@@ -11,5 +11,5 @@
 			"type": "string"
 		}
 	},
-	"editorStyle": "wp-block-ziorwebdev-wc-add-to-cart-editor"
+	"editorStyle": "wp-block-zior-add-to-cart-editor"
 }

@@ -73,7 +73,7 @@ class Get extends Base {
 		/**
 		 * Filter specific meta key.
 		 */
-		$meta_value = apply_filters( "wordpress_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
+		$meta_value = apply_filters( "zior_wp_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
 
 		return $meta_value;
 	}
@@ -88,7 +88,7 @@ class Get extends Base {
 	 */
 	private function get_post_meta_value_by_provider( $provider, $post_id, $meta_key ) {
 		$default_value = get_post_meta( $post_id, $meta_key, true );
-		$meta_value    = apply_filters( "wordpress_blocks_meta_field_post_meta_{$provider}_value", $default_value, $post_id, $meta_key );
+		$meta_value    = apply_filters( "zior_wp_blocks_meta_field_post_meta_{$provider}_value", $default_value, $post_id, $meta_key );
 
 		return $meta_value;
 	}
@@ -102,7 +102,7 @@ class Get extends Base {
 	 */
 	private function get_option_value_by_provider( $provider, $meta_key ) {
 		$default_value = get_option( $meta_key );
-		$meta_value    = apply_filters( "wordpress_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
+		$meta_value    = apply_filters( "zior_wp_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
 
 		return $meta_value;
 	}

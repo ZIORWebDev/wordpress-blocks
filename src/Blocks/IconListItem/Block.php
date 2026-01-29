@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `ziorwebdev/icon-list` blocks.
+ * Server-side rendering of the `zior/icon-list` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -20,7 +20,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Block name
 	 */
-	protected $block_name = 'ziorwebdev/icon-list-item';
+	protected $block_name = 'zior/icon-list-item';
 
 	/**
 	 * Path of the block.json file
@@ -35,7 +35,7 @@ class Block extends Blocks\Base {
 	protected static $instance;
 
 	/**
-	 * Renders the `ziorwebdev/icon-list` block on server.
+	 * Renders the `zior/icon-list` block on server.
 	 *
 	 * @since 1.0.0
 	 *

@@ -112,7 +112,7 @@ export function IconPickerEdit(props) {
   useReplaceIconOnInsert(clientId);
 
   const innerBlocksProps = useInnerBlocksProps(blockProps, {
-    template: [['ziorwebdev/icon', { service: 'wordpress', url: '' }]],
+    template: [['zior/icon', { service: 'wordpress', url: '' }]],
     renderAppender: false,
   });
 

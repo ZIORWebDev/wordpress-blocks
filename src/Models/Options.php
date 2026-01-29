@@ -34,7 +34,7 @@ class Options extends Base {
 	 * @return array List of option keys.
 	 */
 	public function get_option_keys( string $path, array $args ): array {
-		$cache_key  = $this->get_cache_key( $path, $args );
+		$cache_key   = $this->get_cache_key( $path, $args );
 		$cached_data = $this->get_cache( $cache_key );
 
 		if ( ! empty( $cached_data ) ) {
@@ -58,12 +58,12 @@ class Options extends Base {
 		/**
 		 * Filter the list of excluded option name patterns.
 		 */
-		$excludes = apply_filters( 'wordpress_blocks_rest_query_options_keys_excluded', $default_excludes );
+		$excludes = apply_filters( 'zior_wp_blocks_rest_query_options_keys_excluded', $default_excludes );
 
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'wordpress_blocks_rest_query_limit', 50 ) );
+		$limit = absint( apply_filters( 'zior_wp_blocks_rest_query_limit', 50 ) );
 
 		// Build NOT LIKE SQL conditions.
 		$not_like_sql = array();

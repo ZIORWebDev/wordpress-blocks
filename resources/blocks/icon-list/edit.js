@@ -10,10 +10,10 @@ export default function IconListEdit({ attributes, setAttributes, clientId }) {
   // Custom appender for the InnerBlocks
   const IconListItemAppender = () => {
     const handleAddItem = () => {
-      const iconPicker = createBlock('ziorwebdev/icon-picker');
+      const iconPicker = createBlock('zior/icon-picker');
       const paragraph = createBlock('core/paragraph');
 
-      const listItem = createBlock('ziorwebdev/icon-list-item', {}, [
+      const listItem = createBlock('zior/icon-list-item', {}, [
         iconPicker,
         paragraph,
       ]);
@@ -58,10 +58,10 @@ export default function IconListEdit({ attributes, setAttributes, clientId }) {
   const innerBlocksProps = useInnerBlocksProps(blockProps, {
     template: [
       [
-        'ziorwebdev/icon-list-item',
+        'zior/icon-list-item',
         {},
         [
-          ['ziorwebdev/icon-picker', {}],
+          ['zior/icon-picker', {}],
           ['core/paragraph', {}],
         ],
       ],

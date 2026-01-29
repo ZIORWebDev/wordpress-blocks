@@ -29,10 +29,10 @@ class PostMeta {
 		/**
 		 * Filters to get post meta values based on field providers.
 		 */
-		add_filter( 'wordpress_blocks_postmeta_provider_acf_value', array( $this, 'get_acf_post_meta_value' ), 10, 3 );
-		add_filter( 'wordpress_blocks_postmeta_provider_carbon_field_value', array( $this, 'get_carbon_field_post_meta_value' ), 10, 3 );
-		add_filter( 'wordpress_blocks_postmeta_provider_metabox_value', array( $this, 'get_metabox_post_meta_value' ), 10, 3 );
-		add_filter( 'wordpress_blocks_postmeta_provider_pods_value', array( $this, 'get_pods_post_meta_value' ), 10, 3 );
+		add_filter( 'zior_wp_blocks_postmeta_provider_acf_value', array( $this, 'get_acf_post_meta_value' ), 10, 3 );
+		add_filter( 'zior_wp_blocks_postmeta_provider_carbon_field_value', array( $this, 'get_carbon_field_post_meta_value' ), 10, 3 );
+		add_filter( 'zior_wp_blocks_postmeta_provider_metabox_value', array( $this, 'get_metabox_post_meta_value' ), 10, 3 );
+		add_filter( 'zior_wp_blocks_postmeta_provider_pods_value', array( $this, 'get_pods_post_meta_value' ), 10, 3 );
 	}
 
 	/**

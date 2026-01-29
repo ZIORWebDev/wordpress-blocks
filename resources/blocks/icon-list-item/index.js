@@ -14,7 +14,7 @@ export const settings = {
   example: {
     innerBlocks: [
       {
-        name: 'ziorwebdev/icon-picker',
+        name: 'zior/icon-picker',
         attributes: {},
       },
       {

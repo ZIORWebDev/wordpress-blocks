@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `ziorwebdev/icon` blocks.
+ * Server-side rendering of the `zior/icon` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -22,7 +22,7 @@ class Block extends Blocks\Base {
 	 *
 	 * @var $block_name
 	 */
-	protected $block_name = 'ziorwebdev/add-to-cart';
+	protected $block_name = 'zior/add-to-cart';
 
 	/**
 	 * Path of the block.json file
@@ -39,7 +39,7 @@ class Block extends Blocks\Base {
 	protected static $instance;
 
 	/**
-	 * Renders the `ziorwebdev/add-to-cart` block on server.
+	 * Renders the `zior/add-to-cart` block on server.
 	 *
 	 * @since 1.0.0
 	 * @param Array    $attributes The block attributes.
@@ -195,13 +195,13 @@ class Block extends Blocks\Base {
 	 */
 	public function inject_parent_context( $context, $parsed_block, $parent_block ) {
 		// Only apply to the child block.
-		if ( ! isset( $parsed_block['blockName'] ) || 'ziorwebdev/icon' !== $parsed_block['blockName'] ) {
+		if ( ! isset( $parsed_block['blockName'] ) || 'zior/icon' !== $parsed_block['blockName'] ) {
 			return $context;
 		}
 
 		// Ensure parent exists and is icon-picker.
 		if ( ! isset( $parent_block->parsed_block['blockName'] )
-			|| 'ziorwebdev/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
+			|| 'zior/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
 			return $context;
 		}
 

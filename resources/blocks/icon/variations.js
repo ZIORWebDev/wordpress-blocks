@@ -418,7 +418,7 @@ wp.domReady(() => {
 
   // Single loop to register all variations
   allVariations.forEach((variation) => {
-    registerBlockVariation('ziorwebdev/icon', {
+    registerBlockVariation('zior/icon', {
       ...variation,
       isActive,
     });

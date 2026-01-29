@@ -55,8 +55,8 @@ const IconEdit = ({
   const [isLinkSheetVisible, setIsLinkSheetVisible] = useState(false);
   const [hasUrl, setHasUrl] = useState(!!url);
   const activeIcon =
-    styles[`wp-ziorwebdev-icon-${service}`] ||
-    styles[`wp-ziorwebdev-icon`] ||
+    styles[`wp-zior-icon-${service}`] ||
+    styles[`wp-zior-icon`] ||
     DEFAULT_ACTIVE_ICON_STYLES;
   const animatedValue = useRef(new Animated.Value(0)).current;
 

@@ -54,7 +54,7 @@ export default function IconInserter({
           .select('core/block-editor')
           .getBlocks(rootClientId);
         innerBlocks.forEach((b) => {
-          if (b.name === 'ziorwebdev/icon') {
+          if (b.name === 'zior/icon') {
             wp.data.dispatch('core/block-editor').removeBlock(b.clientId);
           }
         });

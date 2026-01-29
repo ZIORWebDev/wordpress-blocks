@@ -1,25 +1,25 @@
 @use "@wordpress/base-styles/variables" as *;
 
 // Editor specific styles for icon picker.
-.wp-block-ziorwebdev-icon-picker div.block-editor-url-input {
+.wp-block-zior-icon-picker div.block-editor-url-input {
   display: inline-block;
   margin-left: $grid-unit-10;
 }
 
 // Prevent toolbar from jumping when selecting / hovering a link.
-.wp-ziorwebdev-icon:hover {
+.wp-zior-icon:hover {
   transform: none;
 }
 
 // Specificity for the following styles are fixed at 0-1-0 to match and be
 // overridable by global styles.
-:root :where(.wp-block-ziorwebdev-icon-picker) {
+:root :where(.wp-block-zior-icon-picker) {
   padding: 0;
 }
 
 // Center flex items. This has an equivalent in style.scss.
-.wp-block[data-align="center"] > .wp-block-ziorwebdev-icon-picker,
-.wp-block.wp-block-ziorwebdev-icon-picker.aligncenter {
+.wp-block[data-align="center"]>.wp-block-zior-icon-picker,
+.wp-block.wp-block-zior-icon-picker.aligncenter {
   justify-content: center;
 }
 
@@ -29,13 +29,13 @@
   opacity: 1;
 }
 
-.wp-block-ziorwebdev-icon-picker .is-selected .wp-ziorwebdev-icon__is-incomplete,
-.wp-ziorwebdev-icon.wp-ziorwebdev-icon__is-incomplete:hover,
-.wp-ziorwebdev-icon.wp-ziorwebdev-icon__is-incomplete:focus {
+.wp-block-zior-icon-picker .is-selected .wp-zior-icon__is-incomplete,
+.wp-zior-icon.wp-zior-icon__is-incomplete:hover,
+.wp-zior-icon.wp-zior-icon__is-incomplete:focus {
   opacity: 1;
 }
 
-.wp-block-ziorwebdev-icon-picker .block-list-appender {
+.wp-block-zior-icon-picker .block-list-appender {
   position: static; // display inline.
 
   .block-editor-inserter {

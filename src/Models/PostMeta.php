@@ -25,7 +25,7 @@ class PostMeta extends Base {
 	 * @return array List of option keys.
 	 */
 	public function get_postmeta_keys( string $path, array $args ): array {
-		$cache_key  = $this->get_cache_key( $path, $args );
+		$cache_key   = $this->get_cache_key( $path, $args );
 		$cached_data = $this->get_cache( $cache_key );
 
 		if ( ! empty( $cached_data ) ) {
@@ -37,7 +37,7 @@ class PostMeta extends Base {
 		/**
 		 * Filter the limit for option name results.
 		 */
-		$limit = absint( apply_filters( 'wordpress_blocks_rest_query_limit', 50 ) );
+		$limit = absint( apply_filters( 'zior_wp_blocks_rest_query_limit', 50 ) );
 
 		$search_term = $args['search'] ?? '';
 		$post_type   = $args['post_type'] ?? 'page';

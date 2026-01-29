@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `ziorwebdev/icon-picker` blocks.
+ * Server-side rendering of the `zior/icon-picker` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -20,7 +20,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Block name
 	 */
-	protected $block_name = 'ziorwebdev/icon-picker';
+	protected $block_name = 'zior/icon-picker';
 
 	/**
 	 * Path of the block.json file
@@ -35,7 +35,7 @@ class Block extends Blocks\Base {
 	protected static $instance;
 
 	/**
-	 * Renders the `ziorwebdev/icon-picker` block on server.
+	 * Renders the `zior/icon-picker` block on server.
 	 *
 	 * @since 1.0.0
 	 *

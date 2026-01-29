@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "ziorwebdev/icon-list",
+	"name": "zior/icon-list",
 	"title": "Icon List",
 	"category": "widgets",
 	"description": "Display an icon list.",
@@ -19,5 +19,5 @@
 			"clientNavigation": true
 		}
 	},
-	"editorStyle": "wp-block-ziorwebdev-icon-list-editor"
+	"editorStyle": "wp-block-zior-icon-list-editor"
 }
