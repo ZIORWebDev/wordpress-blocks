@@ -7,7 +7,7 @@
 
 namespace ZIORWebDev\WordPressBlocks\Models;
 
-use ZIORWebDev\WordPressBlocks\Utils\Cache;
+use ZIORWebDev\WordPressBlocks\Utils;
 
 /**
  * PostMeta Model class
@@ -15,7 +15,7 @@ use ZIORWebDev\WordPressBlocks\Utils\Cache;
  * @package ZIORWebDev\WordPressBlocks\Models;
  * @since 1.0.0
  */
-class PostMeta extends Models\Base {
+class PostMeta extends Base {
 	/**
 	 * Retrieve a list of WordPress option keys.
 	 *
@@ -25,10 +25,10 @@ class PostMeta extends Models\Base {
 	 * @return array List of option keys.
 	 */
 	public function get_postmeta_keys( string $path, array $args ): array {
-		$cached_key  = $this->get_cache_key( $path, $args );
+		$cache_key  = $this->get_cache_key( $path, $args );
 		$cached_data = $this->get_cache( $cache_key );
 
-		if ( false !== $cached_data ) {
+		if ( ! empty( $cached_data ) ) {
 			return $cached_data;
 		}
 
@@ -39,8 +39,8 @@ class PostMeta extends Models\Base {
 		 */
 		$limit = absint( apply_filters( 'wordpress_blocks_rest_query_limit', 50 ) );
 
-		// Search term.
-		$search_term = $args['search'] ?: '';
+		$search_term = $args['search'] ?? '';
+		$post_type   = $args['post_type'] ?? 'page';
 
 		// Get meta keys for the given post type
 		$query = $wpdb->prepare(
@@ -57,7 +57,7 @@ class PostMeta extends Models\Base {
 		);
 
 		$postmeta = $wpdb->get_col( $query );
-		$postmeta = $this->sanitize_keys( $postmeta );
+		$postmeta = Utils\Helper::sanitize_keys( $postmeta );
 
 		// Set cache.
 		$this->set_cache( $cache_key, $postmeta );

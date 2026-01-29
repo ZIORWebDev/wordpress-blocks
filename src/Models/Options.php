@@ -7,7 +7,7 @@
 
 namespace ZIORWebDev\WordPressBlocks\Models;
 
-use ZIORWebDev\WordPressBlocks\Utils\Cache;
+use ZIORWebDev\WordPressBlocks\Utils;
 
 /**
  * Options Model class
@@ -15,7 +15,7 @@ use ZIORWebDev\WordPressBlocks\Utils\Cache;
  * @package ZIORWebDev\WordPressBlocks\Models;
  * @since 1.0.0
  */
-class Options extends Models\Base {
+class Options extends Base {
 	/**
 	 * Retrieve a value by key.
 	 *
@@ -34,10 +34,10 @@ class Options extends Models\Base {
 	 * @return array List of option keys.
 	 */
 	public function get_option_keys( string $path, array $args ): array {
-		$cached_key  = $this->get_cache_key( $path, $args );
+		$cache_key  = $this->get_cache_key( $path, $args );
 		$cached_data = $this->get_cache( $cache_key );
 
-		if ( false !== $cached_data ) {
+		if ( ! empty( $cached_data ) ) {
 			return $cached_data;
 		}
 
@@ -75,7 +75,7 @@ class Options extends Models\Base {
 		$where = implode( ' AND ', $not_like_sql );
 
 		// Add search filter.
-		$search_term = $args['search'] ?: '';
+		$search_term = $args['search'] ?? '';
 		$search_like = '%' . $wpdb->esc_like( $search_term ) . '%';
 
 		// Prepare the query.
@@ -90,7 +90,7 @@ class Options extends Models\Base {
 		);
 
 		$options = $wpdb->get_col( $query );
-		$options = $this->sanitize_keys( $options );
+		$options = Utils\Helper::sanitize_keys( $options );
 
 		// Set cache.
 		$this->set_cache( $cache_key, $options );

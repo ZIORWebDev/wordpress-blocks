@@ -38,7 +38,8 @@ final class Load {
 
 		Routes::get_instance();
 		Blocks::get_instance();
-		Hooks\Meta::get_instance();
+		Hooks\Options::get_instance();
+		Hooks\PostMeta::get_instance();
 	}
 
 	/**

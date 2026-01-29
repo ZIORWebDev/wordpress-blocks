@@ -89,9 +89,7 @@ abstract class Base implements Interface\Route {
 	 * @return array
 	 */
 	public static function get_rest_args() {
-		return array(
-			
-		);
+		return array();
 	}
 
 	/**
@@ -120,28 +118,5 @@ abstract class Base implements Interface\Route {
 		}
 
 		return new \WP_Error( 'rest_forbidden', __( 'Permission denied.' ), array( 'status' => 403 ) );
-	}
-
-	/**
-	 * Sanitize keys.
-	 *
-	 * @param array $keys keys.
-	 * @return array
-	 */
-	protected function sanitize_keys( $keys ) {
-		$sanitize_keys = array();
-
-		foreach ( $keys as $key => $value ) {
-			/**
-			 * Some field providers concatenate child fields with pipes for complex field.
-			 * We only want to return the base meta key.
-			 */
-			$key_parts             = explode( '|', $value );
-			$sanitize_keys[ $key ] = $key_parts[0];
-		}
-
-		$sanitize_keys = array_values( array_unique( $sanitize_keys ) );
-
-		return $sanitize_keys;
 	}
 }

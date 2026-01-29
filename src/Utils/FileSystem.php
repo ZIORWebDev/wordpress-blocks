@@ -51,10 +51,26 @@ class FileSystem {
 		$cache_dir  = $upload_dir . '/wordpress-blocks/cache/';
 
 		if ( $create_if_not_exists && ! is_dir( $cache_dir ) ) {
-			self::create_folder_path( $cache_dir );
+			self::create_cache_dir( $cache_dir );
 		}
 
 		return $cache_dir;
+	}
+
+	/**
+	 * Create cache dir.
+	 * 
+	 * @param string $path
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public static function create_cache_dir( $path ) {
+		if ( ! is_dir( $path ) ) {
+			wp_mkdir_p( $path );
+			return $path;
+		}
+
+		return $path;
 	}
 
 	/**

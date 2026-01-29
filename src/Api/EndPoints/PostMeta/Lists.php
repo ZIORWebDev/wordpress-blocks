@@ -55,7 +55,13 @@ class Lists extends EndPoints\Base {
 	 * @return array The REST args.
 	 */
 	public static function get_rest_args() {
-		return array();
+		return array(
+			'search' => array(
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+		);
 	}
 
 	/**

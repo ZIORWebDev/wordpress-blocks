@@ -36,10 +36,10 @@ class Cache {
 	 * @return string
 	 */
 	protected static function get_rest_cache_dir() {
-		$cache_dir = Utils\FileSystem::get_cache_dir();
+		$cache_dir = FileSystem::get_cache_dir();
 
-		Utils\FileSystem::create_cache_dir( $cache_dir );
-		Utils\FileSystem::secure_cache_dir( $cache_dir );
+		FileSystem::create_cache_dir( $cache_dir );
+		FileSystem::secure_cache_dir( $cache_dir );
 
 		return $cache_dir . '/rest/';
 	}

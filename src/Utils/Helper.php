@@ -26,7 +26,7 @@ class Helper {
 	 * @param mixed $value Value to normalize.
 	 * @return string|null
 	 */
-	public function normalize_value( $value ) {
+	public static function normalize_value( $value ) {
 		if ( is_array( $value ) ) {
 			$all_scalar = true;
 
@@ -55,5 +55,28 @@ class Helper {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Sanitize keys.
+	 *
+	 * @param array $keys keys.
+	 * @return array
+	 */
+	public static function sanitize_keys( $keys ) {
+		$sanitize_keys = array();
+
+		foreach ( $keys as $key => $value ) {
+			/**
+			 * Some field providers concatenate child fields with pipes for complex field.
+			 * We only want to return the base meta key.
+			 */
+			$key_parts             = explode( '|', $value );
+			$sanitize_keys[ $key ] = $key_parts[0];
+		}
+
+		$sanitize_keys = array_values( array_unique( $sanitize_keys ) );
+
+		return $sanitize_keys;
 	}
 }

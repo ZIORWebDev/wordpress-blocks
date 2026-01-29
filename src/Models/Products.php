@@ -15,7 +15,7 @@ use ZIORWebDev\WordPressBlocks\Utils\Cache;
  * @package ZIORWebDev\WordPressBlocks\Models;
  * @since 1.0.0
  */
-class Products extends Models\Base {
+class Products extends Base {
 	/**
 	 * Retrieve a value by key.
 	 *
@@ -34,10 +34,17 @@ class Products extends Models\Base {
 	 * @return array List of option keys.
 	 */
 	public function get_products( string $path, array $args ): array {
-		$cached_key  = $this->get_cache_key( $path, $args );
+		/**
+		 * Check if WC_Product_Query exists.
+		 */
+		if( ! class_exists( 'WC_Product_Query' ) ) {
+			return array();
+		}
+
+		$cache_key  = $this->get_cache_key( $path, $args );
 		$cached_data = $this->get_cache( $cache_key );
 
-		if ( false !== $cached_data ) {
+		if ( ! empty( $cached_data ) ) {
 			return $cached_data;
 		}
 
@@ -54,13 +61,13 @@ class Products extends Models\Base {
 		);
 
 		// Search term.
-		$search_term = $args['search'] ?: '';
+		$search_term = $args['search'] ?? '';
 
 		if ( ! empty( $search_term ) ) {
 			$args['s'] = $search_term;
 		}
 
-		$query       = new WC_Product_Query( $args );
+		$query       = new \WC_Product_Query( $args );
 		$product_ids = $query->get_products();
 
 		$products = array();
