@@ -2,12 +2,13 @@
 /**
  * Routes library
  *
- * @package ZIORWebDev\WordPressBlocks\Api
+ * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
-namespace ZIORWebDev\WordPressBlocks\Api;
+namespace ZIORWebDev\WordPressBlocks;
 
-use ZIORWebDev\WordPressBlocks\Api\Endpoints\Route;
+use ZIORWebDev\WordPressBlocks\Api\Endpoints;
+use ZIORWebDev\WordPressBlocks\Api\Interface;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -47,7 +48,7 @@ class Routes {
 	 * Constructor
 	 */
 	private function __construct() {
-		add_action( 'rest_api_init', array( $this, '_rest_init' ) );
+		add_action( 'rest_api_init', array( $this, 'register_rest_api' ) );
 	}
 
 	/**
@@ -60,33 +61,9 @@ class Routes {
 	}
 
 	/**
-	 * Get routes
-	 *
-	 * @param string $route_path The route path.
-	 * @return array The routes.
-	 */
-	public function get_routes( $route_path = null ) {
-		if ( ! $route_path ) {
-			return $this->routes;
-		}
-		if ( isset( $this->routes[ $route_path ] ) ) {
-			return $this->routes[ $route_path ];
-		}
-	}
-
-	/**
-	 * Register route
-	 *
-	 * @param Route $instance The route instance.
-	 */
-	public function register( Route $instance ) {
-		$this->routes[ $instance::get_name() ] = $instance;
-	}
-
-	/**
 	 * REST init
 	 */
-	public function _rest_init() {
+	public function register_rest_api() {
 		new Endpoints\Products\Lists();
 		new Endpoints\Options\Lists();
 		new Endpoints\PostMeta\Lists();

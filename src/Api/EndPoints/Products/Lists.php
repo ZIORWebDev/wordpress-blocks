@@ -2,11 +2,12 @@
 /**
  * Products Lists endpoint
  *
- * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Products
+ * @package ZIORWebDev\WordPressBlocks\Api\EndPoints\Products
  * @since 1.0.0
  */
-namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Products;
+namespace ZIORWebDev\WordPressBlocks\Api\EndPoints\Products;
 
+use ZIORWebDev\WordPressBlocks\Api\EndPoints;
 use ZIORWebDev\WordPressBlocks\Models\Products as ProductsModel;
 
 // Exit if accessed directly.
@@ -17,17 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Products Lists endpoint
  *
- * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Products
+ * @package ZIORWebDev\WordPressBlocks\Api\EndPoints\Products
  * @since 1.0.0
  */
-class Lists extends Base {
+class Lists extends EndPoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'products\lists';
+	protected static $route_path = 'products/lists';
 
 	/**
 	 * Callback

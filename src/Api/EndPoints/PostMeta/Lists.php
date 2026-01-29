@@ -7,6 +7,7 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta;
 
+use ZIORWebDev\WordPressBlocks\Api\EndPoints;
 use ZIORWebDev\WordPressBlocks\Models\PostMeta as PostMetaModel;
 
 // Exit if accessed directly.
@@ -20,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta
  * @since 1.0.0
  */
-class Lists extends Base {
+class Lists extends EndPoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'postmeta\lists';
+	protected static $route_path = 'postmeta/lists';
 
 	/**
 	 * Callback

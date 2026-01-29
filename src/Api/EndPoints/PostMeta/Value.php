@@ -7,6 +7,8 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta;
 
+use ZIORWebDev\WordPressBlocks\Api\EndPoints;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta
  * @since 1.0.0
  */
-class Value extends Base {
+class Value extends EndPoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'postmeta\value';
+	protected static $route_path = 'postmeta/value';
 
 	/**
 	 * Callback

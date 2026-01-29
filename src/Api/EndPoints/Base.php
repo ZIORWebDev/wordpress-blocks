@@ -7,7 +7,8 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints;
 
-use ZIORWebDev\WordPressBlocks\Api\Routes;
+use ZIORWebDev\WordPressBlocks\Api\Interface;
+use ZIORWebDev\WordPressBlocks\Routes;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -57,8 +58,6 @@ abstract class Base implements Interface\Route {
 				'permission_callback' => array( static::class, 'get_rest_permission' ),
 			)
 		);
-
-		Routes::get_instance()->register( $this );
 	}
 
 	/**
@@ -90,7 +89,9 @@ abstract class Base implements Interface\Route {
 	 * @return array
 	 */
 	public static function get_rest_args() {
-		return array();
+		return array(
+			
+		);
 	}
 
 	/**

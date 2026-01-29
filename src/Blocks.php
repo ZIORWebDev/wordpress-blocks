@@ -24,15 +24,6 @@ final class Blocks {
 	protected static $instance;
 
 	/**
-	 * Get REST API routes.
-	 *
-	 * @return array
-	 */
-	private function get_routes() {
-		return apply_filters( 'wordpress_blocks_routes', array() );
-	}
-
-	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -42,29 +33,6 @@ final class Blocks {
 		Blocks\IconList\Block::get_instance();
 		Blocks\MetaField\Block::get_instance();
 		Blocks\AddToCart\Block::get_instance();
-
-		add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
-	}
-
-	/**
-	 * Register REST API routes.
-	 *
-	 * @return void
-	 */
-	public function register_routes() {
-		$routes = $this->get_routes();
-
-		if ( empty( $routes ) || ! is_array( $routes ) ) {
-			return;
-		}
-
-		foreach ( $routes as $route ) {
-			register_rest_route(
-				$route['namespace'],
-				$route['route'],
-				$route['args']
-			);
-		}
 	}
 
 	/**

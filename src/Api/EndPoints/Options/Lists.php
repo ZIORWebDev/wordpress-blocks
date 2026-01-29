@@ -7,6 +7,7 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
 
+use ZIORWebDev\WordPressBlocks\Api\EndPoints;
 use ZIORWebDev\WordPressBlocks\Models\Options as OptionsModel;
 
 // Exit if accessed directly.
@@ -20,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-class Lists extends Base {
+class Lists extends EndPoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'options\lists';
+	protected static $route_path = 'options/lists';
 
 	/**
 	 * Callback

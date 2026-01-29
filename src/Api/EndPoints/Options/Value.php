@@ -1,11 +1,13 @@
 <?php
 /**
- * PostMeta Value endpoint
+ * Options Value endpoint
  *
- * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta
+ * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta;
+namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
+
+use ZIORWebDev\WordPressBlocks\Api\EndPoints;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,19 +15,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * PostMeta Value endpoint
+ * Options Value endpoint
  *
- * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta
+ * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-class Value extends Base {
+class Value extends EndPoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected static $route_path = 'postmeta\value';
+	protected static $route_path = 'options/value';
 
 	/**
 	 * Callback
