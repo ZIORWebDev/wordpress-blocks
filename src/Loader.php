@@ -13,7 +13,7 @@ namespace ZIORWebDev\WordPressBlocks;
  * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
-final class Load {
+final class Loader {
 
 	/**
 	 * Package version.
@@ -23,23 +23,16 @@ final class Load {
 	protected static $package_version = '1.1.4';
 
 	/**
-	 * Singleton instance of the Plugin class.
-	 *
-	 * @var Load
+	 * Load classes and actions
 	 */
-	protected static $instance;
-
-	/**
-	 * Class constructor.
-	 */
-	public function __construct() {
+	public function load() {
 		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ), 50 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 
-		Routes::get_instance();
-		Blocks::get_instance();
-		Hooks\Options::get_instance();
-		Hooks\PostMeta::get_instance();
+		( new Routes() )->load();
+		( new Blocks() )->load();
+		( new Hooks\Options() )->load();
+		( new Hooks\PostMeta() )->load();
 	}
 
 	/**
@@ -108,19 +101,5 @@ final class Load {
 			array(), // dependencies
 			self::$package_version
 		);
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }

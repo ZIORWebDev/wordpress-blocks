@@ -24,13 +24,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Routes {
 
 	/**
-	 * Instance
-	 *
-	 * @var Routes
-	 */
-	protected static $instance;
-
-	/**
 	 * Routes
 	 *
 	 * @var array
@@ -45,9 +38,9 @@ class Routes {
 	private static $rest_namespace = 'wordpress-blocks/v1';
 
 	/**
-	 * Constructor
+	 * Load routes.
 	 */
-	private function __construct() {
+	public function load() {
 		add_action( 'rest_api_init', array( $this, 'register_rest_api' ) );
 	}
 

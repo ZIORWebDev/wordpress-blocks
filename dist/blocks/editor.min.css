@@ -1,1 +1,284 @@
-.wp-block-zior-icon-picker .wp-zior-icon,.wp-block-zior-icon-picker .wp-zior-icon button{line-height:0}.wp-block-zior-icon-anchor{align-items:center;background:none;border:0;box-sizing:border-box;color:currentColor;cursor:pointer;display:inline-flex;font-family:inherit;font-size:inherit;font-weight:inherit;height:auto;margin:0;opacity:1;padding:.25em}.wp-block-zior-icon-anchor:hover{transform:none}:root :where(.wp-block-zior-icon-picker.is-style-pill-shape .wp-zior-icon button){padding-left:.6666666667em;padding-right:.6666666667em}:root :where(.wp-block-zior-icon-picker.is-style-logos-only .wp-zior-icon button){padding:0}.wp-block-zior-icon__toolbar_content_text{width:250px}.wp-block-zior-icon-picker div.block-editor-url-input{display:inline-block;margin-left:8px}.wp-zior-icon:hover{transform:none}:root :where(.wp-block-zior-icon-picker){padding:0}.wp-block.wp-block-zior-icon-picker.aligncenter,.wp-block[data-align=center]>.wp-block-zior-icon-picker{justify-content:center}.block-editor-block-preview__content .components-button:disabled,.wp-block-zior-icon-picker .is-selected .wp-zior-icon__is-incomplete,.wp-zior-icon.wp-zior-icon__is-incomplete:focus,.wp-zior-icon.wp-zior-icon__is-incomplete:hover{opacity:1}.wp-block-zior-icon-picker .block-list-appender{position:static}.wp-block-zior-icon-picker .block-list-appender .block-editor-inserter{font-size:inherit}.wp-block-zior-icon-picker .block-list-appender .block-editor-button-block-appender{font-size:inherit;height:1.5em;padding:0;width:1.5em}.wp-block-zior-icon-list-item{align-items:center;display:flex;gap:12px}.wp-block-zior-icon-list-item>.block-editor-rich-text__editable,.wp-block-zior-icon-list-item>.wp-block-zior-icon-picker{flex-shrink:0}.wp-block-zior-icon-list-item>.block-editor-rich-text__editable{flex-grow:1}.wp-block-zior-icon-list-item>.block-editor-rich-text__editable p{margin:0;white-space:normal}.wp-block-zior-icon-list .block-list-appender{margin-top:10px!important;position:static!important}.wp-block-zior-icon-list .block-list-appender button.components-button{background-color:transparent;border:1px solid #1e73be;color:#1e73be;cursor:pointer;height:30px;transition:all .15s ease}.wp-block-zior-icon-list .block-list-appender button.components-button:hover{background-color:#1e73be;color:#fff}.wp-block-zior-icon-list .block-list-appender button.components-button:focus{box-shadow:0 0 0 2px rgba(30,115,190,.3);outline:none}.wp-block-zior-icon-list .block-list-appender button.components-button:after{content:"+";display:inline-block;margin-left:6px}.wp-element-button{cursor:revert}.wp-element-button[role=textbox]{cursor:text}:root .editor-styles-wrapper .has-very-light-gray-background-color{background-color:#eee}:root .editor-styles-wrapper .has-very-dark-gray-background-color{background-color:#313131}:root .editor-styles-wrapper .has-very-light-gray-color{color:#eee}:root .editor-styles-wrapper .has-very-dark-gray-color{color:#313131}:root .editor-styles-wrapper .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .editor-styles-wrapper .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .editor-styles-wrapper .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .editor-styles-wrapper .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .editor-styles-wrapper .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .editor-styles-wrapper .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .editor-styles-wrapper .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:where(.editor-styles-wrapper) .has-regular-font-size{font-size:16px}:where(.editor-styles-wrapper) .has-larger-font-size{font-size:42px}:where(.editor-styles-wrapper) iframe:not([frameborder]){border:0}
+/*!************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./resources/editor.scss ***!
+  \************************************************************************************************************************************************************************/
+/**
+ * Typography
+ */
+/**
+ * SCSS Variables.
+ *
+ * Please use variables from this sheet to ensure consistency across the UI.
+ * Don't add to this sheet unless you're pretty sure the value will be reused in many places.
+ * For example, don't add rules to this sheet that affect block visuals. It's purely for UI.
+ */
+/**
+ * Colors
+ */
+/**
+ * Fonts & basic variables.
+ */
+/**
+ * Typography
+ */
+/**
+ * Grid System.
+ * https://make.wordpress.org/design/2019/10/31/proposal-a-consistent-spacing-system-for-wordpress/
+ */
+/**
+ * Radius scale.
+ */
+/**
+ * Elevation scale.
+ */
+/**
+ * Dimensions.
+ */
+/**
+ * Mobile specific styles
+ */
+/**
+ * Editor styles.
+ */
+/**
+ * Block & Editor UI.
+ */
+/**
+ * Block paddings.
+ */
+/**
+ * React Native specific.
+ * These variables do not appear to be used anywhere else.
+ */
+/**
+ * Breakpoints & Media Queries
+ */
+/**
+*  Converts a hex value into the rgb equivalent.
+*
+* @param {string} hex - the hexadecimal value to convert
+* @return {string} comma separated rgb values
+*/
+/**
+ * Long content fade mixin
+ *
+ * Creates a fading overlay to signify that the content is longer
+ * than the space allows.
+ */
+/**
+ * Breakpoint mixins
+ */
+/**
+ * Focus styles.
+ */
+/**
+ * Applies editor left position to the selector passed as argument
+ */
+/**
+ * Styles that are reused verbatim in a few places
+ */
+/**
+ * Allows users to opt-out of animations via OS-level preferences.
+ */
+/**
+ * Reset default styles for JavaScript UI based pages.
+ * This is a WP-admin agnostic reset
+ */
+/**
+ * Reset the WP Admin page styles for Gutenberg-like pages.
+ */
+/**
+ * Creates a checkerboard pattern background to indicate transparency.
+ * @param {String} $size - The size of the squares in the checkerboard pattern. Default is 12px.
+ */
+.wp-block-zior-icon-picker .wp-zior-icon,
+.wp-block-zior-icon-picker .wp-zior-icon button {
+  line-height: 0;
+}
+
+.wp-block-zior-icon-anchor {
+  align-items: center;
+  background: none;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: inherit;
+  color: currentColor;
+  height: auto;
+  font-weight: inherit;
+  font-family: inherit;
+  margin: 0;
+  opacity: 1;
+  padding: 0.25em;
+}
+.wp-block-zior-icon-anchor:hover {
+  transform: none;
+}
+
+:root :where(.wp-block-zior-icon-picker.is-style-pill-shape .wp-zior-icon button) {
+  padding-left: 0.6666666667em;
+  padding-right: 0.6666666667em;
+}
+
+:root :where(.wp-block-zior-icon-picker.is-style-logos-only .wp-zior-icon button) {
+  padding: 0;
+}
+
+.wp-block-zior-icon__toolbar_content_text {
+  width: 250px;
+}
+
+.wp-block-zior-icon-picker div.block-editor-url-input {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.wp-zior-icon:hover {
+  transform: none;
+}
+
+:root :where(.wp-block-zior-icon-picker) {
+  padding: 0;
+}
+
+.wp-block[data-align=center] > .wp-block-zior-icon-picker,
+.wp-block.wp-block-zior-icon-picker.aligncenter {
+  justify-content: center;
+}
+
+.block-editor-block-preview__content .components-button:disabled {
+  opacity: 1;
+}
+
+.wp-block-zior-icon-picker .is-selected .wp-zior-icon__is-incomplete,
+.wp-zior-icon.wp-zior-icon__is-incomplete:hover,
+.wp-zior-icon.wp-zior-icon__is-incomplete:focus {
+  opacity: 1;
+}
+
+.wp-block-zior-icon-picker .block-list-appender {
+  position: static;
+}
+.wp-block-zior-icon-picker .block-list-appender .block-editor-inserter {
+  font-size: inherit;
+}
+.wp-block-zior-icon-picker .block-list-appender .block-editor-button-block-appender {
+  height: 1.5em;
+  width: 1.5em;
+  font-size: inherit;
+  padding: 0;
+}
+
+.wp-block-zior-icon-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wp-block-zior-icon-list-item > .wp-block-zior-icon-picker,
+.wp-block-zior-icon-list-item > .block-editor-rich-text__editable {
+  flex-shrink: 0;
+}
+.wp-block-zior-icon-list-item > .block-editor-rich-text__editable {
+  flex-grow: 1;
+}
+.wp-block-zior-icon-list-item > .block-editor-rich-text__editable p {
+  margin: 0;
+  white-space: normal;
+}
+
+/* Minimal left-aligned appender for icon-list */
+.wp-block-zior-icon-list .block-list-appender {
+  position: initial !important;
+  margin-top: 10px !important;
+}
+.wp-block-zior-icon-list .block-list-appender button.components-button {
+  background-color: transparent;
+  color: #1e73be;
+  border: 1px solid #1e73be;
+  height: 30px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.wp-block-zior-icon-list .block-list-appender button.components-button:hover {
+  background-color: #1e73be;
+  color: #fff;
+}
+.wp-block-zior-icon-list .block-list-appender button.components-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(30, 115, 190, 0.3);
+}
+.wp-block-zior-icon-list .block-list-appender button.components-button::after {
+  content: "+";
+  display: inline-block;
+  margin-left: 6px;
+}
+
+/**
+ * Element styles for the editor
+ */
+.wp-element-button {
+  cursor: revert;
+}
+.wp-element-button[role=textbox] {
+  cursor: text;
+}
+
+:root .editor-styles-wrapper .has-very-light-gray-background-color {
+  background-color: #eee;
+}
+:root .editor-styles-wrapper .has-very-dark-gray-background-color {
+  background-color: #313131;
+}
+:root .editor-styles-wrapper .has-very-light-gray-color {
+  color: #eee;
+}
+:root .editor-styles-wrapper .has-very-dark-gray-color {
+  color: #313131;
+}
+:root .editor-styles-wrapper {
+  /* stylelint-disable @stylistic/function-comma-space-after -- We can not use spacing because of WP multi site kses rule. */
+}
+:root .editor-styles-wrapper .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background {
+  background: linear-gradient(135deg, rgb(0, 208, 132) 0%, rgb(6, 147, 227) 100%);
+}
+:root .editor-styles-wrapper .has-purple-crush-gradient-background {
+  background: linear-gradient(135deg, rgb(52, 226, 228) 0%, rgb(71, 33, 251) 50%, rgb(171, 29, 254) 100%);
+}
+:root .editor-styles-wrapper .has-hazy-dawn-gradient-background {
+  background: linear-gradient(135deg, rgb(250, 172, 168) 0%, rgb(218, 208, 236) 100%);
+}
+:root .editor-styles-wrapper .has-subdued-olive-gradient-background {
+  background: linear-gradient(135deg, rgb(250, 250, 225) 0%, rgb(103, 166, 113) 100%);
+}
+:root .editor-styles-wrapper .has-atomic-cream-gradient-background {
+  background: linear-gradient(135deg, rgb(253, 215, 154) 0%, rgb(0, 74, 89) 100%);
+}
+:root .editor-styles-wrapper .has-nightshade-gradient-background {
+  background: linear-gradient(135deg, rgb(51, 9, 104) 0%, rgb(49, 205, 207) 100%);
+}
+:root .editor-styles-wrapper .has-midnight-gradient-background {
+  background: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 100%);
+}
+:root .editor-styles-wrapper {
+  /* stylelint-enable @stylistic/function-comma-space-after */
+}
+
+:where(.editor-styles-wrapper) .has-regular-font-size {
+  font-size: 16px;
+}
+
+:where(.editor-styles-wrapper) .has-larger-font-size {
+  font-size: 42px;
+}
+
+/**
+ * Editor Normalization Styles
+ *
+ * These are only output in the editor, but styles here are NOT prefixed .editor-styles-wrapper.
+ * This allows us to create normalization styles that are easily overridden by editor styles.
+ */
+:where(.editor-styles-wrapper) iframe:not([frameborder]) {
+  border: 0;
+}
+
+/*# sourceMappingURL=editor.min.css.map*/

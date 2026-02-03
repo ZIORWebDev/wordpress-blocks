@@ -17,35 +17,14 @@ namespace ZIORWebDev\WordPressBlocks;
 final class Blocks {
 
 	/**
-	 * Singleton instance of the Plugin class.
-	 *
-	 * @var Blocks
+	 * Load blocks.
 	 */
-	protected static $instance;
-
-	/**
-	 * Class constructor.
-	 */
-	public function __construct() {
+	public function load() {
 		Blocks\Icon\Block::get_instance();
 		Blocks\IconPicker\Block::get_instance();
 		Blocks\IconListItem\Block::get_instance();
 		Blocks\IconList\Block::get_instance();
 		Blocks\MetaField\Block::get_instance();
 		Blocks\AddToCart\Block::get_instance();
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }
