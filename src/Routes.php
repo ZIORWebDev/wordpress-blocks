@@ -8,7 +8,6 @@
 namespace ZIORWebDev\WordPressBlocks;
 
 use ZIORWebDev\WordPressBlocks\Api\Endpoints;
-use ZIORWebDev\WordPressBlocks\Api\Interface;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -63,17 +62,5 @@ class Routes {
 
 		new Endpoints\Options\Value();
 		new Endpoints\PostMeta\Value();
-	}
-
-	/**
-	 * Get instance
-	 *
-	 * @return RoutesLibrary The instance.
-	 */
-	public static function get_instance() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
 	}
 }
