@@ -8,7 +8,7 @@
 	"textdomain": "default",
 	"attributes": {
 		"productId": {
-			"type": "integer"
+			"type": "string"
 		}
 	},
 	"editorStyle": "wp-block-zior-add-to-cart-editor"

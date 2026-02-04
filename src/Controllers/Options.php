@@ -23,6 +23,7 @@ class Options extends Base {
 	 * @return mixed The resolved value, or null if the key does not exist.
 	 */
 	public static function get_value( array $params ): mixed {
+		error_log( 'IS GET VALUE TRIGGERED?');
 		$meta_key   = isset( $params['metaKey'] ) ? $params['metaKey'] : '';
 		$provider   = isset( $params['fieldProvider'] ) ? $params['fieldProvider'] : '';
 		$meta_value = get_option( $meta_key );

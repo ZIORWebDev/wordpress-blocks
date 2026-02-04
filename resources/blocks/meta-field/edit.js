@@ -162,7 +162,7 @@ function MegaFieldEdit({
 
   const fetchMetaValue = useCallback(
     async (attributes) => {
-      const { metaKey } = attributes;
+      const { metaKey, metaFieldType } = attributes;
 
       if (!metaKey) return;
 
@@ -200,6 +200,7 @@ function MegaFieldEdit({
     outputFormat,
     dateFormat,
   ]);
+
   return (
     <>
       {blockEditingMode === 'default' && (

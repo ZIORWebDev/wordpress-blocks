@@ -39,7 +39,7 @@ class PostMeta extends Base {
 		/**
 		 * Filter specific meta key.
 		 */
-		$meta_value = apply_filters( "zior_wp_blocks_postmeta_{$meta_key}_value", $meta_value, $post_id, $attributes );
+		$meta_value = apply_filters( "zior_wp_blocks_postmeta_{$meta_key}_value", $meta_value, $post_id, $params );
 
 		return $meta_value;
 	}
