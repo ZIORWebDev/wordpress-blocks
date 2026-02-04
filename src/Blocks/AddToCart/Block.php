@@ -32,13 +32,6 @@ class Block extends Blocks\Base {
 	protected $block_json = __DIR__ . '/block.json';
 
 	/**
-	 * Singleton instance of the Plugin class.
-	 *
-	 * @var Icon
-	 */
-	protected static $instance;
-
-	/**
 	 * Renders the `zior/add-to-cart` block on server.
 	 *
 	 * @since 1.0.0
@@ -91,19 +84,5 @@ class Block extends Blocks\Base {
 		}
 
 		return ' ' . implode( ' ', $classes );
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }

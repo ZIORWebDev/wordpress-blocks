@@ -25,14 +25,14 @@ final class Loader {
 	/**
 	 * Load classes and actions
 	 */
-	public function load() {
+	public function init() {
 		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ), 50 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 
 		( new Routes() )->load();
 		( new Blocks() )->load();
-		( new Hooks\Options() )->load();
-		( new Hooks\PostMeta() )->load();
+		( new Hooks\Options() )->init();
+		( new Hooks\PostMeta() )->init();
 	}
 
 	/**

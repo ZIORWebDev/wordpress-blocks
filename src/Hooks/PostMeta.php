@@ -16,16 +16,9 @@ namespace ZIORWebDev\WordPressBlocks\Hooks;
 class PostMeta {
 
 	/**
-	 * Singleton instance.
-	 *
-	 * @var PostMeta
+	 * Initialize action and filter hooks.
 	 */
-	protected static $instance;
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
+	public function init() {
 		/**
 		 * Filters to get post meta values based on field providers.
 		 */
@@ -126,19 +119,5 @@ class PostMeta {
 		$meta_value = $pods->field( $meta_key );
 
 		return $meta_value;
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }
