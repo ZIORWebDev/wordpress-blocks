@@ -34,7 +34,6 @@ export default function Save({ attributes }: SaveProps) {
           min={1}
           step={1}
           value={normalizedQty}
-          readOnly
           aria-label="Quantity"
         />
       )}

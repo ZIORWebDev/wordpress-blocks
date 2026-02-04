@@ -82,8 +82,9 @@ final class Loader {
 	 * @return void
 	 */
 	public function enqueue_block_assets() {
-		$block_style_css  = plugin_dir_url( __DIR__ ) . 'dist/blocks/main.min.css';
+		$block_view_css   = plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.css';
 		$block_editor_css = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css';
+		$block_view_js    = plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.js';
 
 		wp_enqueue_style( 'dashicons' );
 
@@ -97,8 +98,15 @@ final class Loader {
 		// Enqueue block CSS
 		wp_enqueue_style(
 			'zior-wp-blocks-style',
-			$block_style_css,
+			$block_view_css,
 			array(), // dependencies
+			self::$package_version
+		);
+
+		wp_enqueue_script(
+			'zior-wp-blocks-view',
+			$block_view_js,
+			array(),
 			self::$package_version
 		);
 	}

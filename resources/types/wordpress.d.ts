@@ -1,3 +1,4 @@
+// wordpress.d.ts
 export {};
 
 declare global {
@@ -10,12 +11,9 @@ declare global {
   }
 
   const wp: {
-    blocks: {
-      getBlockType: (name: string) => WPBlockType | undefined;
-      hasBlockSupport: (
-        blockTypeOrName: string | WPBlockType,
-        feature: string
-      ) => boolean;
+    blocks?: {
+      getBlockType?: (name: string) => WPBlockType | undefined;
+      hasBlockSupport?: (blockTypeOrName: string | WPBlockType, feature: string) => boolean;
     };
   };
 }

@@ -10,6 +10,7 @@
   },
   "include": [
     "resources/**/*",
-    "resources/types/**/*.d.ts"
+    "resources/types/**/*.d.ts",
+    "**/*.json"
   ]
 }

@@ -6,7 +6,12 @@
   "printWidth": 80,
   "overrides": [
     {
-      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "files": [
+        "*.js",
+        "*.jsx",
+        "*.ts",
+        "*.tsx"
+      ],
       "options": {
         "tabWidth": 2,
         "singleQuote": true,
@@ -14,7 +19,11 @@
       }
     },
     {
-      "files": ["*.css", "*.scss", "*.sass"],
+      "files": [
+        "*.css",
+        "*.scss",
+        "*.sass"
+      ],
       "options": {
         "tabWidth": 2,
         "singleQuote": false

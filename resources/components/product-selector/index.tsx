@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState, useEffect, useCallback, useMemo } from '@wordpress/element';
+import { useState, useEffect, useCallback, useMemo, useRef } from '@wordpress/element';
 import { ComboboxControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
@@ -9,89 +9,100 @@ import { debounce } from '../../utils/debounce';
 type ComboboxOption = { label: string; value: string };
 
 type ProductApiProduct = {
-	id: number | string;
-	name: string;
+  id: number | string;
+  name: string;
 };
 
 type ProductsListResponse = {
-	products?: ProductApiProduct[];
+  products?: ProductApiProduct[];
 };
 
 const toStr = (v: unknown): string => (v === null || v === undefined ? '' : String(v));
 
 export interface ProductSelectorProps {
-	value?: string | number | null;
-	onChange?: (value: string) => void;
+  value?: string | number | null;
+  onChange?: (value: string) => void;
 }
 
-const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () => { } }) => {
-	const [product, setProduct] = useState<string>(toStr(value));
-	const [options, setOptions] = useState<ComboboxOption[]>([]);
-	const [searchTerm, setSearchTerm] = useState<string>('');
+const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () => {} }) => {
+  const [product, setProduct] = useState<string>(toStr(value));
+  const [options, setOptions] = useState<ComboboxOption[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-	// Sync prop -> state without loops
-	useEffect(() => {
-		setProduct((prev) => {
-			const next = toStr(value);
-			return prev === next ? prev : next;
-		});
-	}, [value]);
+  // Sync prop -> state without loops
+  useEffect(() => {
+    const next = toStr(value);
+    setProduct((prev) => (prev === next ? prev : next));
+  }, [value]);
 
-	// Notify parent when product changes
-	useEffect(() => {
-		onChange(product);
-	}, [product, onChange]);
+  const reqSeqRef = useRef(0);
 
-	const fetchOptions = useCallback(
-		debounce((search: unknown) => {
-			const q = encodeURIComponent(toStr(search));
+  const fetchOptions = useCallback(
+    debounce(async (search: unknown, productId: unknown) => {
+      const seq = ++reqSeqRef.current;
 
-			apiFetch<ProductsListResponse>({
-				path: `/wordpress-blocks/v1/products/lists?search=${q}`,
-			})
-				.then((results) => {
-					const products = results?.products ?? [];
-					setOptions(
-						products.map((p) => ({
-							label: p.name,
-							value: String(p.id),
-						}))
-					);
-				})
-				.catch(() => setOptions([]));
-		}, 300),
-		[]
-	);
+      const q = toStr(search);
+      const pid = toStr(productId);
 
-	useEffect(() => {
-		fetchOptions(searchTerm);
-	}, [searchTerm, fetchOptions]);
+      const params = new URLSearchParams();
+      params.set('search', q);
+      if (pid) params.set('productId', pid);
 
-	// Ensure selected product is always displayed
-	const displayedOptions = useMemo<ComboboxOption[]>(() => {
-		if (!product) return options;
-		return options.some((o) => o.value === product)
-			? options
-			: [{ label: `#${product}`, value: product }, ...options];
-	}, [options, product]);
+      try {
+        const results = await apiFetch<ProductsListResponse>({
+          path: `/wordpress-blocks/v1/products/lists?${params.toString()}`,
+        });
 
-	return (
-		<div className="components-base-control">
-			<ComboboxControl
-				label={__('Product')}
-				value={product}
-				options={displayedOptions}
-				onChange={(val) => setProduct(toStr(val))}
-				onFilterValueChange={(val) => setSearchTerm(toStr(val))}
-				placeholder={__('Type to search products...')}
-			/>
-			<p className="components-base-control__help">
-				{__(
-					'Only choose products safe for public display. Avoid private values such as user data or tokens.'
-				)}
-			</p>
-		</div>
-	);
+        // ignore stale responses
+        if (seq !== reqSeqRef.current) return;
+
+        const products = results?.products ?? [];
+        setOptions(
+          products.map((p) => ({
+            label: p.name,
+            value: String(p.id),
+          }))
+        );
+      } catch {
+        if (seq !== reqSeqRef.current) return;
+        setOptions([]);
+      }
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    fetchOptions(searchTerm, product);
+    // If your debounce supports cancel:
+    // return () => fetchOptions.cancel?.();
+  }, [searchTerm, product, fetchOptions]);
+
+  const displayedOptions = useMemo<ComboboxOption[]>(() => {
+    if (!product) return options;
+    return options.some((o) => o.value === product)
+      ? options
+      : [{ label: `#${product}`, value: product }, ...options];
+  }, [options, product]);
+
+  return (
+    <div className="components-base-control">
+      <ComboboxControl
+        label={__('Product')}
+        value={product}
+        options={displayedOptions}
+        onChange={(val) => {
+          const next = toStr(val);
+          setProduct(next);
+          onChange(next);
+        }}
+        onFilterValueChange={(val) => setSearchTerm(toStr(val))}
+        placeholder={__('Type to search products...')}
+      />
+      <p className="components-base-control__help">
+        {__('Only choose products safe for public display. Avoid private values such as user data or tokens.')}
+      </p>
+    </div>
+  );
 };
 
 export default ProductSelector;

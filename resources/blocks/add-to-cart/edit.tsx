@@ -2,6 +2,7 @@ import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-
 import { PanelBody, ToggleControl, TextControl } from '@wordpress/components';
 import { useEffect, useMemo, useCallback } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
+import type { BlockInstance } from '@wordpress/blocks';
 
 import ProductSelector from '../../components/product-selector';
 
@@ -34,27 +35,17 @@ export default function Edit({ attributes, setAttributes, clientId }: EditProps)
     return Number.isFinite(n) && n > 0 ? n : 1;
   }, [quantity]);
 
-  const addToCartUrl = useMemo(() => {
-    if (!productId) return '';
-    const qty = showQuantity ? normalizedQty : 1;
-    return `/?add-to-cart=${encodeURIComponent(String(productId))}&quantity=${encodeURIComponent(
-      String(qty),
-    )}`;
-  }, [productId, showQuantity, normalizedQty]);
+type BlockEditorSelectors = {
+  getBlock: (clientId: string) => (BlockInstance & { innerBlocks?: BlockInstance[] }) | null;
+};
 
-  // Read the first inner block (expected: core/button)
-  const coreButton = useSelect(
-    (select) => {
-      const parent = select('core/block-editor').getBlock(clientId) as
-        | { innerBlocks?: Array<{ name: string; clientId: string; attributes?: Record<string, any> }> }
-        | undefined;
+const coreButton = useSelect((select) => {
+  const editor = select('core/block-editor') as unknown as BlockEditorSelectors;
 
-      const first = parent?.innerBlocks?.[0];
-      if (!first || first.name !== 'core/button') return null;
-      return first;
-    },
-    [clientId],
-  );
+  const parent = editor.getBlock(clientId);
+  const first = parent?.innerBlocks?.[0];
+  return first?.name === 'core/button' ? first : null;
+}, [clientId]);
 
   const { updateBlockAttributes } = useDispatch('core/block-editor') as {
     updateBlockAttributes: (blockClientId: string, attrs: Record<string, any>) => void;
@@ -67,11 +58,9 @@ export default function Edit({ attributes, setAttributes, clientId }: EditProps)
     const newClasses = mergeClasses(buttonClass, 'add_to_cart_button ajax_add_to_cart');
 
     updateBlockAttributes(coreButton.clientId, {
-      className: newClasses,
-      // set when selected; clear when not selected
-      url: addToCartUrl || undefined,
+      className: newClasses
     });
-  }, [coreButton?.clientId, coreButton?.attributes, addToCartUrl, updateBlockAttributes]);
+  }, [coreButton?.clientId, coreButton?.attributes, updateBlockAttributes]);
 
   useEffect(() => {
     syncInnerButton();
