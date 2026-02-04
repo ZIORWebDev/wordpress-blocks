@@ -1,4 +1,3 @@
-import webpack from 'webpack';
 import path from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -8,14 +7,12 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 export default {
   mode: isProduction ? 'production' : 'development',
-  devtool: isProduction ? false : 'source-map',
+  devtool: isProduction ? false : 'eval-cheap-module-source-map',
 
   entry: {
-    'blocks/editor': './resources/editor.js',
-    'blocks/main': './resources/main.js',
+    'blocks/editor': './resources/editor.ts',
+    'blocks/main': './resources/main.ts',
   },
-
-  externals: { jquery: 'jQuery' },
 
   output: {
     filename: `[name].min.js`,
@@ -23,16 +20,46 @@ export default {
     clean: true,
   },
 
+  cache: { type: 'filesystem' },
+
+  // WP best practice: do not bundle these; WP provides them.
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    '@wordpress/blocks': ['wp', 'blocks'],
+    '@wordpress/i18n': ['wp', 'i18n'],
+    '@wordpress/element': ['wp', 'element'],
+    '@wordpress/components': ['wp', 'components'],
+    '@wordpress/block-editor': ['wp', 'blockEditor'],
+    '@wordpress/data': ['wp', 'data'],
+    '@wordpress/hooks': ['wp', 'hooks'],
+    '@wordpress/api-fetch': ['wp', 'apiFetch'],
+  },
+
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.mjs'],
+  },
+
   module: {
     rules: [
+      // Fix Webpack 5 strict ESM "fully specified" resolution inside @wordpress deps
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: { presets: ['@babel/preset-env', '@babel/preset-react'] },
-        },
+        test: /\.m?js$/,
+        include: /node_modules[\\/](?:@wordpress|diff)[\\/]/,
+        resolve: { fullySpecified: false },
       },
+
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: { transpileOnly: true },
+          },
+        ],
+      },
+
       {
         test: /\.(sc|sa|c)ss$/,
         use: [
@@ -45,8 +72,6 @@ export default {
   },
 
   optimization: {
-    usedExports: true,
-    concatenateModules: true,
     minimizer: [
       new TerserPlugin({
         parallel: true,
@@ -55,15 +80,12 @@ export default {
           compress: {
             drop_console: isProduction,
             drop_debugger: isProduction,
-            passes: 3,
-            ecma: 2015,
           },
           format: { comments: false },
         },
       }),
       new CssMinimizerPlugin(),
     ],
-    // No splitChunks → all code stays in entry files
     splitChunks: false,
   },
 
@@ -73,8 +95,5 @@ export default {
     maxAssetSize: 1024000,
   },
 
-  plugins: [
-    new webpack.ProvidePlugin({ $: 'jquery' }),
-    new MiniCssExtractPlugin({ filename: `[name].min.css` }),
-  ],
+  plugins: [new MiniCssExtractPlugin({ filename: `[name].min.css` })],
 };

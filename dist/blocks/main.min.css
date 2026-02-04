@@ -1,5 +1,5 @@
 /*!***********************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./resources/style.scss ***!
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./resources/style.scss ***!
   \***********************************************************************************************************************************************************************/
 .wp-block-zior-icon-picker {
   box-sizing: border-box;
@@ -427,6 +427,12 @@
   color: #000;
 }
 
+.wp-block-zior-add-to-cart {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /**
  * Colors
  */
@@ -749,5 +755,3 @@ html :where(.is-position-sticky) {
     /* stylelint-enable length-zero-no-unit */
   }
 }
-
-/*# sourceMappingURL=main.min.css.map*/

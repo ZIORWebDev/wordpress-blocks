@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": [
+    "resources/**/*",
+    "resources/types/**/*.d.ts"
+  ]
+}

@@ -41,7 +41,8 @@ class Block extends Blocks\Base {
 	 * @return string Rendered HTML of the referenced block.
 	 */
 	public function render( $attributes, $content, $block ) {
-		$product_id = isset( $attributes['productId'] ) ? intval( $attributes['productId'] ) : '';
+		// $product_id = isset( $attributes['productId'] ) ? intval( $attributes['productId'] ) : '';
+		return $content;
 	}
 
 	/**
