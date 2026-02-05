@@ -1,10 +1,5 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-
-type Attributes = {
-  productId?: string | number;
-  showQuantity?: boolean;
-  quantity?: number | string;
-};
+import type { Attributes } from './index';
 
 type SaveProps = {
   attributes: Attributes;

@@ -1,92 +1,73 @@
 /**
  * WordPress dependencies
  */
-import type { ReactElement } from 'react';
-import { useCallback, useRef } from '@wordpress/element';
-import { Dashicon, ToolbarButton } from '@wordpress/components';
-import { Inserter } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useRef } from '@wordpress/element';
+import { ToolbarButton } from '@wordpress/components';
+import { Inserter } from '@wordpress/block-editor';
+import { dispatch, select } from '@wordpress/data';
+import type { BlockInstance } from '@wordpress/blocks';
+import type { IconType } from '@wordpress/components';
 
-/**
- * Types
- */
-type WPBlock = {
-	name: string;
-	clientId: string;
-};
-
-type InserterToggleRenderArgs = {
-	onToggle: () => void;
-	isOpen: boolean;
-	disabled?: boolean;
-};
-
-type IconInserterProps = {
+type Props = {
+	/** Parent block clientId (the block that owns the icon inner block). */
 	rootClientId: string;
+	/** Toolbar button label. */
 	label?: string;
-	/**
-	 * Accepts a Dashicon slug string (e.g. "admin-appearance") or a React element.
-	 * We normalize to a React element before passing to ToolbarButton to satisfy typings.
-	 */
-	icon?: string | ReactElement;
+	/** Toolbar button icon (Dashicon slug, Icon component, or SVG). */
+	icon?: IconType;
+	/** Called when a block is inserted OR the inserter popover is closed. */
 	onSelectOrClose?: () => void;
+	/** Which block name to treat as the “icon block” to replace. */
+	iconBlockName?: string;
 };
 
-export default function IconInserter({
+const STORE = 'core/block-editor' as const;
+
+export default function IconInserter( {
 	rootClientId,
-	label = __('Add block'),
+	label = __( 'Change Icon', 'wordpress-blocks' ),
 	icon = 'admin-appearance',
 	onSelectOrClose,
-}: IconInserterProps) {
-	// Stable ref for inserter anchor (toolbar button).
-	const buttonRef = useRef<HTMLButtonElement | null>(null);
-
-	// Reactive inner blocks under rootClientId.
-	const innerBlocks = useSelect(
-		(select) =>
-			((select('core/block-editor') as any).getBlocks(rootClientId) ?? []) as WPBlock[],
-		[rootClientId]
-	);
-
-	const { removeBlock, insertBlock } = useDispatch('core/block-editor') as any;
-
-	const handleSelect = useCallback(
-		(block: any) => {
-			// Remove existing icon blocks under this root.
-			for (const b of innerBlocks) {
-				if (b.name === 'zior/icon') removeBlock(b.clientId);
-			}
-
-			// Insert the newly selected block under the root.
-			insertBlock(block, undefined, rootClientId);
-		},
-		[innerBlocks, insertBlock, removeBlock, rootClientId]
-	);
-
-	// Normalize icon to a React element to satisfy ToolbarButton's IconType typings.
-	const toolbarIcon =
-		typeof icon === 'string' ? <Dashicon icon={icon as any} /> : icon;
+	iconBlockName = 'zior/icon',
+}: Props ) {
+	// Anchor for the inserter popover (ToolbarButton is rendered as a button-like element).
+	const buttonRef = useRef<HTMLElement | null>( null );
 
 	return (
 		<Inserter
-			rootClientId={rootClientId}
+			rootClientId={ rootClientId }
 			position="bottom center"
-			__experimentalIsQuick={true}
-			isAppender={true}
-			anchorRef={buttonRef}
-			onSelectOrClose={onSelectOrClose}
-			renderToggle={({ onToggle, isOpen, disabled }: InserterToggleRenderArgs) => (
+			__experimentalIsQuick={ true }
+			isAppender={ true }
+			anchorRef={ buttonRef }
+			onSelectOrClose={ onSelectOrClose }
+			renderToggle={ ( { onToggle, isOpen, disabled } ) => (
 				<ToolbarButton
-					icon={toolbarIcon}
-					label={label}
-					onClick={onToggle}
-					aria-expanded={isOpen}
-					disabled={disabled}
-					ref={buttonRef}
+					icon={ icon }
+					label={ label }
+					onClick={ onToggle }
+					aria-expanded={ isOpen }
+					disabled={ disabled }
+					// ToolbarButton's ref typing can be looser across WP versions; this is the safest.
+					ref={ buttonRef as unknown as React.Ref<HTMLButtonElement> }
 				/>
-			)}
-			onSelect={handleSelect}
+			) }
+			onSelect={ ( block: BlockInstance ) => {
+				// Remove existing icon blocks inside the parent (Icon Picker) block.
+				const innerBlocks = select( STORE ).getBlocks(
+					rootClientId
+				) as BlockInstance[];
+
+				innerBlocks.forEach( ( b ) => {
+					if ( b?.name === iconBlockName ) {
+						dispatch( STORE ).removeBlock( b.clientId );
+					}
+				} );
+
+				// Insert the new selected block into the parent.
+				dispatch( STORE ).insertBlock( block, undefined, rootClientId );
+			} }
 		/>
 	);
 }
