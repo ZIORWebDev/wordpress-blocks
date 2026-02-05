@@ -1,9 +1,7 @@
-/* global wp */
-
 /**
  * WordPress dependencies
  */
-const { getBlockType, hasBlockSupport } = wp.blocks;
+import { getBlockType, hasBlockSupport } from '@wordpress/blocks';
 
 /**
  * Types

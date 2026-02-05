@@ -41,49 +41,33 @@ class Block extends Blocks\Base {
 	 * @return string Rendered HTML of the referenced block.
 	 */
 	public function render( $attributes, $content, $block ) {
-		// $product_id = isset( $attributes['productId'] ) ? intval( $attributes['productId'] ) : '';
+		/**
+		 * If this is not a single product, return the $content.
+		 */
+		if ( ! is_singular( 'product' ) ) {
+			return $content;
+		}
+
+		/**
+		 * If the product Id is set, return the $content.
+		 */
+		if ( ! empty( $attributes['productId'] ?? '' ) ) {
+			return $content;
+		}
+
+		$product_id = get_queried_object_id();
+
+		if ( ! $product_id ) {
+			return $content;
+		}
+
+		$content = preg_replace(
+			'/\bdata-product-id=""/',
+			'data-product-id="' . esc_attr( $product_id ) . '"',
+			$content,
+			1
+		);
+
 		return $content;
-	}
-
-	/**
-	 * Returns CSS styles for icon and icon background colors.
-	 *
-	 * @since 1.0.0
-	 * @param array $context Block context passed to icon.
-	 * @return string Inline CSS styles for link's icon and background colors.
-	 */
-	public function get_color_styles( $context ) {
-		$styles = array();
-
-		if ( array_key_exists( 'iconColorValue', $context ) ) {
-			$styles[] = 'color:' . $context['iconColorValue'] . ';';
-		}
-
-		if ( array_key_exists( 'iconBackgroundColorValue', $context ) ) {
-			$styles[] = 'background-color:' . $context['iconBackgroundColorValue'] . ';';
-		}
-
-		return implode( '', $styles );
-	}
-
-	/**
-	 * Returns CSS classes for icon and icon background colors.
-	 *
-	 * @since 1.0.0
-	 * @param array $context Block context passed to icon.
-	 * @return string CSS classes for link's icon and background colors.
-	 */
-	public function get_color_classes( $context ) {
-		$classes = array();
-
-		if ( array_key_exists( 'iconColor', $context ) ) {
-			$classes[] = 'has-' . $context['iconColor'] . '-color';
-		}
-
-		if ( array_key_exists( 'iconBackgroundColor', $context ) ) {
-			$classes[] = 'has-' . $context['iconBackgroundColor'] . '-background-color';
-		}
-
-		return ' ' . implode( ' ', $classes );
 	}
 }
