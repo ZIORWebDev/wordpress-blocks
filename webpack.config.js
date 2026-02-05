@@ -24,16 +24,22 @@ export default {
 
   // WP best practice: do not bundle these; WP provides them.
   externals: {
+    // React (provided by WordPress)
     react: 'React',
     'react-dom': 'ReactDOM',
+
+    // WordPress packages
     '@wordpress/blocks': ['wp', 'blocks'],
     '@wordpress/i18n': ['wp', 'i18n'],
     '@wordpress/element': ['wp', 'element'],
     '@wordpress/components': ['wp', 'components'],
     '@wordpress/block-editor': ['wp', 'blockEditor'],
     '@wordpress/data': ['wp', 'data'],
+    '@wordpress/core-data': ['wp', 'coreData'],
     '@wordpress/hooks': ['wp', 'hooks'],
     '@wordpress/api-fetch': ['wp', 'apiFetch'],
+    '@wordpress/compose': ['wp', 'compose'],
+    '@wordpress/blob': ['wp', 'blob'],
   },
 
   resolve: {

@@ -2,28 +2,17 @@ import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-
 import { PanelBody, ToggleControl, TextControl } from '@wordpress/components';
 import { useEffect, useMemo, useCallback } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
-import type { BlockInstance } from '@wordpress/blocks';
+import type { BlockInstance, BlockEditProps } from '@wordpress/blocks';
 
 import ProductSelector from '../../components/product-selector';
-
-type Attributes = {
-  productId?: string | number;
-  showQuantity?: boolean;
-  quantity?: number | string;
-};
-
-type EditProps = {
-  attributes: Attributes;
-  setAttributes: (next: Partial<Attributes>) => void;
-  clientId: string;
-};
+import type { Attributes } from './index';
 
 function mergeClasses(existing = '', add = ''): string {
   const classes = new Set(`${existing} ${add}`.trim().split(/\s+/).filter(Boolean));
   return Array.from(classes).join(' ');
 }
 
-export default function Edit({ attributes, setAttributes, clientId }: EditProps) {
+export default function Edit({ attributes, setAttributes, clientId }:  BlockEditProps<Attributes>) {
   const { productId, showQuantity = false, quantity = 1 } = attributes;
 
   const blockProps = useBlockProps({
@@ -72,7 +61,7 @@ const coreButton = useSelect((select) => {
         <PanelBody title="Product" initialOpen>
           <ProductSelector
             value={productId ?? ''}
-            onChange={(nextProductId: string | number) => setAttributes({ productId: nextProductId })}
+            onChange={(nextProductId: string) => setAttributes({ productId: nextProductId })}
           />
 
           <ToggleControl

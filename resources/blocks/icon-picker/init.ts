@@ -1,6 +1,6 @@
 /**
  * Internal dependencies
  */
-import { init } from './';
+import { init } from '.';
 
 export default init();

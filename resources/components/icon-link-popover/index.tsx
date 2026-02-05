@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { URLPopover, URLInput, store as blockEditorStore } from '@wordpress/block-editor';
 import { useDispatch } from '@wordpress/data';
 import { Button } from '@wordpress/components';
-import { InputControlSuffixWrapper } from '@wordpress/components';
+import { __experimentalInputControlSuffixWrapper as InputControlSuffixWrapper } from '@wordpress/components';
 
 // If you already have these constants elsewhere, import them instead.
 const BACKSPACE = 8;
