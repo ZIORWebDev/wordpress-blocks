@@ -69,19 +69,10 @@ class PostMeta extends Base {
 	/**
 	 * Retrieve a list of WordPress option keys.
 	 *
-	 * @param string $path Cache path.
-	 * @param array  $params Additional arguments.
-	 *
+	 * @param array $params Additional arguments.
 	 * @return array List of option keys.
 	 */
-	public static function get_keys( string $path, array $params ): array {
-		$cache_key   = static::get_cache_key( $path, $params );
-		$cached_data = static::get_cache( $cache_key );
-
-		if ( ! empty( $cached_data ) ) {
-			return $cached_data;
-		}
-
+	public static function get_keys( array $params ): array {
 		global $wpdb;
 
 		/**
@@ -109,9 +100,6 @@ class PostMeta extends Base {
 		$postmeta = $wpdb->get_col( $query );
 		$postmeta = Utils\Helper::sanitize_keys( $postmeta );
 
-		// Set cache.
-		static::set_cache( $cache_key, $postmeta );
-
-		return $postmeta;
+		return apply_filters( 'zior_wp_blocks_get_post_meta_keys', $postmeta, $args );
 	}
 }

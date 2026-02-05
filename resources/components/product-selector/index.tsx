@@ -17,21 +17,19 @@ type ProductsListResponse = {
   products?: ProductApiProduct[];
 };
 
-const toStr = (v: unknown): string => (v === null || v === undefined ? '' : String(v));
-
 export interface ProductSelectorProps {
   value?: string | number | null;
   onChange?: (value: string) => void;
 }
 
 const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () => {} }) => {
-  const [product, setProduct] = useState<string>(toStr(value));
+  const [product, setProduct] = useState<string>(String(value));
   const [options, setOptions] = useState<ComboboxOption[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   // Sync prop -> state without loops
   useEffect(() => {
-    const next = toStr(value);
+    const next = String(value);
     setProduct((prev) => (prev === next ? prev : next));
   }, [value]);
 
@@ -41,16 +39,13 @@ const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () =
     debounce(async (search: unknown, productId: unknown) => {
       const seq = ++reqSeqRef.current;
 
-      const q = toStr(search);
-      const pid = toStr(productId);
-
       const params = new URLSearchParams();
-      params.set('search', q);
-      if (pid) params.set('productId', pid);
+      params.set('search', String(search));
+      params.set('productId', String(productId));
 
       try {
         const results = await apiFetch<ProductsListResponse>({
-          path: `/wordpress-blocks/v1/products/lists?${params.toString()}`,
+          path: `/${ZIORWPBlocks.restUrl}/products/lists?${params.toString()}`,
         });
 
         // ignore stale responses
@@ -75,7 +70,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () =
     fetchOptions(searchTerm, product);
     // If your debounce supports cancel:
     // return () => fetchOptions.cancel?.();
-  }, [searchTerm, product, fetchOptions]);
+  }, [searchTerm, fetchOptions]);
 
   const displayedOptions = useMemo<ComboboxOption[]>(() => {
     if (!product) return options;
@@ -91,11 +86,11 @@ const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () =
         value={product}
         options={displayedOptions}
         onChange={(val) => {
-          const next = toStr(val);
+          const next = String(val);
           setProduct(next);
           onChange(next);
         }}
-        onFilterValueChange={(val) => setSearchTerm(toStr(val))}
+        onFilterValueChange={(val) => setSearchTerm(String(val))}
         placeholder={__('Type to search products...')}
       />
       <p className="components-base-control__help">

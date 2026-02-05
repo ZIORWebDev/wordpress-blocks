@@ -37,9 +37,34 @@ class Lists extends EndPoints\Base {
 	 * @return array The response.
 	 */
 	public function callback( \WP_REST_Request $request ) {
-		$path    = $this->get_rest_path();
-		$params  = $request->get_params();
-		$options = OptionsController::get_keys( $path, $params );
+		$path   = $this->get_rest_path();
+		$params = $request->get_params();
+
+		/**
+		 * Sort params for cache key consistency.
+		 */
+		ksort( $params );
+
+		/**
+		 * Get cache and return if exists.
+		 */
+		$cache_key   = static::get_cache_key( $path, $params );
+		$cached_data = static::get_cache( $cache_key );
+
+		if ( ! empty( $cached_data ) && is_array( $cached_data ) ) {
+			return rest_ensure_response(
+				array(
+					'meta_keys' => $cached_data,
+				)
+			);
+		}
+
+		$options = OptionsController::get_keys( $params );
+
+		/**
+		 * Save cache.
+		 */
+		static::set_cache( $cache_key, $options );
 
 		return rest_ensure_response(
 			array(

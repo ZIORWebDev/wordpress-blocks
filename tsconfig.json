@@ -31,5 +31,9 @@
   "exclude": [
     "node_modules",
     "dist"
+  ],
+  "files": [
+    "./resources/types/global.d.ts",
+    "./resources/types/wordpress.d.ts"
   ]
 }

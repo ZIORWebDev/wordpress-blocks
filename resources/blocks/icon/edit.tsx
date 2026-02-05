@@ -11,7 +11,6 @@ import { store as blocksStore } from '@wordpress/blocks';
 import {
 	InspectorControls,
 	useBlockProps,
-	type BlockContext,
 } from '@wordpress/block-editor';
 import {
 	ExternalLink,
@@ -52,7 +51,7 @@ type IconServiceResult = {
 };
 
 type Props = BlockEditProps<Attributes> & {
-	context: BlockContext & Context;
+	context: Context;
 };
 
 export default function IconEdit(props: Props) {

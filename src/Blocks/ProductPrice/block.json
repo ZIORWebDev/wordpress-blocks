@@ -1,0 +1,98 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "zior/product-price",
+	"title": "Product Price",
+	"category": "widgets",
+	"description": "Display WooCommerce product price anywhere.",
+	"keywords": [
+		"product",
+		"price"
+	],
+	"textdomain": "default",
+	"attributes": {
+		"productId": {
+			"type": "string"
+		},
+		"showBillingCycle": {
+			"type": "boolean",
+			"default": true
+		},
+		"textAlign": {
+			"type": "string"
+		},
+		"content": {
+			"type": "rich-text",
+			"source": "rich-text",
+			"selector": "h1,h2,h3,h4,h5,h6,p,div,span",
+			"role": "content"
+		},
+		"level": {
+			"type": "number",
+			"default": 2
+		},
+		"levelOptions": {
+			"type": "array"
+		},
+		"placeholder": {
+			"type": "string"
+		},
+		"tagName": {
+			"type": "string",
+			"default": "h2"
+		}
+	},
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"anchor": true,
+		"className": true,
+		"splitting": true,
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		},
+		"color": {
+			"gradients": true,
+			"link": true,
+			"__experimentalDefaultControls": {
+				"background": true,
+				"text": true
+			}
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"__experimentalDefaultControls": {
+				"margin": false,
+				"padding": false
+			}
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontStyle": true,
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalWritingMode": true,
+			"fitText": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			}
+		},
+		"__unstablePasteTextInline": true,
+		"__experimentalSlashInserter": true,
+		"interactivity": {
+			"clientNavigation": true
+		}
+	},
+	"editorStyle": "wp-block-zior-product-price-editor",
+	"style": "wp-block-zior-product-price"
+}

@@ -62,5 +62,7 @@ class Routes {
 
 		new Endpoints\Options\Value();
 		new Endpoints\PostMeta\Value();
+
+		new Endpoints\Products\Information();
 	}
 }

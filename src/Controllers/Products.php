@@ -20,12 +20,10 @@ class Products extends Base {
 	/**
 	 * Retrieve a list of WooCommerce products.
 	 *
-	 * @param string $path Cache path.
-	 * @param array  $args Additional arguments.
-	 *
+	 * @param array $args Additional arguments.
 	 * @return array List of option keys.
 	 */
-	public static function get_products( string $path, array $args ): array {
+	public static function get_products( array $args ): array {
 		/**
 		 * Check if WC_Product_Query exists.
 		 */
@@ -48,19 +46,6 @@ class Products extends Base {
 
 		if ( isset( $args['productId'] ) ) {
 			$include_id = absint( $args['productId'] );
-		}
-
-		// Use sanitized args for cache key consistency.
-		$cache_args = array(
-			'search'    => $search_term,
-			'productId' => $include_id,
-		);
-
-		$cache_key   = static::get_cache_key( $path, $cache_args );
-		$cached_data = static::get_cache( $cache_key );
-
-		if ( ! empty( $cached_data ) && is_array( $cached_data ) ) {
-			return $cached_data;
 		}
 
 		/**
@@ -118,9 +103,52 @@ class Products extends Base {
 			);
 		}
 
-		// Set cache.
-		static::set_cache( $cache_key, $products );
+		return apply_filters( 'zior_wp_blocks_get_products', $products, $args );
+	}
 
-		return $products;
+	/**
+	 * Get product information.
+	 *
+	 * @param string $product_id Product Id.
+	 * @param array  $args Additional arguments.
+	 * @return array Product data.
+	 */
+	public static function get_product( string $product_id, array $args = array() ): array {
+		if ( empty( $product_id ) ) {
+			return array();
+		}
+
+		/**
+		 * If WooCommerce not active, return empty array.
+		 */
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return $array();
+		}
+
+		$product = wc_get_product( $product_id );
+
+		if ( ! $product ) {
+			return array();
+		}
+
+		$product_data = array(
+			'id'             => $product->get_id(),
+			'name'           => $product->get_name(),
+			'slug'           => $product->get_slug(),
+			'permalink'      => $product->get_permalink(),
+			'status'         => $product->get_status(),
+			'type'           => $product->get_type(),
+			'price'          => $product->get_price(),
+			'regular_price'  => $product->get_regular_price(),
+			'sale_price'     => $product->get_sale_price(),
+			'on_sale'        => $product->is_on_sale(),
+			'price_html'     => $product->get_price_html(),
+			'description'    => $product->get_short_description(),
+			'average_rating' => $product->get_average_rating(),
+			'review_count'   => $product->get_review_count(),
+			'rating_count'   => $product->get_rating_count(),
+		);
+
+		return apply_filters( 'zior_wp_blocks_get_product', $product_data, $product );
 	}
 }

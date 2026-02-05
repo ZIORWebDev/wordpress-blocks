@@ -7,8 +7,6 @@
 
 namespace ZIORWebDev\WordPressBlocks\Controllers;
 
-use ZIORWebDev\WordPressBlocks\Traits\Cache as CacheTrait;
-
 /**
  * Base class
  *
@@ -16,5 +14,5 @@ use ZIORWebDev\WordPressBlocks\Traits\Cache as CacheTrait;
  * @since 1.0.0
  */
 abstract class Base {
-	use CacheTrait;
+
 }

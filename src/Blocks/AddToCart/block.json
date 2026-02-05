@@ -11,8 +11,8 @@
 			"type": "string"
 		},
 		"showQuantity": {
-			"type": "string",
-			"default": "0"
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"supports": {

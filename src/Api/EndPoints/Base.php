@@ -9,6 +9,7 @@ namespace ZIORWebDev\WordPressBlocks\Api\Endpoints;
 
 use ZIORWebDev\WordPressBlocks\Api\Interface;
 use ZIORWebDev\WordPressBlocks\Routes;
+use ZIORWebDev\WordPressBlocks\Traits\Cache as CacheTrait;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints
  */
 abstract class Base implements Interface\Route {
+
+	use CacheTrait;
 
 	/**
 	 * REST route path

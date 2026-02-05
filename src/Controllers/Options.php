@@ -23,7 +23,6 @@ class Options extends Base {
 	 * @return mixed The resolved value, or null if the key does not exist.
 	 */
 	public static function get_value( array $params ): mixed {
-		error_log( 'IS GET VALUE TRIGGERED?');
 		$meta_key   = isset( $params['metaKey'] ) ? $params['metaKey'] : '';
 		$provider   = isset( $params['fieldProvider'] ) ? $params['fieldProvider'] : '';
 		$meta_value = get_option( $meta_key );
@@ -44,19 +43,10 @@ class Options extends Base {
 	/**
 	 * Retrieve a list of WordPress option keys.
 	 *
-	 * @param string $path Cache path.
-	 * @param array  $args Additional arguments.
-	 *
+	 * @param array $args Additional arguments.
 	 * @return array List of option keys.
 	 */
-	public static function get_keys( string $path, array $args ): array {
-		$cache_key   = static::get_cache_key( $path, $args );
-		$cached_data = static::get_cache( $cache_key );
-
-		if ( ! empty( $cached_data ) ) {
-			return $cached_data;
-		}
-
+	public static function get_keys( array $args ): array {
 		global $wpdb;
 
 		/**
@@ -108,9 +98,6 @@ class Options extends Base {
 		$options = $wpdb->get_col( $query );
 		$options = Utils\Helper::sanitize_keys( $options );
 
-		// Set cache.
-		static::set_cache( $cache_key, $options );
-
-		return $options;
+		return apply_filters( 'zior_wp_blocks_get_option_keys', $options, $args );
 	}
 }

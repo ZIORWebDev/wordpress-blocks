@@ -6,6 +6,7 @@ import * as MetaField from './blocks/meta-field';
 import * as IconListItem from './blocks/icon-list-item';
 import * as IconList from './blocks/icon-list';
 import * as AddToCart from './blocks/add-to-cart';
+import * as ProductPrice from './blocks/product-price';
 
 type BlockModule = {
   init?: () => void;
@@ -18,6 +19,7 @@ const BLOCKS = [
   IconListItem,
   IconList,
   AddToCart,
+  ProductPrice,
 ] satisfies ReadonlyArray<BlockModule>;
 
 const initBlocks = (blocks: ReadonlyArray<BlockModule>): void => {

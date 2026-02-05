@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\EndPoints\Products
  * @since 1.0.0
  */
-class Lists extends EndPoints\Base {
+class Information extends EndPoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected $route_path = 'products/lists';
+	protected $route_path = 'products/information';
 
 	/**
 	 * Callback
@@ -54,21 +54,26 @@ class Lists extends EndPoints\Base {
 		if ( ! empty( $cached_data ) && is_array( $cached_data ) ) {
 			return rest_ensure_response(
 				array(
-					'meta_keys' => $cached_data,
+					'product' => $cached_data,
 				)
 			);
 		}
 
-		$products = ProductsController::get_products( $params );
+		$product    = array();
+		$product_id = isset( $params['productId'] ) ? $params['productId'] : null;
+
+		if ( ! empty( $product_id ) ) {
+			$product = ProductsController::get_product( $product_id, $params );
+		}
 
 		/**
 		 * Save cache.
 		 */
-		static::set_cache( $cache_key, $products );
+		static::set_cache( $cache_key, $product );
 
 		return rest_ensure_response(
 			array(
-				'products' => $products,
+				'product' => $product,
 			)
 		);
 	}
@@ -80,9 +85,9 @@ class Lists extends EndPoints\Base {
 	 */
 	public function get_rest_args() {
 		return array(
-			'search' => array(
+			'productId' => array(
 				'type'              => 'string',
-				'required'          => false,
+				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			),
 		);

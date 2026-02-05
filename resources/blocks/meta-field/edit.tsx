@@ -9,7 +9,6 @@ import { clsx } from 'clsx';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useCallback, useMemo, Platform } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-
 import {
 	AlignmentControl,
 	BlockControls,

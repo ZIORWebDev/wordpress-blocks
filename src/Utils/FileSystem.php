@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FileSystem {
 
+	private static $cache_dir = '';
+
 	/**
 	 * Delete plugin uploads dir
 	 *
@@ -59,7 +61,7 @@ class FileSystem {
 
 	/**
 	 * Create cache dir.
-	 * 
+	 *
 	 * @param string $path
 	 * @return string
 	 * @since 1.0.0

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Traits
  * @since 1.0.0
  */
-Trait Cache {
+trait Cache {
 	/**
 	 * Generate a cache key for a request.
 	 *
