@@ -1,33 +1,44 @@
+/**
+ * External dependencies
+ */
 import { clsx } from 'clsx';
-import { __ } from '@wordpress/i18n';
-import { store as blocksStore, type BlockVariation } from '@wordpress/blocks';
-import { useSelect, useDispatch } from '@wordpress/data';
+
+/**
+ * WordPress dependencies
+ */
+import type { BlockEditProps, BlockVariation } from '@wordpress/blocks';
+import { store as blocksStore } from '@wordpress/blocks';
 import {
-	useBlockProps,
 	InspectorControls,
-	store as blockEditorStore,
+	useBlockProps,
+	type BlockContext,
 } from '@wordpress/block-editor';
 import {
-	TextControl,
 	ExternalLink,
-	__experimentalToolsPanel as ToolsPanel,
-	__experimentalToolsPanelItem as ToolsPanelItem,
 	Icon,
-	DropdownMenu,
+	TextControl,
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	__experimentalToolsPanel as ToolsPanel,
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useDispatch, useSelect } from '@wordpress/data';
 
+/**
+ * Internal dependencies
+ */
 import { getIconService } from './icon-list';
 import { useToolsPanelDropdownMenuProps } from '../../utils/hooks';
-import type { Attributes } from './index';
 
-type IconBlockAttributes = {
+type Attributes = {
 	url?: string;
 	service?: string;
 	label?: string;
 	rel?: string;
 };
 
-type IconBlockContext = {
+type Context = {
 	showLabels?: boolean;
 	iconColor?: string;
 	iconColorValue?: string;
@@ -35,31 +46,20 @@ type IconBlockContext = {
 	iconBackgroundColorValue?: string;
 };
 
-type Props = {
-	attributes: IconBlockAttributes;
-	context: IconBlockContext;
-	setAttributes: (next: Partial<IconBlockAttributes>) => void;
-	name: string;
-	clientId: string;
+type IconServiceResult = {
+	icon: unknown;
+	label: string;
 };
 
-type BlocksSelectors = {
-	getActiveBlockVariation: (
-		blockName: string,
-		attrs: IconBlockAttributes
-	) => BlockVariation | undefined;
+type Props = BlockEditProps<Attributes> & {
+	context: BlockContext & Context;
 };
 
-type BlockEditorSelectors = {
-	getBlockRootClientId: (clientId: string) => string | null;
-};
+export default function IconEdit(props: Props) {
+	const { attributes, context, setAttributes, name, clientId } = props;
+	const { url, service = '', label = '', rel } = attributes;
 
-// Derive the prop type from the actual exported component (DropdownMenuProps is not exported).
-type DropdownMenuProps = React.ComponentProps<typeof DropdownMenu>;
-
-export default function Edit(props: BlockEditProps<Attributes>) {
-  const { attributes, setAttributes, clientId, context } = props;
-	const { url, service, label = '', rel } = attributes;
+	const dropdownMenuProps = useToolsPanelDropdownMenuProps();
 
 	const {
 		showLabels,
@@ -67,46 +67,44 @@ export default function Edit(props: BlockEditProps<Attributes>) {
 		iconColorValue,
 		iconBackgroundColor,
 		iconBackgroundColorValue,
-	} = context;
-
-	// ToolsPanel expects DropdownMenu props; `label` is required.
-	const dropdownMenuPropsFromHook =
-		useToolsPanelDropdownMenuProps() as Partial<DropdownMenuProps>;
-
-	const dropdownMenuProps = {
-		label: __('Tools panel options'),
-		...dropdownMenuPropsFromHook,
-	} as DropdownMenuProps;
+	} = context ?? {};
 
 	const { activeVariation } = useSelect(
 		(select) => {
-			const { getActiveBlockVariation } = select(blocksStore) as BlocksSelectors;
+			const { getActiveBlockVariation } = select(blocksStore) as {
+				getActiveBlockVariation: (
+					blockName: string,
+					attrs: Record<string, unknown>
+				) => BlockVariation | undefined;
+			};
+
 			return { activeVariation: getActiveBlockVariation(name, attributes) };
 		},
-		// Avoid using the whole attributes object as a dep (object identity changes often).
-		[name, url, service, label, rel]
+		[name, attributes]
 	);
 
-	const { icon, label: iconLinkName } = getIconService(activeVariation);
+	const { icon, label: iconLinkName } = getIconService(
+		activeVariation
+	) as IconServiceResult;
+
 	const iconLinkText = label.trim() === '' ? iconLinkName : label;
 
 	const parentClientId = useSelect(
-		(select) => {
-			const editor = select(blockEditorStore) as BlockEditorSelectors;
-			return editor.getBlockRootClientId(clientId);
-		},
+		(select) =>
+			select('core/block-editor').getBlockRootClientId(clientId) as
+				| string
+				| undefined,
 		[clientId]
 	);
 
-	// WP data dispatch typing is generic/promisified; bridge intentionally through `unknown`.
-	const { selectBlock } = useDispatch('core/block-editor') as unknown as {
+	const { selectBlock } = useDispatch('core/block-editor') as {
 		selectBlock: (id: string) => void;
 	};
 
 	const wrapperClasses = clsx(
 		'wp-zior-icon',
 		'wp-block-zior-icon',
-		service ? `wp-zior-icon-${service}` : null,
+		`wp-zior-icon-${service}`,
 		{
 			'wp-zior-icon__is-incomplete': !url,
 			[`has-${iconColor}-color`]: !!iconColor,
@@ -116,32 +114,33 @@ export default function Edit(props: BlockEditProps<Attributes>) {
 
 	const blockProps = useBlockProps({
 		className: 'wp-block-zior-icon-anchor',
-		onClick: (e: React.MouseEvent<HTMLElement>) => {
-			e.stopPropagation();
-			if (parentClientId) selectBlock(parentClientId);
+		onClick: (e: React.MouseEvent) => {
+			e.stopPropagation(); // prevent selecting the child
+			if (parentClientId) selectBlock(parentClientId); // select parent block
 		},
 	});
 
 	return (
 		<>
-			{/* Main controls */}
 			<InspectorControls>
 				<ToolsPanel
-					label={__('Settings')}
+					label={__('Settings', 'wordpress-blocks')}
 					resetAll={() => setAttributes({ label: undefined })}
 					dropdownMenuProps={dropdownMenuProps}
 				>
 					<ToolsPanelItem
 						isShownByDefault
-						label={__('Text')}
+						label={__('Text', 'wordpress-blocks')}
 						hasValue={() => !!label}
 						onDeselect={() => setAttributes({ label: undefined })}
 					>
 						<TextControl
 							__next40pxDefaultSize
-							label={__('Text')}
+							__nextHasNoMarginBottom
+							label={__('Text', 'wordpress-blocks')}
 							help={__(
-								'The text is visible when enabled from the parent Icon Picker block.'
+								'The text is visible when enabled from the parent Icon Picker block.',
+								'wordpress-blocks'
 							)}
 							value={label}
 							onChange={(value: string) => setAttributes({ label: value })}
@@ -149,23 +148,24 @@ export default function Edit(props: BlockEditProps<Attributes>) {
 						/>
 					</ToolsPanelItem>
 				</ToolsPanel>
-			</InspectorControls>
 
-			{/* Advanced controls (do not nest InspectorControls) */}
-			<InspectorControls group="advanced">
-				<TextControl
-					__next40pxDefaultSize
-					label={__('Link relation')}
-					help={
-						<ExternalLink href="https://developer.mozilla.org/docs/Web/HTML/Attributes/rel">
-							{__(
-								'The <a>Link Relation</a> attribute defines the relationship between a linked resource and the current document.'
-							)}
-						</ExternalLink>
-					}
-					value={rel ?? ''}
-					onChange={(value: string) => setAttributes({ rel: value })}
-				/>
+				<InspectorControls group="advanced">
+					<TextControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={__('Link relation', 'wordpress-blocks')}
+						help={
+							<ExternalLink href="https://developer.mozilla.org/docs/Web/HTML/Attributes/rel">
+								{__(
+									'The <a>Link Relation</a> attribute defines the relationship between a linked resource and the current document.',
+									'wordpress-blocks'
+								)}
+							</ExternalLink>
+						}
+						value={rel || ''}
+						onChange={(value: string) => setAttributes({ rel: value })}
+					/>
+				</InspectorControls>
 			</InspectorControls>
 
 			<span
@@ -176,7 +176,7 @@ export default function Edit(props: BlockEditProps<Attributes>) {
 					backgroundColor: iconBackgroundColorValue,
 				}}
 			>
-				<button {...blockProps} type="button">
+				<button {...blockProps} role="button">
 					<Icon icon={icon} />
 					<span
 						className={clsx('wp-block-zior-icon-label', {

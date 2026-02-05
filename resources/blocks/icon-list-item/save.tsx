@@ -1,21 +1,11 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
-type Attributes = {
-	// add attributes later if needed
-};
-
-type SaveProps = {
-	attributes: Attributes;
-};
-
-export default function IconListItemSave( { attributes }: SaveProps ) {
-	const blockProps = useBlockProps.save( {
+export default function Save() {
+	const blockProps = useBlockProps.save({
 		className: 'zior-icon-list-item',
-	} );
+	});
 
-	return (
-		<li { ...blockProps }>
-			<InnerBlocks.Content />
-		</li>
-	);
+	const innerBlocksProps = useInnerBlocksProps.save(blockProps);
+
+	return <li {...innerBlocksProps} />;
 }

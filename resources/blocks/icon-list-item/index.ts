@@ -1,31 +1,60 @@
 /**
  * Internal dependencies
  */
+import type { BlockConfiguration, BlockDeprecation } from '@wordpress/blocks';
+
 import initBlock from '../../utils/init-block';
 import edit from './edit';
 import metadata from '../../../src/Blocks/IconListItem/block.json';
 import save from './save';
 
-import type { BlockConfiguration } from '@wordpress/blocks';
-
-export type Attributes = {
-};
-
 const { name } = metadata;
 
 export { metadata, name };
 
-export const settings: BlockConfiguration<Attributes> = {
-  ...metadata, // Provides title, category, attributes, etc.
+type AnyAttrs = Record<string, unknown>;
+
+type ExampleInnerBlock = {
+  name: string;
+  attributes?: AnyAttrs;
+  innerBlocks?: ExampleInnerBlock[];
+};
+
+type Settings = {
+  example: {
+    innerBlocks: ExampleInnerBlock[];
+  };
+  icon: string;
+  edit: unknown;
+  save: unknown;
+  deprecated?: readonly BlockDeprecation<AnyAttrs, Record<string, any>>[];
+};
+
+export const settings: Settings = {
   example: {
     innerBlocks: [
-      { name: 'zior/icon-picker', attributes: {} },
-      { name: 'core/paragraph', attributes: { placeholder: 'Add content...' } },
+      {
+        name: 'zior/icon-picker',
+        attributes: {},
+      },
+      {
+        name: 'core/paragraph',
+        attributes: {
+          placeholder: 'Add content...',
+        },
+      },
     ],
   },
   icon: 'minus',
   edit,
-  save,
+  save
 };
 
-export const init = () => initBlock({ name, metadata, settings });
+export const init = (): unknown =>
+  initBlock({
+    name,
+    metadata,
+    // initBlock wants BlockConfiguration, but that type may require title/category/attributes
+    // (which are already supplied by metadata). Cast at the boundary.
+    settings: settings as unknown as BlockConfiguration<AnyAttrs>,
+  });

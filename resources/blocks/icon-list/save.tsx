@@ -1,21 +1,27 @@
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import type { BlockSaveProps } from '@wordpress/blocks';
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-import type { Attributes } from './index';
+type ListType = 'ul' | 'ol';
 
-export default function IconListSave(
-	props: BlockSaveProps<Attributes>
-) {
-	const { listType = 'ul' } = props.attributes;
+type Attributes = {
+	listType?: ListType;
+};
 
-	const blockProps = useBlockProps.save( {
+type SaveProps = {
+	attributes: Attributes;
+};
+
+export default function Save({ attributes }: SaveProps) {
+	const { listType = 'ul' } = attributes;
+
+	const blockProps = useBlockProps.save({
 		className: 'ziorweb-icon-list',
-	} );
+	});
 
-	const ListTag = listType;
+	// Ensure only valid tags are used (keeps runtime safe even if bad data slips in)
+	const ListTag: ListType = listType === 'ol' ? 'ol' : 'ul';
 
 	return (
-		<ListTag { ...blockProps }>
+		<ListTag {...blockProps}>
 			<InnerBlocks.Content />
 		</ListTag>
 	);

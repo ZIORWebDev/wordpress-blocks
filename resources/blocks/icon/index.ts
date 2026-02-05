@@ -1,31 +1,40 @@
-import type { BlockConfiguration, BlockVariation } from '@wordpress/blocks';
-import { registerBlockVariation } from '@wordpress/blocks';
+/**
+ * Wordpress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import type { BlockConfiguration } from '@wordpress/blocks';
 
+/**
+ * Internal dependencies
+ */
 import initBlock from '../../utils/init-block';
 import edit from './edit';
-import save from './save';
 import metadata from '../../../src/Blocks/Icon/block.json';
 import variations from './variations';
+import save from './save';
 
-export type Attributes = {
-  // your attributes...
+const { name } = metadata;
+
+export { metadata, name };
+
+type AnyAttrs = Record<string, unknown>;
+
+type Settings = {
 };
 
-export const name = metadata.name as string;
-export { metadata };
-
-export const settings: BlockConfiguration<Attributes> = {
-  ...metadata,
+export const settings: Settings = {
   icon: 'color-picker',
   edit,
   save,
+  variations,
 };
 
-export const init = () => {
-  initBlock({ name, metadata, settings });
-
-  // Register variations after the block is registered
-  (variations as BlockVariation[]).forEach((variation) => {
-    registerBlockVariation(name, variation);
+export const init = (): unknown =>
+  initBlock({
+    name,
+    metadata,
+    // initBlock wants BlockConfiguration, but that type may require title/category/attributes
+    // (which are already supplied by metadata). Cast at the boundary.
+    settings: settings as unknown as BlockConfiguration<AnyAttrs>,
   });
-};
+

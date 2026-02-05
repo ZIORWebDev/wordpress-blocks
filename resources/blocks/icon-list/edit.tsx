@@ -1,103 +1,101 @@
-import type { ReactElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
-	InspectorControls,
 	useBlockProps,
 	useInnerBlocksProps,
+	InspectorControls,
 } from '@wordpress/block-editor';
 import { createBlock } from '@wordpress/blocks';
 import { dispatch } from '@wordpress/data';
-import { PanelBody, SelectControl, Button } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import type { BlockEditProps, BlockInstance } from '@wordpress/blocks';
+import type { ComponentType } from 'react';
 
-import type { Attributes } from './index';
-type ListType = NonNullable<Attributes['listType']>;
+type ListType = 'ul' | 'ol';
+
+type Attributes = {
+	listType?: ListType;
+};
+
+type IconListItemAppenderProps = {
+	rootClientId: string;
+};
 
 const TEMPLATE = [
 	[
 		'zior/icon-list-item',
 		{},
 		[
-			[ 'zior/icon-picker', {} ],
-			[ 'core/paragraph', {} ],
+			['zior/icon-picker', {}],
+			['core/paragraph', {}],
 		],
 	],
 ] as const;
 
-const LIST_TAGS: Record<ListType, 'ul' | 'ol'> = {
-	ul: 'ul',
-	ol: 'ol',
-};
-
-const LIST_TYPE_OPTIONS: Array<{ label: string; value: ListType }> = [
-	{ label: __( 'Unordered', 'wordpress-blocks' ), value: 'ul' },
-	{ label: __( 'Ordered', 'wordpress-blocks' ), value: 'ol' },
-];
-
-export default function IconListEdit( {
+export default function Edit({
 	attributes,
 	setAttributes,
 	clientId,
-}: BlockEditProps<Attributes> ): ReactElement {
-	const listType: ListType = attributes.listType ?? 'ul';
-	const ListTag = LIST_TAGS[ listType ];
+}: BlockEditProps<Attributes>) {
+	const { listType = 'ul' } = attributes;
 
-	const onChangeListType = ( value: string ) => {
-		if ( value === 'ul' || value === 'ol' ) {
-			setAttributes( { listType: value } );
-		}
-	};
+	const IconListItemAppender: ComponentType = (() => {
+		const Appender = ({ rootClientId }: IconListItemAppenderProps) => {
+			const handleAddItem = () => {
+				const iconPicker: BlockInstance = createBlock('zior/icon-picker');
+				const paragraph: BlockInstance = createBlock('core/paragraph');
 
-	const handleAddItem = () => {
-		const iconPicker = createBlock( 'zior/icon-picker' ) as BlockInstance;
-		const paragraph = createBlock( 'core/paragraph' ) as BlockInstance;
+				const listItem: BlockInstance = createBlock('zior/icon-list-item', {}, [
+					iconPicker,
+					paragraph,
+				]);
 
-		const listItem = createBlock(
-			'zior/icon-list-item',
-			{},
-			[ iconPicker, paragraph ]
-		) as BlockInstance;
+				// insertBlocks expects an array in the typings
+				dispatch('core/block-editor').insertBlocks([listItem], undefined, rootClientId);
+			};
 
-		// insertBlocks expects an array
-		dispatch( 'core/block-editor' ).insertBlocks( [ listItem ], undefined, clientId );
-	};
-
-	const blockProps = useBlockProps( { className: 'ziorweb-icon-list' } );
-
-	const innerBlocksProps = useInnerBlocksProps( blockProps, {
-		// WP typings differ by version; template typing is inconsistent across packages.
-		template: TEMPLATE as unknown as any,
-		templateLock: false,
-
-		// No __experimentalAppenderTagName (not in your types)
-		// Wrap the appender in <li> yourself to preserve list semantics.
-		renderAppender: () => (
-			<li className="ziorweb-icon-list__appender">
-				<Button
-					variant="secondary"
-					onClick={ handleAddItem }
-					className="ziorweb-icon-list__add-item"
+			return (
+				<button
+					type="button"
+					className="components-button components-icon-button"
+					onClick={handleAddItem}
 				>
-					{ __( 'Add Item', 'wordpress-blocks' ) }
-				</Button>
-			</li>
-		),
-	} );
+					{__('Add Item', 'wordpress-blocks')}
+				</button>
+			);
+		};
+
+		return () => <Appender rootClientId={clientId} />;
+	})();
+
+	const blockProps = useBlockProps({ className: 'ziorweb-icon-list' });
+  const innerBlocksOptions = {
+    template: TEMPLATE,
+    renderAppender: IconListItemAppender,
+    __experimentalAppenderTagName: 'li',
+  } as unknown as Parameters<typeof useInnerBlocksProps>[1];
+  const innerBlocksProps = useInnerBlocksProps(blockProps, innerBlocksOptions);
+
+	const ListTag: ListType = listType;
 
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'List Settings', 'wordpress-blocks' ) } initialOpen={ true }>
+				<PanelBody title={__('List Settings', 'wordpress-blocks')} initialOpen>
 					<SelectControl
-						label={ __( 'List Type', 'wordpress-blocks' ) }
-						value={ listType }
-						options={ LIST_TYPE_OPTIONS }
-						onChange={ onChangeListType }
+						label={__('List Type', 'wordpress-blocks')}
+						value={listType}
+						options={[
+							{ label: __('Unordered', 'wordpress-blocks'), value: 'ul' },
+							{ label: __('Ordered', 'wordpress-blocks'), value: 'ol' },
+						]}
+						onChange={(value) =>
+							setAttributes({ listType: (value as ListType) || 'ul' })
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>
 
-			<ListTag { ...innerBlocksProps } />
+			<ListTag {...innerBlocksProps} />
 		</>
 	);
 }

@@ -1,27 +1,49 @@
+/**
+ * WordPress dependencies
+ */
 import { __ } from '@wordpress/i18n';
-import type { IconType } from '@wordpress/components';
 
-import { ChainIcon } from './icons/chain';
-import { normalizeWpIcon } from '../../utils/icon-lists';
+/**
+ * Internal dependencies
+ */
+import { ChainIcon } from './icons';
 
-type VariationLike = {
+/**
+ * Shape of a block variation we care about.
+ * Keep this minimal and future-proof.
+ */
+export type IconServiceVariation = {
 	name?: string;
 	icon?: unknown;
 	title?: string;
 };
 
-export function getIconService(
-	variation?: VariationLike | null
-): { icon: IconType; label: string } {
-	const fallback: { icon: IconType; label: string } = {
-		icon: ChainIcon as IconType,
-		label: __('Chain Icon'),
-	};
+/**
+ * Return type for the icon service resolver.
+ */
+export type IconServiceResult = {
+	icon: unknown;
+	label: string;
+};
 
-	if (!variation?.name) return fallback;
+/**
+ * Retrieves the icon service's icon component and label.
+ *
+ * @param variation The object of the icon service variation.
+ * @return An object containing the Icon component and label.
+ */
+export function getIconService(
+	variation?: IconServiceVariation
+): IconServiceResult {
+	if (!variation?.name) {
+		return {
+			icon: ChainIcon,
+			label: __('Chain Icon', 'wordpress-blocks'),
+		};
+	}
 
 	return {
-		icon: normalizeWpIcon(variation.icon) ?? fallback.icon,
-		label: variation.title ?? fallback.label,
+		icon: variation.icon ?? ChainIcon,
+		label: variation.title ?? __('Chain Icon', 'wordpress-blocks'),
 	};
 }

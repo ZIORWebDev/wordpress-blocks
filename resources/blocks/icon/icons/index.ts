@@ -1,2 +1,2 @@
-export * as ChainIcon from './chain';
-export * as UpworkIcon from './upwork';
+export * from './chain';
+export * from './upwork';
