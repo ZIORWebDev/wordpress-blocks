@@ -9,7 +9,14 @@
 	"attributes": {
 		"productId": {
 			"type": "string"
+		},
+		"showQuantity": {
+			"type": "string",
+			"default": "0"
 		}
+	},
+	"supports": {
+		"align": true
 	},
 	"editorStyle": "wp-block-zior-add-to-cart-editor"
 }

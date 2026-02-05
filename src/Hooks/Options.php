@@ -16,14 +16,6 @@ namespace ZIORWebDev\WordPressBlocks\Hooks;
 class Options {
 
 	/**
-	 * Singleton instance.
-	 *
-	 * @var Options
-	 */
-	protected static $instance;
-
-
-	/**
 	 * Get option name by field ID.
 	 *
 	 * @param string $field_id Field ID.
@@ -68,9 +60,9 @@ class Options {
 	}
 
 	/**
-	 * Constructor.
+	 * Initialize action and filter hooks.
 	 */
-	public function __construct() {
+	public function init() {
 		/**
 		 * Filters to get meta/option values based on field providers.
 		 */
@@ -189,19 +181,5 @@ class Options {
 		$option_value = $pods->field( $meta_key );
 
 		return $option_value;
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }

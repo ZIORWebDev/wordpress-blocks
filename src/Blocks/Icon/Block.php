@@ -32,13 +32,6 @@ class Block extends Blocks\Base {
 	protected $block_json = __DIR__ . '/block.json';
 
 	/**
-	 * Singleton instance of the Plugin class.
-	 *
-	 * @var Icon
-	 */
-	protected static $instance;
-
-	/**
 	 * Convert string to title case
 	 *
 	 * @param String $title
@@ -51,6 +44,18 @@ class Block extends Blocks\Base {
 		$title = ucwords( strtolower( $title ) );
 
 		return $title;
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		parent::__construct();
+
+		/**
+		 * Hook to inject parent context into child blocks.
+		 */
+		add_filter( 'render_block_context', array( $this, 'inject_parent_context' ), 10, 3 );
 	}
 
 	/**
@@ -290,19 +295,5 @@ class Block extends Blocks\Base {
 		}
 
 		return $context;
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }

@@ -8,7 +8,6 @@
 namespace ZIORWebDev\WordPressBlocks;
 
 use ZIORWebDev\WordPressBlocks\Api\Endpoints;
-use ZIORWebDev\WordPressBlocks\Api\Interface;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,13 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Routes {
-
-	/**
-	 * Instance
-	 *
-	 * @var Routes
-	 */
-	protected static $instance;
 
 	/**
 	 * Routes
@@ -45,9 +37,9 @@ class Routes {
 	private static $rest_namespace = 'wordpress-blocks/v1';
 
 	/**
-	 * Constructor
+	 * Load routes.
 	 */
-	private function __construct() {
+	public function load() {
 		add_action( 'rest_api_init', array( $this, 'register_rest_api' ) );
 	}
 
@@ -70,17 +62,5 @@ class Routes {
 
 		new Endpoints\Options\Value();
 		new Endpoints\PostMeta\Value();
-	}
-
-	/**
-	 * Get instance
-	 *
-	 * @return RoutesLibrary The instance.
-	 */
-	public static function get_instance() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
 	}
 }
