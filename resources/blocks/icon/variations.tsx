@@ -99,7 +99,7 @@ domReady(() => {
 	const allVariations: RegisterableVariation[] = [];
 
 	// core/social-link variations
-	getBlockVariations('core/social-link').forEach((variation) => {
+	(getBlockVariations('core/social-link') ?? []).forEach((variation) => {
 		const icon =
 			typeof variation.icon === 'function'
 				? variation.icon()
@@ -112,6 +112,7 @@ domReady(() => {
 			attributes: (variation.attributes ?? {}) as ServiceAttributes,
 		});
 	});
+
 
 	// Dashicons
 	const dashIcons: readonly string[] = [
