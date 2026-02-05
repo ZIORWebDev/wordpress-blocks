@@ -63,8 +63,8 @@ A dynamic block that allows users to insert values from WordPress data sources d
 
 - Insert values from:
 
-  - wp_options
-  - Post meta
+  - Options table
+  - Post meta table
 
 - Dynamic rendering
 - Supports return format templates using placeholder tokens
@@ -75,6 +75,29 @@ A dynamic block that allows users to insert values from WordPress data sources d
 - Display custom fields
 - Output site options such as address or contact information
 - Build dynamic layouts without writing PHP templates
+
+---
+
+### WooCommerce Product Add To Cart Block
+
+A customizable block that allows users to insert a WooCommerce **Add to Cart** button directly into the editor, with support for dynamic product data and flexible quantity handling.
+
+**Features**
+
+- Add to cart for:
+  - Specific products by ID
+  - Current product context (when used on single product templates)
+- Optional quantity selector support
+- Dynamic data attributes for frontend handling
+- Works seamlessly in both editor preview and frontend output
+- Compatible with WooCommerce templates and block-based themes
+
+**Use cases**
+
+- Custom product landing pages
+- Sales and promotional sections
+- Product comparison layouts
+- Block-based WooCommerce product templates
 
 ---
 
