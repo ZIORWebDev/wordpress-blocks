@@ -1,11 +1,11 @@
-.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon,
-.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon button {
+.wp-block-zior-icon-picker .wp-zior-icon,
+.wp-block-zior-icon-picker .wp-zior-icon button {
   line-height: 0;
 }
 
 // The editor uses the button element, the frontend uses a link.
 // Therefore we unstyle the button element to make it more like the frontend.
-.wp-block-ziorwebdev-icon-anchor {
+.wp-block-zior-icon-anchor {
   align-items: center;
   background: none;
   border: 0;
@@ -25,23 +25,23 @@
   // This rule is duplicated from the style.scss and needs to be the same as there.
   padding: 0.25em;
 
-  // Override the shared `.wp-block-ziorwebdev-icon` class used on both the li and button
+  // Override the shared `.wp-block-zior-icon` class used on both the li and button
   // due to backwards compatibility from moving the blockProps from the li to the button.
   &:hover {
     transform: none;
   }
 }
 
-:root :where(.wp-block-ziorwebdev-icon-picker.is-style-pill-shape .wp-ziorwebdev-icon button) {
+:root :where(.wp-block-zior-icon-picker.is-style-pill-shape .wp-zior-icon button) {
   padding-left: calc((2 / 3) * 1em);
   padding-right: calc((2 / 3) * 1em);
 }
 
-:root :where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only .wp-ziorwebdev-icon button) {
+:root :where(.wp-block-zior-icon-picker.is-style-logos-only .wp-zior-icon button) {
   padding: 0;
 }
 
-.wp-block-ziorwebdev-icon__toolbar_content_text {
+.wp-block-zior-icon__toolbar_content_text {
   // Corresponds to the size of the text control input in the block inspector.
   width: 250px;
 }

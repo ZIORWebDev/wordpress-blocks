@@ -50,11 +50,6 @@ abstract class Base {
 		 * Hook to register the block.
 		 */
 		add_action( 'init', array( $this, 'register' ) );
-
-		/**
-		 * Hook to inject parent context into child blocks.
-		 */
-		add_filter( 'render_block_context', array( $this, 'inject_parent_context' ), 10, 3 );
 	}
 
 	/**
@@ -79,19 +74,6 @@ abstract class Base {
 	 */
 	public function get_permission( $request ) {
 		return wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'wp_rest' );
-	}
-
-	/**
-	 * Inject parent icon-picker attributes into child icon context.
-	 *
-	 * @param array  $context      The current block context.
-	 * @param array  $parsed_block The parsed block array.
-	 * @param object $parent_block The parent block object.
-	 *
-	 * @return array Modified block context.
-	 */
-	public function inject_parent_context( $context, $parsed_block, $parent_block ) {
-		return $context;
 	}
 
 	/**

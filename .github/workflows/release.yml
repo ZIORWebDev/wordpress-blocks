@@ -16,13 +16,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Read version from composer.json
+      - name: Read version from src/Load.php
         id: version
         run: |
-          VERSION=$(jq -r '.version' composer.json)
+          VERSION=$(grep -Po "(?<=protected static \$package_version = ')[^']+" src/Load.php)
 
-          if [ "$VERSION" = "null" ] || [ -z "$VERSION" ]; then
-            echo "❌ Version not found in composer.json"
+          if [ -z "$VERSION" ]; then
+            echo "Version not found in src/Load.php"
             exit 1
           fi
 
@@ -35,11 +35,11 @@ jobs:
           TAG="${{ steps.version.outputs.version }}"
 
           if gh release view "$TAG" > /dev/null 2>&1; then
-            echo "⚠️ Release $TAG already exists. Deleting..."
+            echo "Release $TAG already exists. Deleting..."
             gh release delete "$TAG" --yes
             git push --delete origin "$TAG" || true
           else
-            echo "✅ No existing release for $TAG"
+            echo "No existing release for $TAG"
           fi
 
       - name: Create GitHub Release

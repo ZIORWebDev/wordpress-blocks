@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "ziorwebdev/icon",
+	"name": "zior/icon",
 	"title": "Icon",
 	"category": "widgets",
 	"description": "Display an icon.",
 	"textdomain": "default",
 	"parent": [
-		"ziorwebdev/icon-picker"
+		"zior/icon-picker"
 	],
 	"attributes": {
 		"service": {
@@ -38,5 +38,5 @@
 			"clientNavigation": true
 		}
 	},
-	"editorStyle": "wp-block-ziorwebdev-icon-editor"
+	"editorStyle": "wp-block-zior-icon-editor"
 }
