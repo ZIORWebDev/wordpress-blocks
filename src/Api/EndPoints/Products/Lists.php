@@ -54,7 +54,7 @@ class Lists extends EndPoints\Base {
 		if ( ! empty( $cached_data ) && is_array( $cached_data ) ) {
 			return rest_ensure_response(
 				array(
-					'meta_keys' => $cached_data,
+					'products' => $cached_data,
 				)
 			);
 		}

@@ -63,7 +63,7 @@ class Block extends Blocks\Base {
 		$count      = (int) $product->get_rating_count();
 		$stars_html = wc_get_star_rating_html( $rating, $count );
 		$content    = preg_replace(
-			'~(<(h[1-6]|p|div|span)\b[^>]*\bclass=(["\'])[^"\']*\bwp-block-zior-product-price\b[^"\']*\3[^>]*>)(.*?)(</\2>)~is',
+			'~(<(div)\b[^>]*\bclass=(["\'])[^"\']*\bwp-block-zior-product-price\b[^"\']*\3[^>]*>)(.*?)(</\2>)~is',
 			'$1' . $price . '$5',
 			$content,
 			1

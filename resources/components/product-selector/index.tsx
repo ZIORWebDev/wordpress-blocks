@@ -94,7 +94,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () =
         placeholder={__('Type to search products...')}
       />
       <p className="components-base-control__help">
-        {__('Only choose products safe for public display. Avoid private values such as user data or tokens.')}
+        {__('Only choose products safe for public display.')}
       </p>
     </div>
   );

@@ -8,6 +8,7 @@
 namespace ZIORWebDev\WordPressBlocks\Blocks\MetaField;
 
 use ZIORWebDev\WordPressBlocks\Blocks;
+use ZIORWebDev\WordPressBlocks\utils;
 
 /**
  * Meta Field class
@@ -56,7 +57,7 @@ class Block extends Blocks\Base {
 			return $content;
 		}
 
-		$normalized_value = $this->normalize_value( $meta_value );
+		$normalized_value = Utils\Helper::normalize_value( $meta_value );
 
 		/**
 		 * Sanitize value.
@@ -85,12 +86,14 @@ class Block extends Blocks\Base {
 			return $value;
 		}
 
-		return preg_replace(
-			'/<([^\/>\s]+)([^>]*)>.*?<\/\1>/s',
-			'<$1$2>' . $value . '</$1>',
+		$replaced = preg_replace(
+			'~(<(?<tag>[a-z][a-z0-9:-]*)\b[^>]*>)([^<]*)(</\k<tag>>)~is',
+			'$1' . $value . '$4',
 			$html,
 			1
 		);
+
+		return $replaced;
 	}
 
 	/**
@@ -174,42 +177,5 @@ class Block extends Blocks\Base {
 		$meta_value    = apply_filters( "zior_wp_blocks_meta_field_option_{$provider}_value", $default_value, $meta_key );
 
 		return $meta_value;
-	}
-
-	/**
-	 * Normalize arrays/objects to strings.
-	 *
-	 * @param mixed $value Value to normalize.
-	 * @return string|null
-	 */
-	private function normalize_value( $value ) {
-		if ( is_array( $value ) ) {
-			$all_scalar = true;
-
-			foreach ( $value as $v ) {
-				if ( ! is_scalar( $v ) ) {
-					$all_scalar = false;
-					break;
-				}
-			}
-
-			if ( $all_scalar ) {
-				return implode( ', ', $value );
-			}
-
-			/**
-			 * When the value is nested array, return empty string as we cannot render it.
-			 */
-			return '';
-		}
-
-		/**
-		 * When the value is object, return empty string as we cannot render it.
-		 */
-		if ( is_object( $value ) ) {
-			return '';
-		}
-
-		return $value;
 	}
 }
