@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `zior/icon-picker` blocks.
+ * Server-side rendering of the `ziorwebdev/icon-picker` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -20,7 +20,7 @@ class Block extends Blocks\Base {
 	/**
 	 * Block name
 	 */
-	protected $block_name = 'zior/icon-picker';
+	protected $block_name = 'ziorwebdev/icon-picker';
 
 	/**
 	 * Path of the block.json file
@@ -28,7 +28,14 @@ class Block extends Blocks\Base {
 	protected $block_json = __DIR__ . '/block.json';
 
 	/**
-	 * Renders the `zior/icon-picker` block on server.
+	 * Singleton instance of the Plugin class.
+	 *
+	 * @var Load
+	 */
+	protected static $instance;
+
+	/**
+	 * Renders the `ziorwebdev/icon-picker` block on server.
 	 *
 	 * @since 1.0.0
 	 *
@@ -40,5 +47,19 @@ class Block extends Blocks\Base {
 	 */
 	public function render( $attributes, $content, $block ) {
 		return $content;
+	}
+
+	/**
+	 * Returns instance of Settings.
+	 *
+	 * @since 1.0.0
+	 * @return object
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 }
