@@ -26,5 +26,6 @@ class Blocks {
 		new Blocks\MetaField\Block();
 		new Blocks\AddToCart\Block();
 		new Blocks\ProductPrice\Block();
+		new Blocks\ProductRating\Block();
 	}
 }

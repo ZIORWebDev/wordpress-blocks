@@ -33,6 +33,7 @@ final class Loader {
 		( new Blocks() )->load();
 		( new Hooks\Options() )->init();
 		( new Hooks\PostMeta() )->init();
+		( new Hooks\Editor() )->init();
 	}
 
 	/**
@@ -71,7 +72,9 @@ final class Loader {
 			'zior-wp-blocks-editor',
 			'ZIORWPBlocks',
 			array(
-				'restUrl' => $rest_namespace,
+				'restUrl'         => $rest_namespace,
+				'hasSubscription' => apply_filters( 'zior_wp_blocks_has_subscription_support', false ),
+				'isWCInstalled'   => apply_filters( 'zior_wp_blocks_is_woocommerce_installed', false ),
 			)
 		);
 	}
@@ -87,7 +90,6 @@ final class Loader {
 		$block_view_js    = plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.js';
 
 		wp_enqueue_style( 'dashicons' );
-
 		wp_enqueue_style(
 			'zior-wp-blocks-editor',
 			$block_editor_css,

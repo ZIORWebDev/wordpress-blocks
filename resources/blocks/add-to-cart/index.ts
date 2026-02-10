@@ -20,4 +20,10 @@ export const settings = {
   save,
 } as unknown as BlockConfiguration<Attributes>;
 
-export const init = () => initBlock({ name, metadata, settings });
+export const init = () => {
+  if ( ! ZIORWPBlocks.isWCInstalled ) {
+    return;
+  }
+
+  initBlock({ name, metadata, settings });
+};

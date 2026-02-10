@@ -20,7 +20,7 @@ class PostMeta extends Base {
 	/**
 	 * Get post meta value.
 	 */
-	public static function get_value( $params ): mixed {
+	public static function get_value( array $params ): mixed {
 		$meta_key = isset( $params['metaKey'] ) ? $params['metaKey'] : '';
 		$provider = isset( $params['fieldProvider'] ) ? $params['fieldProvider'] : '';
 		$post_id  = self::get_post_id( $params );
@@ -50,7 +50,7 @@ class PostMeta extends Base {
 	 * @param array $params parameters.
 	 * @return int|null
 	 */
-	private static function get_post_id( $params ) {
+	private static function get_post_id( array $params ): ?int {
 		global $post;
 
 		if ( isset( $params['postId'] ) && $params['postId'] ) {

@@ -40,7 +40,7 @@ class Block extends Blocks\Base {
 	 * @param WP_Block $block      Block object.
 	 * @return string Rendered HTML of the referenced block.
 	 */
-	public function render( $attributes, $content, $block ) {
+	public function render( $attributes, $content, $block ): string {
 		/**
 		 * If this is not a single product, return the $content.
 		 */

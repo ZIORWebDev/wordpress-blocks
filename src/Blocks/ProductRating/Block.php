@@ -5,7 +5,7 @@
  * @package ZIORWebDev\WordPressBlocks
  */
 
-namespace ZIORWebDev\WordPressBlocks\Blocks\ProductPrice;
+namespace ZIORWebDev\WordPressBlocks\Blocks\ProductRating;
 
 use ZIORWebDev\WordPressBlocks\Blocks;
 
@@ -22,7 +22,7 @@ class Block extends Blocks\Base {
 	 *
 	 * @var $block_name
 	 */
-	protected $block_name = 'zior/product-price';
+	protected $block_name = 'zior/product-rating';
 
 	/**
 	 * Path of the block.json file
@@ -58,10 +58,11 @@ class Block extends Blocks\Base {
 			return $content;
 		}
 
-		$product = wc_get_product( $product_id );
-		$price   = $product->get_price_html();
-
-		$content = preg_replace(
+		$product    = wc_get_product( $product_id );
+		$rating     = (float) $product->get_average_rating();
+		$count      = (int) $product->get_rating_count();
+		$stars_html = wc_get_star_rating_html( $rating, $count );
+		$content    = preg_replace(
 			'~(<(h[1-6]|p|div|span)\b[^>]*\bclass=(["\'])[^"\']*\bwp-block-zior-product-price\b[^"\']*\3[^>]*>)(.*?)(</\2>)~is',
 			'$1' . $price . '$5',
 			$content,
