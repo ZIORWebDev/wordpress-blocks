@@ -1,11 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "zior/icon-picker",
+	"name": "ziorwebdev/icon-picker",
 	"title": "Icon Picker",
 	"category": "widgets",
 	"allowedBlocks": [
-		"zior/icon"
+		"ziorwebdev/icon"
 	],
 	"description": "Display icon.",
 	"keywords": [
@@ -59,11 +59,7 @@
 		"iconUrl": "iconUrl"
 	},
 	"supports": {
-		"align": [
-			"left",
-			"center",
-			"right"
-		],
+		"align": [ "left", "center", "right" ],
 		"anchor": true,
 		"html": false,
 		"__experimentalExposeControlsToChildren": true,
@@ -77,19 +73,10 @@
 			}
 		},
 		"spacing": {
-			"blockGap": [
-				"horizontal",
-				"vertical"
-			],
+			"blockGap": [ "horizontal", "vertical" ],
 			"margin": true,
 			"padding": true,
-			"units": [
-				"px",
-				"em",
-				"rem",
-				"vh",
-				"vw"
-			],
+			"units": [ "px", "em", "rem", "vh", "vw" ],
 			"__experimentalDefaultControls": {
 				"blockGap": true,
 				"margin": true,
@@ -128,6 +115,6 @@
 			"label": "Pill Shape"
 		}
 	],
-	"editorStyle": "wp-block-zior-icon-picker-editor",
-	"style": "wp-block-zior-icon-picker"
+	"editorStyle": "wp-block-ziorwebdev-icon-picker-editor",
+	"style": "wp-block-ziorwebdev-icon-picker"
 }

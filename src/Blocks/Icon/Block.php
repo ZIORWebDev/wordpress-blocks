@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `zior/icon` blocks.
+ * Server-side rendering of the `ziorwebdev/icon` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -22,7 +22,7 @@ class Block extends Blocks\Base {
 	 *
 	 * @var $block_name
 	 */
-	protected $block_name = 'zior/icon';
+	protected $block_name = 'ziorwebdev/icon';
 
 	/**
 	 * Path of the block.json file
@@ -30,6 +30,13 @@ class Block extends Blocks\Base {
 	 * @var $block_json
 	 */
 	protected $block_json = __DIR__ . '/block.json';
+
+	/**
+	 * Singleton instance of the Plugin class.
+	 *
+	 * @var Icon
+	 */
+	protected static $instance;
 
 	/**
 	 * Convert string to title case
@@ -47,19 +54,7 @@ class Block extends Blocks\Base {
 	}
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		/**
-		 * Hook to inject parent context into child blocks.
-		 */
-		add_filter( 'render_block_context', array( $this, 'inject_parent_context' ), 10, 3 );
-	}
-
-	/**
-	 * Renders the `zior/icon` block on server.
+	 * Renders the `ziorwebdev/icon` block on server.
 	 *
 	 * @since 1.0.0
 	 * @param Array    $attributes The block attributes.
@@ -95,7 +90,7 @@ class Block extends Blocks\Base {
 		$icon               = $this->get_icon( $service );
 		$wrapper_attributes = get_block_wrapper_attributes(
 			array(
-				'class' => 'wp-zior-icon wp-zior-icon-' . $service . $this->get_color_classes( $block->context ),
+				'class' => 'wp-ziorwebdev-icon wp-ziorwebdev-icon-' . $service . $this->get_color_classes( $block->context ),
 				'style' => $this->get_color_styles( $block->context ),
 			)
 		);
@@ -111,9 +106,9 @@ class Block extends Blocks\Base {
 			$content .= ' href="' . esc_url( $url ) . '"';
 		}
 
-		$content .= 'class="wp-block-zior-icon-anchor">';
+		$content .= 'class="wp-block-ziorwebdev-icon-anchor">';
 		$content .= $icon;
-		$content .= '<span class="wp-block-zior-icon-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
+		$content .= '<span class="wp-block-ziorwebdev-icon-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
 		$content .= '</a></span>';
 
 		$processor = new \WP_HTML_Tag_Processor( $content );
@@ -207,7 +202,7 @@ class Block extends Blocks\Base {
 		 * @return array The list of icon services.
 		 * Convert the service to title case and return.
 		 */
-		$services_data = apply_filters( 'zior_wp_blocks_icon_get_services', $services_data );
+		$services_data = apply_filters( 'ziorwebdev_icon_get_services', $services_data );
 
 		if ( ! empty( $service )
 			&& ! empty( $field )
@@ -275,13 +270,13 @@ class Block extends Blocks\Base {
 	 */
 	public function inject_parent_context( $context, $parsed_block, $parent_block ) {
 		// Only apply to the child block.
-		if ( ! isset( $parsed_block['blockName'] ) || 'zior/icon' !== $parsed_block['blockName'] ) {
+		if ( ! isset( $parsed_block['blockName'] ) || 'ziorwebdev/icon' !== $parsed_block['blockName'] ) {
 			return $context;
 		}
 
 		// Ensure parent exists and is icon-picker.
 		if ( ! isset( $parent_block->parsed_block['blockName'] )
-			|| 'zior/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
+			|| 'ziorwebdev/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
 			return $context;
 		}
 
@@ -295,5 +290,19 @@ class Block extends Blocks\Base {
 		}
 
 		return $context;
+	}
+
+	/**
+	 * Returns instance of Settings.
+	 *
+	 * @since 1.0.0
+	 * @return object
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 }
