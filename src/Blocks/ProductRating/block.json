@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "zior/product-price",
-	"title": "Product Price",
+	"name": "zior/product-rating",
+	"title": "Product Rating",
 	"category": "widgets",
-	"description": "Display WooCommerce product price anywhere.",
+	"description": "Display WooCommerce product rating anywhere.",
 	"keywords": [
 		"product",
-		"price"
+		"rating"
 	],
 	"textdomain": "default",
 	"attributes": {

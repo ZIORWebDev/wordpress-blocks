@@ -207,7 +207,7 @@ class Block extends Blocks\Base {
 		 * @return array The list of icon services.
 		 * Convert the service to title case and return.
 		 */
-		$services_data = apply_filters( 'ziorwebdev_icon_get_services', $services_data );
+		$services_data = apply_filters( 'zior_wp_blocks_icon_get_services', $services_data );
 
 		if ( ! empty( $service )
 			&& ! empty( $field )

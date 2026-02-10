@@ -21,7 +21,7 @@ class Options {
 	 * @param string $field_id Field ID.
 	 * @return string|null
 	 */
-	private function get_option_name_by_field_name( $field_id ) {
+	private function get_option_name_by_field_name( string $field_id ): ?string {
 		$meta_boxes = apply_filters( 'rwmb_meta_boxes', array() );
 
 		foreach ( $meta_boxes as $meta_box ) {
@@ -45,7 +45,7 @@ class Options {
 	 * @param string $field_name Field name.
 	 * @return string|null
 	 */
-	private function get_pod_name_by_field_name( $field_name ) {
+	private function get_pod_name_by_field_name( string $field_name ): ?string {
 		$pods = pods_api()->load_pods();
 
 		foreach ( $pods as $name => $pod_def ) {
@@ -62,7 +62,7 @@ class Options {
 	/**
 	 * Initialize action and filter hooks.
 	 */
-	public function init() {
+	public function init(): void {
 		/**
 		 * Filters to get meta/option values based on field providers.
 		 */
@@ -79,7 +79,7 @@ class Options {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_acf_option_value( $option_value, $meta_key ) {
+	public function get_acf_option_value( mized $option_value, string $meta_key ): mixed {
 		/**
 		 * If ACF is not active, return the default value.
 		 */
@@ -102,7 +102,7 @@ class Options {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_carbon_field_option_value( $option_value, $meta_key ) {
+	public function get_carbon_field_option_value( mixed $option_value, string $meta_key ): mixed {
 		/**
 		 * If carbon fields is not active, return the default value.
 		 */
@@ -131,7 +131,7 @@ class Options {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_metabox_option_value( $option_value, $meta_key ) {
+	public function get_metabox_option_value( mixed $option_value, string $meta_key ): mixed {
 		/**
 		 * If metabox is not active, return the default value.
 		 */
@@ -160,7 +160,7 @@ class Options {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_pods_option_value( $option_value, $meta_key ) {
+	public function get_pods_option_value( mixed $option_value, string $meta_key ): mixed {
 		/**
 		 * If pods is not active, return the default value.
 		 */

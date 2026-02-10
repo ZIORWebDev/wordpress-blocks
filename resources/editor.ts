@@ -7,25 +7,22 @@ import * as IconListItem from './blocks/icon-list-item';
 import * as IconList from './blocks/icon-list';
 import * as AddToCart from './blocks/add-to-cart';
 import * as ProductPrice from './blocks/product-price';
+import * as ProductRating from './blocks/product-rating';
 
-type BlockModule = {
-  init?: () => void;
+const getAllBlocks = () => {
+  const blocks = [
+    Icon,
+    IconPicker,
+    MetaField,
+    IconListItem,
+    IconList,
+    AddToCart,
+    ProductPrice,
+    ProductRating,
+  ];
+
+  return blocks.filter(Boolean);
 };
 
-const BLOCKS = [
-  Icon,
-  IconPicker,
-  MetaField,
-  IconListItem,
-  IconList,
-  AddToCart,
-  ProductPrice,
-] satisfies ReadonlyArray<BlockModule>;
+getAllBlocks().forEach(({ init }) => init());
 
-const initBlocks = (blocks: ReadonlyArray<BlockModule>): void => {
-  for (const block of blocks) {
-    if (typeof block.init === 'function') block.init();
-  }
-};
-
-initBlocks(BLOCKS);

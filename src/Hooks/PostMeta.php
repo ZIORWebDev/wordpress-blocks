@@ -35,7 +35,7 @@ class PostMeta {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_acf_post_meta_value( $meta_value, $post_id, $meta_key ) {
+	public function get_acf_post_meta_value( mixed $meta_value, string $post_id, string $meta_key ): mixed {
 		/**
 		 * If ACF is not active, return the default value.
 		 */
@@ -58,7 +58,7 @@ class PostMeta {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_carbon_field_post_meta_value( $meta_value, $post_id, $meta_key ) {
+	public function get_carbon_field_post_meta_value( mixed $meta_value, string $post_id, string $meta_key ): mixed {
 		/**
 		 * If carbon fields is not active, return the default value.
 		 */
@@ -87,7 +87,7 @@ class PostMeta {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_metabox_post_meta_value( $meta_value, $post_id, $meta_key ) {
+	public function get_metabox_post_meta_value( mixed $meta_value, string $post_id, string $meta_key ): mixed {
 		/**
 		 * If metabox is not active, return the default value.
 		 */
@@ -107,7 +107,7 @@ class PostMeta {
 	 * @param string $meta_key Meta key.
 	 * @return mixed
 	 */
-	public function get_pods_post_meta_value( $meta_value, $post_id, $meta_key ) {
+	public function get_pods_post_meta_value( mixed $meta_value, string $post_id, string $meta_key ): mixed {
 		/**
 		 * If pods is not active, return the default value.
 		 */

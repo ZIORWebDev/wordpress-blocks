@@ -12,9 +12,15 @@ const { name } = metadata;
 export { metadata, name };
 
 export const settings = {
-  icon: 'money-alt',
+  icon: 'star-half',
   edit,
   save,
 };
 
-export const init = () => initBlock({ name, metadata, settings });
+export const init = () => {
+  if ( ! ZIORWPBlocks.isWCInstalled ) {
+    return;
+  }
+
+  initBlock({ name, metadata, settings });
+};
