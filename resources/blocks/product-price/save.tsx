@@ -37,18 +37,12 @@ interface SaveProps {
  * Save function
  */
 export default function Save({ attributes }: SaveProps) {
-	const { textAlign, content = '', level = 2, tagName, saveContent = true, link, url } =
+	const { textAlign, content = '', level = 2, tagName, link, url } =
 		attributes;
 
 	// Keep original behavior: tagName overrides, otherwise "h" + level.
 	// (We keep it as a string because Gutenberg supports custom tags too.)
 	const HtmlTag = (tagName && tagName.length ? tagName : `h${level}`) as keyof JSX.IntrinsicElements;
-
-	// When saveContent is false, return an empty wrapper tag (no RichText content),
-	// but still preserve block props.
-	if (!saveContent) {
-		return <HtmlTag {...useBlockProps.save()} />;
-	}
 
 	const className = clsx({
 		[`has-text-align-${textAlign}`]: !!textAlign,

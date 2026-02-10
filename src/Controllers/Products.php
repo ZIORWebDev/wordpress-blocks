@@ -131,6 +131,9 @@ class Products extends Base {
 			return array();
 		}
 
+		$average_rating = $product->get_average_rating();
+		$rating_count   = $product->get_rating_count();
+
 		$product_data = array(
 			'id'             => $product->get_id(),
 			'name'           => $product->get_name(),
@@ -144,9 +147,10 @@ class Products extends Base {
 			'on_sale'        => $product->is_on_sale(),
 			'price_html'     => $product->get_price_html(),
 			'description'    => $product->get_short_description(),
-			'average_rating' => $product->get_average_rating(),
+			'average_rating' => $average_rating,
 			'review_count'   => $product->get_review_count(),
-			'rating_count'   => $product->get_rating_count(),
+			'rating_count'   => $rating_count,
+			'rating_html'    => wc_get_rating_html( $average_rating, $rating_count ),
 		);
 
 		return apply_filters( 'zior_wp_blocks_get_product', $product_data, $product );

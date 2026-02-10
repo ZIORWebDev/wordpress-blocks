@@ -4,38 +4,32 @@
 import { clsx } from 'clsx';
 
 /**
- * WordPress dependencies (use global `wp` instead of module imports)
+ * WordPress dependencies
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
 
 /**
- * Types
- */
-type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
-
-interface BlockAttributes {
-	textAlign?: TextAlign;
-	content?: string;
-}
-
-interface SaveProps {
-	attributes: BlockAttributes;
-}
-
-/**
  * Save function
  */
-export default function Save({ attributes }: SaveProps) {
-	const { textAlign, content = '' } =
-		attributes;
+export default function Save({ attributes }) {
+	const {
+		textAlign,
+		content = '',
+	} = attributes;
 
 	const props = useBlockProps.save({
-		className
+		className: clsx(
+			'woocommerce',
+			{
+				[`has-text-align-${textAlign}`]: !!textAlign,
+			}
+		),
 	});
 
+
 	return (
-		<HtmlTag {...props}>
+		<div {...props}>
 			<RichText.Content value={content} />
-		</HtmlTag>
+		</div>
 	);
 }

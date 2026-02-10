@@ -15,13 +15,10 @@ import {
 	RichText,
 	useBlockProps,
 	useBlockEditingMode,
-	InspectorControls
+	InspectorControls,
 } from '@wordpress/block-editor';
 import type { BlockEditProps } from '@wordpress/blocks';
-import {
-	PanelBody,
-  __experimentalText as Text,
-} from '@wordpress/components';
+import { PanelBody, __experimentalText as Text } from '@wordpress/components';
 
 import apiFetch from '@wordpress/api-fetch';
 
@@ -38,8 +35,9 @@ type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
 interface Attributes {
 	textAlign?: TextAlign;
 	content?: string;
+	placeholder?: string;
 	helpText?: string;
-  productId?: string;
+	productId?: string;
 }
 
 type Props = BlockEditProps<Attributes>;
@@ -62,7 +60,7 @@ function Edit({
 		content = '',
 		placeholder,
 		helpText,
-    	productId,
+		productId,
 	} = attributes;
 
 	const blockProps = useBlockProps({
@@ -74,29 +72,26 @@ function Edit({
 
 	const blockEditingMode = useBlockEditingMode();
 
-	function getParameters(attrs: Attributes) {
-		const params = new URLSearchParams({
-			productId: attrs.productId ?? '',
-		});
-
-		return params;
-	}
+	const onContentChange = (value: string) => {
+		setAttributes({ content: value });
+	};
 
 	const fetchProduct = useCallback(
-		async (attrs: Attributes) => {
-			const { productId: pid } = attrs;
+		async (pid: string) => {
 			if (!pid) return;
 
 			try {
-				const path = `/${ZIORWPBlocks.restUrl}/products/information?${getParameters(
-					attrs).toString()}`;
+				const params = new URLSearchParams({ productId: pid });
+
+				// Ensure your restUrl is the namespace/root, e.g. "ziorwp/v1"
+				const path = `/${ZIORWPBlocks.restUrl}/products/information?${params.toString()}`;
 
 				const response = (await apiFetch({
 					path,
 					headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-				})) as { product?: { price_html?: string } };
+				})) as { product?: { rating_html?: string } };
 
-				setAttributes({ content: response?.product?.price_html ?? '' });
+				setAttributes({ content: response?.product?.rating_html ?? '' });
 			} catch {
 				setAttributes({ content: '' });
 			}
@@ -106,8 +101,8 @@ function Edit({
 
 	useEffect(() => {
 		if (!productId) return;
-		fetchProduct(attributes);
-	}, [productId, fetchProduct, attributes]);
+		fetchProduct(productId);
+	}, [productId, fetchProduct]);
 
 	return (
 		<>
@@ -115,7 +110,9 @@ function Edit({
 				<BlockControls group="block">
 					<AlignmentControl
 						value={textAlign}
-						onChange={(nextAlign?: TextAlign) => setAttributes({ textAlign: nextAlign })}
+						onChange={(nextAlign?: TextAlign) =>
+							setAttributes({ textAlign: nextAlign })
+						}
 					/>
 				</BlockControls>
 			)}
@@ -123,22 +120,28 @@ function Edit({
 			<InspectorControls>
 				<PanelBody title={__('Settings')} initialOpen={true}>
 					{helpText && (
-						<Text variant="small" style={{ marginBottom: '12px', display: 'block' }}>
+						<Text
+							variant="small"
+							style={{ marginBottom: '12px', display: 'block' }}
+						>
 							{helpText}
 						</Text>
-          )}
+					)}
 
 					<ProductSelector
 						value={productId ?? ''}
-						onChange={(nextProductId: string) => setAttributes({ productId: nextProductId })}
+						onChange={(nextProductId: string) =>
+							setAttributes({ productId: nextProductId })
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<RichText
 				identifier="content"
-				tagName={''}
+				tagName="div"
 				value={content}
+				onChange={onContentChange}
 				onMerge={mergeBlocks}
 				onReplace={onReplace}
 				onRemove={() => onReplace([])}

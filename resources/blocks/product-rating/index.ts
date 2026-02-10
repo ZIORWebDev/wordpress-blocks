@@ -4,7 +4,7 @@
  */
 import initBlock from '../../utils/init-block';
 import edit from './edit';
-import metadata from '../../../src/blocks/ProductPrice/block.json';
+import metadata from '../../../src/blocks/ProductRating/block.json';
 import save from './save';
 
 const { name } = metadata;
