@@ -57,8 +57,6 @@ export default function Save({ attributes }: SaveProps) {
 	});
 
 	return (
-		<HtmlTag {...props}>
-			<RichText.Content value={content} />
-		</HtmlTag>
+		<HtmlTag {...props}><span data-zior-placeholder-price></span></HtmlTag>
 	);
 }
