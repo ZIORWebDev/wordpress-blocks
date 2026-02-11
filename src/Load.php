@@ -13,30 +13,27 @@ namespace ZIORWebDev\WordPressBlocks;
  * @package ZIORWebDev\WordPressBlocks
  * @since 1.0.0
  */
-final class Load {
+final class Loader {
 
 	/**
 	 * Package version.
 	 *
 	 * @var string
 	 */
-	protected static $package_version = '1.0.0';
+	protected static $package_version = '1.1.4';
 
 	/**
-	 * Singleton instance of the Plugin class.
-	 *
-	 * @var Load
+	 * Load classes and actions
 	 */
-	protected static $instance;
-
-	/**
-	 * Class constructor.
-	 */
-	public function __construct() {
+	public function init() {
 		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ), 50 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 
-		Blocks::get_instance();
+		( new Routes() )->load();
+		( new Blocks() )->load();
+		( new Hooks\Options() )->init();
+		( new Hooks\PostMeta() )->init();
+		( new Hooks\Editor() )->init();
 	}
 
 	/**
@@ -50,9 +47,8 @@ final class Load {
 		}
 
 		// Determine dependency
-
-			$screen       = get_current_screen();
-			$dependencies = array( 'wp-blocks', 'wp-dom-ready' );
+		$screen       = get_current_screen();
+		$dependencies = array( 'wp-blocks', 'wp-dom-ready' );
 
 		if ( $screen->base === 'post' ) {
 			$dependencies[] = 'wp-edit-post';
@@ -60,23 +56,29 @@ final class Load {
 			$dependencies[] = 'wp-edit-widgets';
 		}
 
-		$vendor_js       = plugin_dir_url( __DIR__ ) . 'dist/vendors.min.js';
 		$block_editor_js = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.js';
 
-		// Enqueue vendor JS
-		wp_enqueue_script(
-			'ziorwebdev-wordpress-blocks-vendor',
-			$vendor_js,
-			array(),
-			self::$package_version
-		);
+		// Enqueue WooCommerce styles in the block editor to preview blocks correctly.
+		wp_enqueue_style( 'woocommerce-general' );
 
 		// Enqueue editor JS
 		wp_enqueue_script(
-			'ziorwebdev-wordpress-blocks-editor',
+			'zior-wp-blocks-editor',
 			$block_editor_js,
 			$dependencies,
 			self::$package_version
+		);
+
+		$rest_namespace = Routes::get_namespace();
+
+		wp_localize_script(
+			'zior-wp-blocks-editor',
+			'ZIORWPBlocks',
+			array(
+				'restUrl'         => $rest_namespace,
+				'hasSubscription' => apply_filters( 'zior_wp_blocks_has_subscription_support', false ),
+				'isWCInstalled'   => apply_filters( 'zior_wp_blocks_is_woocommerce_installed', false ),
+			)
 		);
 	}
 
@@ -86,38 +88,31 @@ final class Load {
 	 * @return void
 	 */
 	public function enqueue_block_assets() {
-		$block_style_css  = plugin_dir_url( __DIR__ ) . 'dist/blocks/main.min.css';
+		$block_view_css   = plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.css';
 		$block_editor_css = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css';
+		$block_view_js    = plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.js';
 
 		wp_enqueue_style( 'dashicons' );
-
 		wp_enqueue_style(
-			'ziorwebdev-wordpress-blocks-editor',
+			'zior-wp-blocks-editor',
 			$block_editor_css,
-			array(), // dependencies
+			array(),
 			self::$package_version
 		);
 
 		// Enqueue block CSS
 		wp_enqueue_style(
-			'ziorwebdev-wordpress-blocks-style',
-			$block_style_css,
-			array(), // dependencies
+			'zior-wp-blocks-style',
+			$block_view_css,
+			array(),
 			self::$package_version
 		);
-	}
 
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
+		wp_enqueue_script(
+			'zior-wp-blocks-view',
+			$block_view_js,
+			array(),
+			self::$package_version
+		);
 	}
 }

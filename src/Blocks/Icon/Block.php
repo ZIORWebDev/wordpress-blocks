@@ -1,6 +1,6 @@
 <?php
 /**
- * Server-side rendering of the `ziorwebdev/icon` blocks.
+ * Server-side rendering of the `zior/icon` blocks.
  *
  * @package ZIORWebDev\WordPressBlocks
  */
@@ -22,7 +22,7 @@ class Block extends Blocks\Base {
 	 *
 	 * @var $block_name
 	 */
-	protected $block_name = 'ziorwebdev/icon';
+	protected $block_name = 'zior/icon';
 
 	/**
 	 * Path of the block.json file
@@ -30,13 +30,6 @@ class Block extends Blocks\Base {
 	 * @var $block_json
 	 */
 	protected $block_json = __DIR__ . '/block.json';
-
-	/**
-	 * Singleton instance of the Plugin class.
-	 *
-	 * @var Icon
-	 */
-	protected static $instance;
 
 	/**
 	 * Convert string to title case
@@ -54,7 +47,19 @@ class Block extends Blocks\Base {
 	}
 
 	/**
-	 * Renders the `ziorwebdev/icon` block on server.
+	 * Constructor.
+	 */
+	public function __construct() {
+		parent::__construct();
+
+		/**
+		 * Hook to inject parent context into child blocks.
+		 */
+		add_filter( 'render_block_context', array( $this, 'inject_parent_context' ), 10, 3 );
+	}
+
+	/**
+	 * Renders the `zior/icon` block on server.
 	 *
 	 * @since 1.0.0
 	 * @param Array    $attributes The block attributes.
@@ -71,18 +76,14 @@ class Block extends Blocks\Base {
 		$rel             = isset( $attributes['rel'] ) ? $attributes['rel'] : '';
 		$show_labels     = array_key_exists( 'showLabels', $block->context ) ? $block->context['showLabels'] : false;
 
-		/**
-		 * Prepend emails with `mailto:` if not set.
-		 * The `is_email` returns false for emails with schema.
-		 */
+		// Prepend emails with `mailto:` if not set.
+		// The `is_email` returns false for emails with schema.
 		if ( is_email( $url ) ) {
 			$url = 'mailto:' . antispambot( $url );
 		}
 
-		/**
-		 * Prepend URL with https:// if it doesn't appear to contain a scheme
-		 * and it's not a relative link or a fragment.
-		 */
+		// Prepend URL with https:// if it doesn't appear to contain a scheme
+		// and it's not a relative link or a fragment.
 		if ( ! empty( $url ) && ! parse_url( $url, PHP_URL_SCHEME ) && ! str_starts_with( $url, '//' ) && ! str_starts_with( $url, '#' ) ) {
 			$url = 'https://' . $url;
 		}
@@ -90,7 +91,7 @@ class Block extends Blocks\Base {
 		$icon               = $this->get_icon( $service );
 		$wrapper_attributes = get_block_wrapper_attributes(
 			array(
-				'class' => 'wp-ziorwebdev-icon wp-ziorwebdev-icon-' . $service . $this->get_color_classes( $block->context ),
+				'class' => 'wp-zior-icon wp-zior-icon-' . $service . $this->get_color_classes( $block->context ),
 				'style' => $this->get_color_styles( $block->context ),
 			)
 		);
@@ -106,9 +107,9 @@ class Block extends Blocks\Base {
 			$content .= ' href="' . esc_url( $url ) . '"';
 		}
 
-		$content .= 'class="wp-block-ziorwebdev-icon-anchor">';
+		$content .= 'class="wp-block-zior-icon-anchor">';
 		$content .= $icon;
-		$content .= '<span class="wp-block-ziorwebdev-icon-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
+		$content .= '<span class="wp-block-zior-icon-label' . ( $show_labels ? '' : ' screen-reader-text' ) . '">' . esc_html( $text ) . '</span>';
 		$content .= '</a></span>';
 
 		$processor = new \WP_HTML_Tag_Processor( $content );
@@ -190,19 +191,8 @@ class Block extends Blocks\Base {
 			),
 		);
 
-		/**
-		 * Filter the list of available icon service.
-		 *
-		 * This can be used to change icons or add custom icons (additionally to variations in the editor).
-		 * Icons should be directly renderable - therefore SVGs work best.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $services_data The list of services. Each item is an array containing a 'name' and 'icon' key.
-		 * @return array The list of icon services.
-		 * Convert the service to title case and return.
-		 */
-		$services_data = apply_filters( 'ziorwebdev_icon_get_services', $services_data );
+		// Allow developers to add custom icon services.
+		$services_data = apply_filters( 'zior_wp_blocks_icon_get_services', $services_data );
 
 		if ( ! empty( $service )
 			&& ! empty( $field )
@@ -270,13 +260,13 @@ class Block extends Blocks\Base {
 	 */
 	public function inject_parent_context( $context, $parsed_block, $parent_block ) {
 		// Only apply to the child block.
-		if ( ! isset( $parsed_block['blockName'] ) || 'ziorwebdev/icon' !== $parsed_block['blockName'] ) {
+		if ( ! isset( $parsed_block['blockName'] ) || 'zior/icon' !== $parsed_block['blockName'] ) {
 			return $context;
 		}
 
 		// Ensure parent exists and is icon-picker.
 		if ( ! isset( $parent_block->parsed_block['blockName'] )
-			|| 'ziorwebdev/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
+			|| 'zior/icon-picker' !== $parent_block->parsed_block['blockName'] ) {
 			return $context;
 		}
 
@@ -290,19 +280,5 @@ class Block extends Blocks\Base {
 		}
 
 		return $context;
-	}
-
-	/**
-	 * Returns instance of Settings.
-	 *
-	 * @since 1.0.0
-	 * @return object
-	 */
-	public static function get_instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 }
