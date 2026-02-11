@@ -1,9 +1,9 @@
-.wp-block-ziorwebdev-icon-list-item {
+.wp-block-zior-icon-list-item {
     display: flex;
     align-items: center;
     gap: 12px; // spacing between icon and content
 
-    >.wp-block-ziorwebdev-icon-picker,
+    >.wp-block-zior-icon-picker,
     >.block-editor-rich-text__editable {
         flex-shrink: 0; // prevent shrinking
     }

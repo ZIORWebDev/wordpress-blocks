@@ -1,7 +1,7 @@
 @use "../icon/icon-with-bg.scss" as *;
 @use "../icon/icon-without-bg.scss" as *;
 
-.wp-block-ziorwebdev-icon-picker {
+.wp-block-zior-icon-picker {
 	// This block has customizable padding, border-box makes that more predictable.
 	box-sizing: border-box;
 
@@ -16,14 +16,14 @@
 	background: none;
 
 	// Some themes add underlines, false underlines (via shadows), and borders to <a>.
-	.wp-ziorwebdev-icon a,
-	.wp-ziorwebdev-icon a:hover {
+	.wp-zior-icon a,
+	.wp-zior-icon a:hover {
 		text-decoration: none;
 		border-bottom: 0;
 		box-shadow: none;
 	}
 
-	.wp-ziorwebdev-icon {
+	.wp-zior-icon {
 		svg {
 			width: 1em;
 			height: 1em;
@@ -71,7 +71,7 @@
 	}
 }
 
-.wp-block-ziorwebdev-icon {
+.wp-block-zior-icon {
 	/* display: block; */
 	border-radius: 9999px; // This makes it pill-shaped instead of oval, in cases where the image fed is not perfectly sized.
 
@@ -94,12 +94,12 @@
 }
 
 // This needs specificity because themes usually override it with things like .widget-area a.
-.wp-block-ziorwebdev-icon-picker .wp-block-ziorwebdev-icon.wp-ziorwebdev-icon {
+.wp-block-zior-icon-picker .wp-block-zior-icon.wp-zior-icon {
 	display: inline-block;
 	margin: 0;
 	padding: 0;
 
-	.wp-block-ziorwebdev-icon-anchor {
+	.wp-block-zior-icon-anchor {
 
 		&,
 		&:hover,
@@ -113,7 +113,7 @@
 }
 
 // Provide colors for a range of icons.
-:where(.wp-block-ziorwebdev-icon-picker:not(.is-style-logos-only)) {
+:where(.wp-block-zior-icon-picker:not(.is-style-logos-only)) {
 	// Generic items such as mail, feed, etc.
 	@include icon-with-bg;
 }
@@ -122,8 +122,8 @@
 // The specificity for this selector has not been reduced to 0-1-0 as per
 // global styles variation selectors as the lack of background should be
 // enforced for this block style.
-:where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only) {
-	.wp-ziorwebdev-icon {
+:where(.wp-block-zior-icon-picker.is-style-logos-only) {
+	.wp-zior-icon {
 		background: none;
 
 		// Make these bigger.
@@ -137,32 +137,32 @@
 }
 
 // Treatment for pill shape style.
-.wp-block-ziorwebdev-icon-picker.is-style-pill-shape {
-	.wp-ziorwebdev-icon {
+.wp-block-zior-icon-picker.is-style-pill-shape {
+	.wp-zior-icon {
 		width: auto;
 	}
 }
 
 // The following rules have their selector specificity set to 0-1-0 to
 // facilitate theme.json styling of the inner icon block padding.
-:root :where(.wp-block-ziorwebdev-icon-picker .wp-ziorwebdev-icon a) {
+:root :where(.wp-block-zior-icon-picker .wp-zior-icon a) {
 	padding: 0.25em;
 }
 
-:root :where(.wp-block-ziorwebdev-icon-picker.is-style-logos-only .wp-ziorwebdev-icon a) {
+:root :where(.wp-block-zior-icon-picker.is-style-logos-only .wp-zior-icon a) {
 	padding: 0;
 }
 
-:root :where(.wp-block-ziorwebdev-icon-picker.is-style-pill-shape .wp-ziorwebdev-icon a) {
+:root :where(.wp-block-zior-icon-picker.is-style-pill-shape .wp-zior-icon a) {
 	padding-left: calc((2/3) * 1em);
 	padding-right: calc((2/3) * 1em);
 }
 
 // Ensure the Snapchat label is visible when no custom
 // icon color or background color is set.
-.wp-block-ziorwebdev-icon-picker:not(.has-icon-color):not(.has-icon-background-color) {
-	.wp-ziorwebdev-icon-snapchat {
-		.wp-block-ziorwebdev-icon-label {
+.wp-block-zior-icon-picker:not(.has-icon-color):not(.has-icon-background-color) {
+	.wp-zior-icon-snapchat {
+		.wp-block-zior-icon-label {
 			color: #000;
 		}
 	}
