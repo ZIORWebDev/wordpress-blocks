@@ -14,7 +14,6 @@ import { RichText, useBlockProps } from '@wordpress/block-editor';
 export default function Save({ attributes }) {
 	const {
 		textAlign,
-		content = '',
 	} = attributes;
 
 	const props = useBlockProps.save({

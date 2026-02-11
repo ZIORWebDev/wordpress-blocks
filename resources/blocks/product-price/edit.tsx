@@ -249,7 +249,8 @@ function Edit( {
 				onMerge={ mergeBlocks }
 				onReplace={ onReplace }
 				onRemove={ () => onReplace( [] ) }
-				placeholder={ placeholder || __( 'Product Price' ) }
+				placeholder={placeholder || __('Product Price')}
+				allowedFormats={[]}
 				textAlign={ textAlign }
 				{ ...( Platform.isNative && { deleteEnter: true } ) }
 				{ ...blockProps }

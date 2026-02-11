@@ -13,6 +13,9 @@
 	"attributes": {
 		"productId": {
 			"type": "string"
+		},
+		"textAlign": {
+			"type": "string"
 		}
 	},
 	"supports": {

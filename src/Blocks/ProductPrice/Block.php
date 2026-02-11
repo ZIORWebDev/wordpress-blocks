@@ -57,8 +57,8 @@ class Block extends Blocks\Base {
 		$product = wc_get_product( $product_id );
 		$price   = $product->get_price_html();
 		$content = preg_replace(
-			'~<(h[1-6]|p|div|span)\b[^>]*\bdata-zior-placeholder-price(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?\b[^>]*>\s*</\1>~i',
-			$rating_html,
+			'~<span\b[^>]*\bdata-zior-placeholder-price(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+))?\b[^>]*>\s*</span>~i',
+			$price,
 			$content,
 			1
 		);

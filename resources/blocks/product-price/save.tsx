@@ -37,7 +37,7 @@ interface SaveProps {
  * Save function
  */
 export default function Save({ attributes }: SaveProps) {
-	const { textAlign, content = '', level = 2, tagName, link, url } =
+	const { textAlign, level = 2, tagName } =
 		attributes;
 
 	// Keep original behavior: tagName overrides, otherwise "h" + level.
@@ -48,12 +48,8 @@ export default function Save({ attributes }: SaveProps) {
 		[`has-text-align-${textAlign}`]: !!textAlign,
 	});
 
-	// Persist link URL as a data attribute for server-side usage.
-	const linkUrl = link?.url ?? url ?? '';
-
 	const props = useBlockProps.save({
-		className,
-		'data-link-url': linkUrl,
+		className: className
 	});
 
 	return (
