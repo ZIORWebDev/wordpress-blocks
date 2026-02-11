@@ -64,7 +64,7 @@ class Lists extends EndPoints\Base {
 		/**
 		 * Save cache.
 		 */
-		static::set_cache( $cache_key, $options );
+		static::set_cache( $cache_key, $postmeta );
 
 		return rest_ensure_response(
 			array(

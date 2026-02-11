@@ -13,37 +13,11 @@
 	"attributes": {
 		"productId": {
 			"type": "string"
-		},
-		"textAlign": {
-			"type": "string"
-		},
-		"content": {
-			"type": "rich-text",
-			"source": "rich-text",
-			"selector": "h1,h2,h3,h4,h5,h6,p,div,span",
-			"role": "content"
-		},
-		"level": {
-			"type": "number",
-			"default": 2
-		},
-		"levelOptions": {
-			"type": "array"
-		},
-		"placeholder": {
-			"type": "string"
-		},
-		"tagName": {
-			"type": "string",
-			"default": "h2"
 		}
 	},
 	"supports": {
-		"align": [
-			"wide",
-			"full"
-		],
-		"anchor": true,
+		"align": false,
+		"anchor": false,
 		"className": true,
 		"splitting": true,
 		"__experimentalBorder": {
@@ -89,6 +63,6 @@
 			"clientNavigation": true
 		}
 	},
-	"editorStyle": "wp-block-zior-product-price-editor",
-	"style": "wp-block-zior-product-price"
+	"editorStyle": "wp-block-zior-product-rating-editor",
+	"style": "wp-block-zior-product-rating"
 }

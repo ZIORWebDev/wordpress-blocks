@@ -80,8 +80,8 @@ class PostMeta extends Base {
 		 */
 		$limit = absint( apply_filters( 'zior_wp_blocks_rest_query_limit', 50 ) );
 
-		$search_term = $args['search'] ?? '';
-		$post_type   = $args['post_type'] ?? 'page';
+		$search_term = $params['search'] ?? '';
+		$post_type   = $params['post_type'] ?? 'page';
 
 		// Get meta keys for the given post type
 		$query = $wpdb->prepare(
@@ -100,6 +100,6 @@ class PostMeta extends Base {
 		$postmeta = $wpdb->get_col( $query );
 		$postmeta = Utils\Helper::sanitize_keys( $postmeta );
 
-		return apply_filters( 'zior_wp_blocks_get_post_meta_keys', $postmeta, $args );
+		return apply_filters( 'zior_wp_blocks_get_post_meta_keys', $postmeta, $params );
 	}
 }

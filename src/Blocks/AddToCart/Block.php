@@ -41,16 +41,12 @@ class Block extends Blocks\Base {
 	 * @return string Rendered HTML of the referenced block.
 	 */
 	public function render( $attributes, $content, $block ): string {
-		/**
-		 * If this is not a single product, return the $content.
-		 */
+		// If this is not a single product, return the $content.
 		if ( ! is_singular( 'product' ) ) {
 			return $content;
 		}
 
-		/**
-		 * If the product Id is set, return the $content.
-		 */
+		// If the product Id is set, return the $content.
 		if ( ! empty( $attributes['productId'] ?? '' ) ) {
 			return $content;
 		}

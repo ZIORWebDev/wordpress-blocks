@@ -76,18 +76,14 @@ class Block extends Blocks\Base {
 		$rel             = isset( $attributes['rel'] ) ? $attributes['rel'] : '';
 		$show_labels     = array_key_exists( 'showLabels', $block->context ) ? $block->context['showLabels'] : false;
 
-		/**
-		 * Prepend emails with `mailto:` if not set.
-		 * The `is_email` returns false for emails with schema.
-		 */
+		// Prepend emails with `mailto:` if not set.
+		// The `is_email` returns false for emails with schema.
 		if ( is_email( $url ) ) {
 			$url = 'mailto:' . antispambot( $url );
 		}
 
-		/**
-		 * Prepend URL with https:// if it doesn't appear to contain a scheme
-		 * and it's not a relative link or a fragment.
-		 */
+		// Prepend URL with https:// if it doesn't appear to contain a scheme
+		// and it's not a relative link or a fragment.
 		if ( ! empty( $url ) && ! parse_url( $url, PHP_URL_SCHEME ) && ! str_starts_with( $url, '//' ) && ! str_starts_with( $url, '#' ) ) {
 			$url = 'https://' . $url;
 		}
@@ -195,18 +191,7 @@ class Block extends Blocks\Base {
 			),
 		);
 
-		/**
-		 * Filter the list of available icon service.
-		 *
-		 * This can be used to change icons or add custom icons (additionally to variations in the editor).
-		 * Icons should be directly renderable - therefore SVGs work best.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $services_data The list of services. Each item is an array containing a 'name' and 'icon' key.
-		 * @return array The list of icon services.
-		 * Convert the service to title case and return.
-		 */
+		// Allow developers to add custom icon services.
 		$services_data = apply_filters( 'zior_wp_blocks_icon_get_services', $services_data );
 
 		if ( ! empty( $service )

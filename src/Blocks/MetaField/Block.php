@@ -59,18 +59,14 @@ class Block extends Blocks\Base {
 
 		$normalized_value = Utils\Helper::normalize_value( $meta_value );
 
-		/**
-		 * Sanitize value.
-		 */
+		// Sanitize value.
 		if ( is_string( $normalized_value ) && strpos( $normalized_value, '<' ) !== false ) {
 			$sanitized_value = wp_kses_post( $normalized_value );
 		} else {
 			$sanitized_value = esc_html( (string) $normalized_value );
 		}
 
-		/**
-		 * Preserve the content formatting, classes, and styles but replace the content with meta value.
-		 */
+		// Preserve the content formatting, classes, and styles but replace the content with meta value.
 		return $this->replace_inner_html( $content, $sanitized_value );
 	}
 
@@ -120,9 +116,7 @@ class Block extends Blocks\Base {
 			$meta_value = $this->get_option_by_provider( $provider, $meta_key );
 		}
 
-		/**
-		 * Filter specific meta key.
-		 */
+		// Filter specific meta key.
 		$meta_value = apply_filters( "zior_wp_blocks_meta_field_{$meta_key}_value", $meta_value, $attributes );
 
 		return $meta_value;

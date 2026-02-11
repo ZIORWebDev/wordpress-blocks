@@ -29,7 +29,7 @@ export default function Save({ attributes }) {
 
 	return (
 		<div {...props}>
-			<RichText.Content value={content} />
+			<span data-zior-placeholder-rating></span>
 		</div>
 	);
 }

@@ -58,6 +58,9 @@ final class Loader {
 
 		$block_editor_js = plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.js';
 
+		// Enqueue WooCommerce styles in the block editor to preview blocks correctly.
+		wp_enqueue_style( 'woocommerce-general' );
+
 		// Enqueue editor JS
 		wp_enqueue_script(
 			'zior-wp-blocks-editor',
@@ -93,7 +96,7 @@ final class Loader {
 		wp_enqueue_style(
 			'zior-wp-blocks-editor',
 			$block_editor_css,
-			array(), // dependencies
+			array(),
 			self::$package_version
 		);
 
@@ -101,7 +104,7 @@ final class Loader {
 		wp_enqueue_style(
 			'zior-wp-blocks-style',
 			$block_view_css,
-			array(), // dependencies
+			array(),
 			self::$package_version
 		);
 

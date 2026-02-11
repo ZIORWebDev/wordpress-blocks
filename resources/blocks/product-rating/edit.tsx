@@ -136,20 +136,22 @@ function Edit({
 					/>
 				</PanelBody>
 			</InspectorControls>
-
-			<RichText
-				identifier="content"
-				tagName="div"
-				value={content}
-				onChange={onContentChange}
-				onMerge={mergeBlocks}
-				onReplace={onReplace}
-				onRemove={() => onReplace([])}
-				placeholder={placeholder || __('Product Rating')}
-				textAlign={textAlign}
-				{...(Platform.isNative && { deleteEnter: true })}
-				{...blockProps}
-			/>
+			<div className="woocommerce">
+				<RichText
+					identifier="content"
+					tagName="div"
+					value={content}
+					onChange={onContentChange}
+					onMerge={mergeBlocks}
+					onReplace={onReplace}
+					onRemove={() => onReplace([])}
+					placeholder={placeholder || __('Product Rating')}
+					textAlign={textAlign}
+					allowedFormats={ [] }
+					{...(Platform.isNative && { deleteEnter: true })}
+					{...blockProps}
+				/>
+			</div>
 		</>
 	);
 }
