@@ -99,6 +99,63 @@ A customizable block that allows users to insert a WooCommerce **Add to Cart** b
 - Product comparison layouts
 - Block-based WooCommerce product templates
 
+### WooCommerce Product Price Block
+
+A dynamic block that renders the WooCommerce product price using native WooCommerce pricing logic.
+
+This block ensures compatibility with simple, variable, and subscription-based products while preserving WooCommerce formatting.
+
+#### Features
+
+- Displays price for:
+  - Specific product by ID
+  - Current product context (when used on single product templates)
+- Dynamic rendering using WooCommerce `get_price_html()` / `price_html`
+- Supports:
+  - Simple products
+  - Variable products (price ranges)
+  - Sale pricing
+  - Subscription pricing (if WooCommerce Subscriptions is active)
+- Editor preview reflects real product pricing
+- Preserves WooCommerce markup and CSS compatibility
+- Works in Full Site Editing (FSE) templates
+
+#### Use cases
+
+- Custom single product templates
+- Product landing pages
+- Pricing tables
+- Subscription comparison layouts
+- Custom WooCommerce layouts without overriding PHP templates
+
+### WooCommerce Product Rating Block
+
+A dynamic block that displays the WooCommerce product star rating with full frontend compatibility.
+
+The block outputs WooCommerce’s native rating HTML to keep styling and structured data consistent.
+
+#### Features
+
+- Displays rating for:
+  - Specific product by ID
+  - Current product context
+- Uses WooCommerce rating HTML output (star markup + accessible text)
+- Supports:
+  - Star rating visualization
+  - Rating count
+  - Average rating
+- Editor preview displays real rating data
+- Compatible with WooCommerce CSS and structured data
+- Works in block-based product templates
+
+#### Use cases
+
+- Custom single product templates
+- Product grids and listing layouts
+- Landing pages
+- Product comparison sections
+- Highlighting social proof in sales pages
+
 ---
 
 ## Installation
