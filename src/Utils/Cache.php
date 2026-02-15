@@ -75,4 +75,23 @@ class Cache {
 
 		return $cache_key;
 	}
+
+	/**
+	 * Clear cache.
+	 *
+	 * @param string $path
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public static function clear_cache(): void {
+		$cache_dir = FileSystem::get_cache_dir( false );
+
+		if ( ! is_dir( $cache_dir ) ) {
+			return;
+		}
+
+		FileSystem::clear_cache_dir( $cache_dir );
+
+		return;
+	}
 }

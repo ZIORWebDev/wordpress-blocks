@@ -76,20 +76,30 @@ class FileSystem {
 	}
 
 	/**
-	 * Create cache dir
+	 * Clear cache dir
 	 *
 	 * @param string $path
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public static function clear_cache_dir( $path ) {
+	public static function clear_cache_dir( string $path ): void {
 		if ( ! is_dir( $path ) ) {
-			wp_mkdir_p( $path );
-
-			return $path;
+			return;
 		}
 
-		return $path;
+		$files = glob( trailingslashit( $path ) . '*' );
+
+		if ( empty( $files ) ) {
+			return;
+		}
+
+		foreach ( $files as $file ) {
+			if ( is_file( $file ) ) {
+				wp_delete_file( $file );
+			}
+		}
+
+		return;
 	}
 
 	/**
