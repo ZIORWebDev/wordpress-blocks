@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useCallback, Platform } from '@wordpress/element';
+import { useEffect, Platform, useRef } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 
 import {
@@ -20,19 +20,13 @@ import {
 	InspectorControls,
 } from '@wordpress/block-editor';
 import type { BlockEditProps } from '@wordpress/blocks';
-import {
-	PanelBody,
-	SelectControl,
-	__experimentalText as Text,
-} from '@wordpress/components';
-
-import apiFetch from '@wordpress/api-fetch';
+import { PanelBody, SelectControl, __experimentalText as Text } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import { generateAnchor, setAnchor } from './autogenerate-anchors';
-import ProductSelector from '../../components/product-selector';
+import ProductSelector, { fetchProductInfo } from '../../components/product-selector';
 
 /**
  * Types
@@ -53,12 +47,6 @@ interface Attributes {
 }
 
 type Props = BlockEditProps<Attributes>;
-
-/**
- * Note: ZIORWPBlocks + wpApiSettings are globals provided by WP.
- */
-declare const ZIORWPBlocks: { restUrl: string };
-declare const wpApiSettings: { nonce: string };
 
 function Edit( {
 	attributes,
@@ -128,7 +116,7 @@ function Edit( {
 	] );
 
 	const onContentChange = ( value: string ) => {
-		const newAttrs: Partial< Attributes > = { content: value };
+		const newAttrs: Partial<Attributes> = { content: value };
 
 		if (
 			canGenerateAnchors &&
@@ -140,46 +128,29 @@ function Edit( {
 		setAttributes( newAttrs );
 	};
 
-	const getParameters = ( attrs: Pick< Attributes, 'productId' > ) => {
-		const params = new URLSearchParams( {
-			productId: attrs.productId ?? '',
-		} );
-
-		return params;
-	};
-
-	const fetchProduct = useCallback(
-		async ( attrs: Pick< Attributes, 'productId' > ) => {
-			const { productId: pid } = attrs;
-			if ( ! pid ) return;
-
-			try {
-				const path = `/${ ZIORWPBlocks.restUrl }/products/information?${ getParameters(
-					attrs
-				).toString() }`;
-
-				const response = ( await apiFetch( {
-					path,
-					headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-				} ) ) as { product?: { price_html?: string } };
-
-				setAttributes( { content: response?.product?.price_html ?? '' } );
-			} catch {
-				setAttributes( { content: '' } );
-			}
-		},
-		[ setAttributes ]
-	);
-
 	/**
-	 * FIX 1:
-	 * Only refetch when productId changes.
-	 * (Do NOT depend on `attributes` — formatting changes update attributes and would refetch/overwrite content.)
+	 * Fetch product info ONLY when productId changes.
+	 * Uses shared fetchProductInfo() from ProductSelector module.
 	 */
+	const reqSeqRef = useRef( 0 );
+
 	useEffect( () => {
 		if ( ! productId ) return;
-		void fetchProduct( { productId } );
-	}, [ productId, fetchProduct ] );
+
+		const seq = ++reqSeqRef.current;
+
+		fetchProductInfo( productId )
+			.then( ( response ) => {
+				if ( seq !== reqSeqRef.current ) return;
+
+				const product = response?.product as { price_html?: string } | undefined;
+				setAttributes( { content: product?.price_html ?? '' } );
+			} )
+			.catch( () => {
+				if ( seq !== reqSeqRef.current ) return;
+				setAttributes( { content: '' } );
+			} );
+	}, [ productId, setAttributes ] );
 
 	return (
 		<>
@@ -224,7 +195,6 @@ function Edit( {
 							{ label: 'Span', value: 'span' },
 						] }
 						onChange={ ( selected?: string ) => {
-							// If user picked an hN, sync level and set tagName.
 							if ( selected && selected.startsWith( 'h' ) ) {
 								const parsed = parseInt( selected.slice( 1 ), 10 );
 								const currentLevel = Number.isNaN( parsed ) ? level : parsed;
@@ -249,8 +219,8 @@ function Edit( {
 				onMerge={ mergeBlocks }
 				onReplace={ onReplace }
 				onRemove={ () => onReplace( [] ) }
-				placeholder={placeholder || __('Product Price')}
-				allowedFormats={[]}
+				placeholder={ placeholder || __( 'Product Price' ) }
+				allowedFormats={ [] }
 				textAlign={ textAlign }
 				{ ...( Platform.isNative && { deleteEnter: true } ) }
 				{ ...blockProps }
