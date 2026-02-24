@@ -18,42 +18,47 @@ type ProductsListResponse = {
 	products?: ProductApiProduct[];
 };
 
-type ProductInformationResponse = {
-	product?: Record<string, unknown>;
-};
-
-/**
- * Fetch a single product "information" payload (used by multiple blocks).
- * Keeps the REST path logic in one place.
- */
-export async function fetchProductInfo(
-	productId: string
-): Promise<ProductInformationResponse> {
-	const pid = String(productId ?? '').trim();
-	if (!pid) return {};
-
-	const params = new URLSearchParams({ productId: pid });
-	const path = `/${ZIORWPBlocks.restUrl}/products/information?${params.toString()}`;
-
-	return apiFetch<ProductInformationResponse>({
-		path,
-		headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-	});
-}
-
 export interface ProductSelectorProps {
 	value?: string | number | null;
 	onChange?: (value: string) => void;
 }
 
-const ProductSelector: FC<ProductSelectorProps> = ({
-	value = '',
-	onChange = () => {},
-}) => {
+/**
+ * Globals provided by WP / plugin.
+ */
+/* eslint-disable @typescript-eslint/naming-convention */
+declare const ZIORWPBlocks: { restUrl: string };
+/* eslint-enable @typescript-eslint/naming-convention */
+
+/**
+ * Exportable fetcher that returns options as a Promise.
+ * Note: This does NOT debounce by itself.
+ */
+export async function fetchOptions(
+	search: unknown,
+	productId: unknown
+): Promise<ComboboxOption[]> {
+	const params = new URLSearchParams();
+	params.set('search', String(search ?? ''));
+	params.set('productId', String(productId ?? ''));
+
+	const results = await apiFetch<ProductsListResponse>({
+		path: `/${ZIORWPBlocks.restUrl}/products/lists?${params.toString()}`,
+	});
+
+	const products = results?.products ?? [];
+	return products.map((p) => ({
+		label: p.name,
+		value: String(p.id),
+	}));
+}
+
+const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () => {} }) => {
 	const [product, setProduct] = useState<string>(String(value));
 	const [options, setOptions] = useState<ComboboxOption[]>([]);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
+	// Sync prop -> state without loops
 	useEffect(() => {
 		const next = String(value);
 		setProduct((prev) => (prev === next ? prev : next));
@@ -61,39 +66,30 @@ const ProductSelector: FC<ProductSelectorProps> = ({
 
 	const reqSeqRef = useRef(0);
 
-	const fetchOptions = useCallback(
-		debounce(async (search: unknown, productId: unknown) => {
+	// Debounced wrapper used by the component.
+	const fetchOptionsDebounced = useMemo(() => {
+		return debounce(async (search: unknown, productId: unknown) => {
 			const seq = ++reqSeqRef.current;
 
-			const params = new URLSearchParams();
-			params.set('search', String(search));
-			params.set('productId', String(productId));
-
 			try {
-				const results = await apiFetch<ProductsListResponse>({
-					path: `/${ZIORWPBlocks.restUrl}/products/lists?${params.toString()}`,
-				});
+				const nextOptions = await fetchOptions(search, productId);
 
+				// ignore stale responses
 				if (seq !== reqSeqRef.current) return;
 
-				const products = results?.products ?? [];
-				setOptions(
-					products.map((p) => ({
-						label: p.name,
-						value: String(p.id),
-					}))
-				);
+				setOptions(nextOptions);
 			} catch {
 				if (seq !== reqSeqRef.current) return;
 				setOptions([]);
 			}
-		}, 300),
-		[]
-	);
+		}, 300);
+	}, []);
 
 	useEffect(() => {
-		fetchOptions(searchTerm, product);
-	}, [searchTerm, fetchOptions]);
+		fetchOptionsDebounced(searchTerm, product);
+		// If your debounce supports cancel:
+		// return () => fetchOptionsDebounced.cancel?.();
+	}, [searchTerm, product, fetchOptionsDebounced]);
 
 	const displayedOptions = useMemo<ComboboxOption[]>(() => {
 		if (!product) return options;

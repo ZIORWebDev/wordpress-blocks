@@ -11,8 +11,20 @@
 	],
 	"textdomain": "default",
 	"attributes": {
-		"productId": {
-			"type": "string"
+		"product": {
+			"type": "object",
+			"default": {
+				"id": "",
+				"label": ""
+			},
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"label": {
+					"type": "string"
+				}
+			}
 		},
 		"textAlign": {
 			"type": "string"

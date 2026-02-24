@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, Platform, useRef } from '@wordpress/element';
+import { useEffect, useCallback, Platform, useMemo, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 
 import {
@@ -22,19 +22,17 @@ import {
 import type { BlockEditProps } from '@wordpress/blocks';
 import { PanelBody, SelectControl, __experimentalText as Text } from '@wordpress/components';
 
+import apiFetch from '@wordpress/api-fetch';
+
 /**
  * Internal dependencies
  */
 import { generateAnchor, setAnchor } from './autogenerate-anchors';
-import ProductSelector, { fetchProductInfo } from '../../components/product-selector';
+import ProductSelector, { fetchOptions as fetchProductOptions } from '../../components/product-selector';
 
 /**
  * Types
  */
-type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
-
-type TagName = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
-
 interface Attributes {
 	textAlign?: TextAlign;
 	content?: string;
@@ -48,14 +46,15 @@ interface Attributes {
 
 type Props = BlockEditProps<Attributes>;
 
-function Edit( {
-	attributes,
-	setAttributes,
-	mergeBlocks,
-	onReplace,
-	style,
-	clientId,
-}: Props ) {
+/**
+ * Note: ZIORWPBlocks + wpApiSettings are globals provided by WP.
+ */
+/* eslint-disable @typescript-eslint/naming-convention */
+declare const ZIORWPBlocks: { restUrl: string };
+declare const wpApiSettings: { nonce: string };
+/* eslint-enable @typescript-eslint/naming-convention */
+
+function Edit({ attributes, setAttributes, mergeBlocks, onReplace, style, clientId }: Props) {
 	const {
 		textAlign,
 		content = '',
@@ -67,45 +66,46 @@ function Edit( {
 		productId,
 	} = attributes;
 
-	const effectiveTag: TagName = ( tagName && tagName.length ? tagName : `h${ level }` ) as TagName;
+	const effectiveTag: TagName = (tagName && tagName.length ? tagName : `h${level}`) as TagName;
 
-	const blockProps = useBlockProps( {
-		className: clsx( {
-			[ `has-text-align-${ textAlign }` ]: !! textAlign,
-		} ),
+	const blockProps = useBlockProps({
+		className: clsx({
+			[`has-text-align-${textAlign}`]: !!textAlign,
+		}),
 		style,
-	} );
+	});
 
 	const blockEditingMode = useBlockEditingMode();
 
-	const { canGenerateAnchors } = useSelect( ( wpSelect ) => {
+	const { canGenerateAnchors, isSelected } = useSelect((wpSelect) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const { getGlobalBlockCount, getSettings } = wpSelect( blockEditorStore ) as any;
+		const { getGlobalBlockCount, getSettings, isBlockSelected } = wpSelect(blockEditorStore) as any;
 		const settings = getSettings?.() ?? {};
 
 		return {
 			canGenerateAnchors:
-				!! settings.generateAnchors ||
-				( getGlobalBlockCount?.( 'core/table-of-contents' ) ?? 0 ) > 0,
+				!!settings.generateAnchors ||
+				(getGlobalBlockCount?.('core/table-of-contents') ?? 0) > 0,
+			isSelected: !!isBlockSelected?.(clientId),
 		};
-	}, [] );
+	}, [clientId]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const { __unstableMarkNextChangeAsNotPersistent } = useDispatch( blockEditorStore ) as any;
+	const { __unstableMarkNextChangeAsNotPersistent } = useDispatch(blockEditorStore) as any;
 
-	useEffect( () => {
-		if ( ! canGenerateAnchors ) return;
+	useEffect(() => {
+		if (!canGenerateAnchors) return;
 
-		if ( ! anchor && content ) {
+		if (!anchor && content) {
 			__unstableMarkNextChangeAsNotPersistent?.();
-			setAttributes( {
-				anchor: generateAnchor( clientId, content ),
-			} );
+			setAttributes({
+				anchor: generateAnchor(clientId, content),
+			});
 		}
 
-		setAnchor( clientId, anchor );
+		setAnchor(clientId, anchor);
 
-		return () => setAnchor( clientId, null );
+		return () => setAnchor(clientId, null);
 	}, [
 		anchor,
 		content,
@@ -113,77 +113,121 @@ function Edit( {
 		canGenerateAnchors,
 		setAttributes,
 		__unstableMarkNextChangeAsNotPersistent,
-	] );
+	]);
 
-	const onContentChange = ( value: string ) => {
+	const onContentChange = (value: string) => {
 		const newAttrs: Partial<Attributes> = { content: value };
 
 		if (
 			canGenerateAnchors &&
-			( ! anchor || ! value || generateAnchor( clientId, content ) === anchor )
+			(!anchor || !value || generateAnchor(clientId, content) === anchor)
 		) {
-			newAttrs.anchor = generateAnchor( clientId, value );
+			newAttrs.anchor = generateAnchor(clientId, value);
 		}
 
-		setAttributes( newAttrs );
+		setAttributes(newAttrs);
 	};
 
+	const getParameters = (attrs: Pick<Attributes, 'productId'>) => {
+		const params = new URLSearchParams({
+			productId: attrs.productId ?? '',
+		});
+
+		return params;
+	};
+
+	const fetchProduct = useCallback(
+		async (attrs: Pick<Attributes, 'productId'>) => {
+			const { productId: pid } = attrs;
+			if (!pid) return;
+
+			try {
+				const path = `/${ZIORWPBlocks.restUrl}/products/information?${getParameters(attrs).toString()}`;
+
+				const response = (await apiFetch({
+					path,
+					headers: { 'X-WP-Nonce': wpApiSettings.nonce },
+				})) as { product?: { price_html?: string } };
+
+				setAttributes({ content: response?.product?.price_html ?? '' });
+			} catch {
+				setAttributes({ content: '' });
+			}
+		},
+		[setAttributes]
+	);
+
 	/**
-	 * Fetch product info ONLY when productId changes.
-	 * Uses shared fetchProductInfo() from ProductSelector module.
+	 * FIX 1:
+	 * Only refetch when productId changes.
+	 * (Do NOT depend on `attributes` — formatting changes update attributes and would refetch/overwrite content.)
 	 */
-	const reqSeqRef = useRef( 0 );
+	useEffect(() => {
+		if (!productId) return;
+		void fetchProduct({ productId });
+	}, [productId, fetchProduct]);
 
-	useEffect( () => {
-		if ( ! productId ) return;
+	/**
+	 * Use ProductSelector's exported fetchOptions:
+	 * When the block is selected, prefetch options (including the currently selected product)
+	 * so the combobox is ready immediately when the inspector opens.
+	 */
+	const [prefetchedOptions, setPrefetchedOptions] = useState<unknown>(null);
 
-		const seq = ++reqSeqRef.current;
+	useEffect(() => {
+		if (!isSelected) return;
 
-		fetchProductInfo( productId )
-			.then( ( response ) => {
-				if ( seq !== reqSeqRef.current ) return;
+		let cancelled = false;
 
-				const product = response?.product as { price_html?: string } | undefined;
-				setAttributes( { content: product?.price_html ?? '' } );
-			} )
-			.catch( () => {
-				if ( seq !== reqSeqRef.current ) return;
-				setAttributes( { content: '' } );
-			} );
-	}, [ productId, setAttributes ] );
+		(async () => {
+			try {
+				// Empty search term, include current product id so it appears in the list.
+				const opts = await fetchProductOptions('', productId ?? '');
+				if (cancelled) return;
+				setPrefetchedOptions(opts);
+			} catch {
+				if (cancelled) return;
+				setPrefetchedOptions([]);
+			}
+		})();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [isSelected, productId]);
+
+	// Keep TS happy and ensure the effect isn't tree-shaken as "unused".
+	// (This doesn't change UI; it just keeps the prefetch state referenced.)
+	useMemo(() => prefetchedOptions, [prefetchedOptions]);
 
 	return (
 		<>
-			{ blockEditingMode === 'default' && (
+			{blockEditingMode === 'default' && (
 				<BlockControls group="block">
 					<AlignmentControl
-						value={ textAlign }
-						onChange={ ( nextAlign?: TextAlign ) =>
-							setAttributes( { textAlign: nextAlign } )
-						}
+						value={textAlign}
+						onChange={(nextAlign?: TextAlign) => setAttributes({ textAlign: nextAlign })}
 					/>
 				</BlockControls>
-			) }
+			)}
 
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
-					{ helpText && (
-						<Text variant="small" style={ { marginBottom: '12px', display: 'block' } }>
-							{ helpText }
+				<PanelBody title={__('Settings')} initialOpen={true}>
+					{helpText && (
+						<Text variant="small" style={{ marginBottom: '12px', display: 'block' }}>
+							{helpText}
 						</Text>
-					) }
+					)}
 
 					<ProductSelector
-						value={ productId ?? '' }
-						onChange={ ( nextProductId: string ) =>
-							setAttributes( { productId: nextProductId } )
-						}
+						value={productId ?? ''}
+						onChange={(nextProductId: string) => setAttributes({ productId: nextProductId })}
 					/>
 
 					<SelectControl
-						label={ __( 'HTML tag' ) }
-						value={ effectiveTag }
-						options={ [
+						label={__('HTML tag')}
+						value={effectiveTag}
+						options={[
 							{ label: 'H1', value: 'h1' },
 							{ label: 'H2', value: 'h2' },
 							{ label: 'H3', value: 'h3' },
@@ -193,37 +237,38 @@ function Edit( {
 							{ label: 'Paragraph', value: 'p' },
 							{ label: 'Div', value: 'div' },
 							{ label: 'Span', value: 'span' },
-						] }
-						onChange={ ( selected?: string ) => {
-							if ( selected && selected.startsWith( 'h' ) ) {
-								const parsed = parseInt( selected.slice( 1 ), 10 );
-								const currentLevel = Number.isNaN( parsed ) ? level : parsed;
+						]}
+						onChange={(selected?: string) => {
+							// If user picked an hN, sync level and set tagName.
+							if (selected && selected.startsWith('h')) {
+								const parsed = parseInt(selected.slice(1), 10);
+								const currentLevel = Number.isNaN(parsed) ? level : parsed;
 
-								setAttributes( {
+								setAttributes({
 									level: currentLevel,
-									tagName: `h${ currentLevel }`,
-								} );
+									tagName: `h${currentLevel}`,
+								});
 							} else {
-								setAttributes( { tagName: selected } );
+								setAttributes({ tagName: selected });
 							}
-						} }
+						}}
 					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<RichText
 				identifier="content"
-				tagName={ effectiveTag }
-				value={ content }
-				onChange={ onContentChange }
-				onMerge={ mergeBlocks }
-				onReplace={ onReplace }
-				onRemove={ () => onReplace( [] ) }
-				placeholder={ placeholder || __( 'Product Price' ) }
-				allowedFormats={ [] }
-				textAlign={ textAlign }
-				{ ...( Platform.isNative && { deleteEnter: true } ) }
-				{ ...blockProps }
+				tagName={effectiveTag}
+				value={content}
+				onChange={onContentChange}
+				onMerge={mergeBlocks}
+				onReplace={onReplace}
+				onRemove={() => onReplace([])}
+				placeholder={placeholder || __('Product Price')}
+				allowedFormats={[]}
+				textAlign={textAlign}
+				{...(Platform.isNative && { deleteEnter: true })}
+				{...blockProps}
 			/>
 		</>
 	);
