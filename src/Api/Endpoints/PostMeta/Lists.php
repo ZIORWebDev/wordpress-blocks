@@ -7,7 +7,7 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta;
 
-use ZIORWebDev\WordPressBlocks\Api\EndPoints;
+use ZIORWebDev\WordPressBlocks\Api\Endpoints;
 use ZIORWebDev\WordPressBlocks\Controllers\PostMeta as PostMetaController;
 
 // Exit if accessed directly.
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\PostMeta
  * @since 1.0.0
  */
-class Lists extends EndPoints\Base {
+class Lists extends Endpoints\Base {
 
 	/**
 	 * Route path

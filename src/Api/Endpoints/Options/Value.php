@@ -8,7 +8,7 @@
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
 
 use ZIORWebDev\WordPressBlocks\utils;
-use ZIORWebDev\WordPressBlocks\Api\EndPoints;
+use ZIORWebDev\WordPressBlocks\Api\Endpoints;
 use ZIORWebDev\WordPressBlocks\Controllers\Options as OptionsController;
 
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-class Value extends EndPoints\Base {
+class Value extends Endpoints\Base {
 
 	/**
 	 * Route path
@@ -52,7 +52,7 @@ class Value extends EndPoints\Base {
 	 */
 	public function get_rest_args() {
 		return array(
-			'metaKey' => array(
+			'metaKey'       => array(
 				'type'              => 'string',
 				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',

@@ -7,7 +7,7 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
 
-use ZIORWebDev\WordPressBlocks\Api\EndPoints;
+use ZIORWebDev\WordPressBlocks\Api\Endpoints;
 use ZIORWebDev\WordPressBlocks\Controllers\Options as OptionsController;
 
 // Exit if accessed directly.
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-class Lists extends EndPoints\Base {
+class Lists extends Endpoints\Base {
 
 	/**
 	 * Route path
