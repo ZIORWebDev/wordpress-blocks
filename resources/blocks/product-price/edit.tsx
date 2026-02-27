@@ -7,79 +7,63 @@ import { clsx } from 'clsx';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useCallback, Platform } from '@wordpress/element';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useEffect, useCallback, useMemo, useRef, Platform } from '@wordpress/element';
 
 import {
 	AlignmentControl,
 	BlockControls,
 	RichText,
 	useBlockProps,
-	store as blockEditorStore,
 	useBlockEditingMode,
 	InspectorControls,
 } from '@wordpress/block-editor';
 import type { BlockEditProps } from '@wordpress/blocks';
-import {
-	PanelBody,
-	SelectControl,
-	__experimentalText as Text,
-} from '@wordpress/components';
-
-import apiFetch from '@wordpress/api-fetch';
+import { PanelBody, SelectControl, __experimentalText as Text } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
-import { generateAnchor, setAnchor } from './autogenerate-anchors';
 import ProductSelector from '../../components/product-selector';
+import metadata from '../../../src/blocks/ProductPrice/block.json';
+import { fetchProductInformation } from '../../components/product-selector/product-information';
 
-/**
- * Types
- */
-type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
-
-type TagName = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
+type ProductValue = {
+	id: string;
+	label: string;
+};
 
 interface Attributes {
-	textAlign?: TextAlign;
+	textAlign?: string;
 	content?: string;
-	level: number;
 	placeholder?: string;
 	anchor?: string;
 	tagName?: string;
 	helpText?: string;
-	productId?: string;
+	product?: ProductValue;
 }
 
 type Props = BlockEditProps<Attributes>;
 
-/**
- * Note: ZIORWPBlocks + wpApiSettings are globals provided by WP.
- */
-declare const ZIORWPBlocks: { restUrl: string };
-declare const wpApiSettings: { nonce: string };
+const EMPTY_PRODUCT: ProductValue = { id: '', label: '' };
 
-function Edit( {
-	attributes,
-	setAttributes,
-	mergeBlocks,
-	onReplace,
-	style,
-	clientId,
-}: Props ) {
+function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Props ) {
 	const {
 		textAlign,
 		content = '',
-		level,
 		placeholder,
-		anchor,
 		tagName,
 		helpText,
-		productId,
+		product,
 	} = attributes;
 
-	const effectiveTag: TagName = ( tagName && tagName.length ? tagName : `h${ level }` ) as TagName;
+	// block.json enum list
+	const tagOptions = useMemo( () => {
+		const tagNameEnum = metadata.attributes.tagName.enum as string[];
+		return tagNameEnum.map( ( value ) => ( {
+			label: value.toUpperCase(),
+			value,
+		} ) );
+	}, [] );
 
 	const blockProps = useBlockProps( {
 		className: clsx( {
@@ -90,96 +74,44 @@ function Edit( {
 
 	const blockEditingMode = useBlockEditingMode();
 
-	const { canGenerateAnchors } = useSelect( ( wpSelect ) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const { getGlobalBlockCount, getSettings } = wpSelect( blockEditorStore ) as any;
-		const settings = getSettings?.() ?? {};
+	/**
+	 * Bulletproof guards:
+	 * - lastFetchedIdRef prevents re-fetch loops when `product` object identity changes.
+	 * - reqSeqRef prevents stale responses from overwriting when user changes quickly.
+	 */
+	const lastFetchedIdRef = useRef<string>( '' );
+	const reqSeqRef = useRef<number>( 0 );
 
-		return {
-			canGenerateAnchors:
-				!! settings.generateAnchors ||
-				( getGlobalBlockCount?.( 'core/table-of-contents' ) ?? 0 ) > 0,
-		};
-	}, [] );
+	const fetchAndSetContent = useCallback(
+		async ( productId: string ) => {
+			if ( ! productId ) return;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const { __unstableMarkNextChangeAsNotPersistent } = useDispatch( blockEditorStore ) as any;
-
-	useEffect( () => {
-		if ( ! canGenerateAnchors ) return;
-
-		if ( ! anchor && content ) {
-			__unstableMarkNextChangeAsNotPersistent?.();
-			setAttributes( {
-				anchor: generateAnchor( clientId, content ),
-			} );
-		}
-
-		setAnchor( clientId, anchor );
-
-		return () => setAnchor( clientId, null );
-	}, [
-		anchor,
-		content,
-		clientId,
-		canGenerateAnchors,
-		setAttributes,
-		__unstableMarkNextChangeAsNotPersistent,
-	] );
-
-	const onContentChange = ( value: string ) => {
-		const newAttrs: Partial< Attributes > = { content: value };
-
-		if (
-			canGenerateAnchors &&
-			( ! anchor || ! value || generateAnchor( clientId, content ) === anchor )
-		) {
-			newAttrs.anchor = generateAnchor( clientId, value );
-		}
-
-		setAttributes( newAttrs );
-	};
-
-	const getParameters = ( attrs: Pick< Attributes, 'productId' > ) => {
-		const params = new URLSearchParams( {
-			productId: attrs.productId ?? '',
-		} );
-
-		return params;
-	};
-
-	const fetchProduct = useCallback(
-		async ( attrs: Pick< Attributes, 'productId' > ) => {
-			const { productId: pid } = attrs;
-			if ( ! pid ) return;
+			const seq = ++reqSeqRef.current;
 
 			try {
-				const path = `/${ ZIORWPBlocks.restUrl }/products/information?${ getParameters(
-					attrs
-				).toString() }`;
+				const info = await fetchProductInformation( productId );
+				// Ignore stale responses
+				if ( seq !== reqSeqRef.current ) return;
 
-				const response = ( await apiFetch( {
-					path,
-					headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-				} ) ) as { product?: { price_html?: string } };
-
-				setAttributes( { content: response?.product?.price_html ?? '' } );
+				setAttributes( { content: info?.price_html ?? '' } );
 			} catch {
+				if ( seq !== reqSeqRef.current ) return;
 				setAttributes( { content: '' } );
 			}
 		},
 		[ setAttributes ]
 	);
 
-	/**
-	 * FIX 1:
-	 * Only refetch when productId changes.
-	 * (Do NOT depend on `attributes` — formatting changes update attributes and would refetch/overwrite content.)
-	 */
 	useEffect( () => {
-		if ( ! productId ) return;
-		void fetchProduct( { productId } );
-	}, [ productId, fetchProduct ] );
+    const pid = product?.id ? String(product.id) : '';
+		if ( ! pid ) return;
+
+		// Only fetch when productId actually changes
+		if ( lastFetchedIdRef.current === pid ) return;
+		lastFetchedIdRef.current = pid;
+
+		void fetchAndSetContent( pid );
+	}, [ product?.id, fetchAndSetContent ] );
 
 	return (
 		<>
@@ -187,7 +119,7 @@ function Edit( {
 				<BlockControls group="block">
 					<AlignmentControl
 						value={ textAlign }
-						onChange={ ( nextAlign?: TextAlign ) =>
+						onChange={ ( nextAlign?: string ) =>
 							setAttributes( { textAlign: nextAlign } )
 						}
 					/>
@@ -197,60 +129,48 @@ function Edit( {
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
 					{ helpText && (
-						<Text variant="small" style={ { marginBottom: '12px', display: 'block' } }>
+						<Text
+							variant="small"
+							style={ { marginBottom: '12px', display: 'block' } }
+						>
 							{ helpText }
 						</Text>
 					) }
 
 					<ProductSelector
-						value={ productId ?? '' }
-						onChange={ ( nextProductId: string ) =>
-							setAttributes( { productId: nextProductId } )
-						}
+						value={ product ?? EMPTY_PRODUCT }
+						onChange={ ( nextProduct: ProductValue ) => {
+							// Reset guards if product cleared
+							const nextId = nextProduct?.id ? String( nextProduct.id ) : '';
+							if ( ! nextId ) {
+								lastFetchedIdRef.current = '';
+								reqSeqRef.current++;
+								setAttributes( { product: nextProduct, content: '' } );
+								return;
+							}
+
+							setAttributes( { product: nextProduct } );
+						} }
 					/>
 
 					<SelectControl
 						label={ __( 'HTML tag' ) }
-						value={ effectiveTag }
-						options={ [
-							{ label: 'H1', value: 'h1' },
-							{ label: 'H2', value: 'h2' },
-							{ label: 'H3', value: 'h3' },
-							{ label: 'H4', value: 'h4' },
-							{ label: 'H5', value: 'h5' },
-							{ label: 'H6', value: 'h6' },
-							{ label: 'Paragraph', value: 'p' },
-							{ label: 'Div', value: 'div' },
-							{ label: 'Span', value: 'span' },
-						] }
-						onChange={ ( selected?: string ) => {
-							// If user picked an hN, sync level and set tagName.
-							if ( selected && selected.startsWith( 'h' ) ) {
-								const parsed = parseInt( selected.slice( 1 ), 10 );
-								const currentLevel = Number.isNaN( parsed ) ? level : parsed;
-
-								setAttributes( {
-									level: currentLevel,
-									tagName: `h${ currentLevel }`,
-								} );
-							} else {
-								setAttributes( { tagName: selected } );
-							}
-						} }
+						value={ tagName }
+						options={ tagOptions }
+						onChange={ ( selected?: string ) => setAttributes( { tagName: selected } ) }
 					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<RichText
 				identifier="content"
-				tagName={ effectiveTag }
+				tagName={ tagName }
 				value={ content }
-				onChange={ onContentChange }
 				onMerge={ mergeBlocks }
 				onReplace={ onReplace }
 				onRemove={ () => onReplace( [] ) }
-				placeholder={placeholder || __('Product Price')}
-				allowedFormats={[]}
+				placeholder={ placeholder || __( 'Product Price' ) }
+				allowedFormats={ [] }
 				textAlign={ textAlign }
 				{ ...( Platform.isNative && { deleteEnter: true } ) }
 				{ ...blockProps }

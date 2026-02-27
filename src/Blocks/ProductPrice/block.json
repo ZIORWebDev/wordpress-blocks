@@ -11,8 +11,20 @@
 	],
 	"textdomain": "default",
 	"attributes": {
-		"productId": {
-			"type": "string"
+		"product": {
+			"type": "object",
+			"default": {
+				"id": "",
+				"label": ""
+			},
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"label": {
+					"type": "string"
+				}
+			}
 		},
 		"textAlign": {
 			"type": "string"
@@ -23,18 +35,12 @@
 			"selector": "h1,h2,h3,h4,h5,h6,p,div,span",
 			"role": "content"
 		},
-		"level": {
-			"type": "number",
-			"default": 2
-		},
-		"levelOptions": {
-			"type": "array"
-		},
 		"placeholder": {
 			"type": "string"
 		},
 		"tagName": {
 			"type": "string",
+			"enum": ["h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "span"],
 			"default": "h2"
 		}
 	},

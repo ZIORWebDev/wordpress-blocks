@@ -41,17 +41,14 @@ class Block extends Blocks\Base {
 	 * @return string Rendered HTML of the referenced block.
 	 */
 	public function render( $attributes, $content, $block ): string {
-		// If this is not a single product, return the $content.
-		if ( ! is_singular( 'product' ) ) {
+		// Return the content when not on a single product page
+		// and no product id is provided in the block attributes.
+		if ( ! is_singular( 'product' ) && empty( $attributes['product']['id'] ?? '' ) ) {
 			return $content;
 		}
 
-		// If the product Id is set, return the $content.
-		if ( ! empty( $attributes['productId'] ?? '' ) ) {
-			return $content;
-		}
-
-		$product_id = get_queried_object_id();
+		// If product id is not provided, fall back to the current product ID.
+		$product_id = $attributes['product']['id'] ?: get_queried_object_id();
 
 		if ( ! $product_id ) {
 			return $content;

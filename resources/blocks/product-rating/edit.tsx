@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useCallback, Platform } from '@wordpress/element';
+import { useEffect, useCallback, useRef, Platform } from '@wordpress/element';
 
 import {
 	AlignmentControl,
@@ -20,136 +20,140 @@ import {
 import type { BlockEditProps } from '@wordpress/blocks';
 import { PanelBody, __experimentalText as Text } from '@wordpress/components';
 
-import apiFetch from '@wordpress/api-fetch';
-
 /**
  * Internal dependencies
  */
 import ProductSelector from '../../components/product-selector';
+import { fetchProductInformation } from '../../components/product-selector/product-information';
 
-/**
- * Types
- */
-type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
+type ProductValue = {
+	id: string;
+	label: string;
+};
 
 interface Attributes {
-	textAlign?: TextAlign;
+	textAlign?: string;
 	content?: string;
 	placeholder?: string;
+	anchor?: string;
 	helpText?: string;
-	productId?: string;
+	product?: ProductValue;
 }
 
 type Props = BlockEditProps<Attributes>;
 
-/**
- * Note: ZIORWPBlocks + wpApiSettings are globals provided by WP.
- */
-declare const ZIORWPBlocks: { restUrl: string };
-declare const wpApiSettings: { nonce: string };
+const EMPTY_PRODUCT: ProductValue = { id: '', label: '' };
 
-function Edit({
-	attributes,
-	setAttributes,
-	mergeBlocks,
-	onReplace,
-	style,
-}: Props) {
+function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Props ) {
 	const {
 		textAlign,
 		content = '',
 		placeholder,
 		helpText,
-		productId,
+		product,
 	} = attributes;
 
-	const blockProps = useBlockProps({
-		className: clsx({
-			[`has-text-align-${textAlign}`]: !!textAlign,
-		}),
+	const blockProps = useBlockProps( {
+		className: clsx( {
+			[ `has-text-align-${ textAlign }` ]: !! textAlign,
+		} ),
 		style,
-	});
+	} );
 
 	const blockEditingMode = useBlockEditingMode();
 
-	const onContentChange = (value: string) => {
-		setAttributes({ content: value });
-	};
+	/**
+	 * Bulletproof guards:
+	 * - lastFetchedIdRef prevents re-fetch loops when `product` object identity changes.
+	 * - reqSeqRef prevents stale responses from overwriting when user changes quickly.
+	 */
+	const lastFetchedIdRef = useRef<string>( '' );
+	const reqSeqRef = useRef<number>( 0 );
 
-	const fetchProduct = useCallback(
-		async (pid: string) => {
-			if (!pid) return;
+	const fetchAndSetContent = useCallback(
+		async ( productId: string ) => {
+			if ( ! productId ) return;
+
+			const seq = ++reqSeqRef.current;
 
 			try {
-				const params = new URLSearchParams({ productId: pid });
+				const info = await fetchProductInformation( productId );
+				// Ignore stale responses
+				if ( seq !== reqSeqRef.current ) return;
 
-				// Ensure your restUrl is the namespace/root, e.g. "ziorwp/v1"
-				const path = `/${ZIORWPBlocks.restUrl}/products/information?${params.toString()}`;
-
-				const response = (await apiFetch({
-					path,
-					headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-				})) as { product?: { rating_html?: string } };
-
-				setAttributes({ content: response?.product?.rating_html ?? '' });
+				setAttributes( { content: info?.rating_html ?? '' } );
 			} catch {
-				setAttributes({ content: '' });
+				if ( seq !== reqSeqRef.current ) return;
+				setAttributes( { content: '' } );
 			}
 		},
-		[setAttributes]
+		[ setAttributes ]
 	);
 
-	useEffect(() => {
-		if (!productId) return;
-		fetchProduct(productId);
-	}, [productId, fetchProduct]);
+	useEffect( () => {
+	const pid = product?.id ? String(product.id) : '';
+		if ( ! pid ) return;
+
+		// Only fetch when productId actually changes
+		if ( lastFetchedIdRef.current === pid ) return;
+		lastFetchedIdRef.current = pid;
+
+		void fetchAndSetContent( pid );
+	}, [ product?.id, fetchAndSetContent ] );
 
 	return (
 		<>
-			{blockEditingMode === 'default' && (
+			{ blockEditingMode === 'default' && (
 				<BlockControls group="block">
 					<AlignmentControl
-						value={textAlign}
-						onChange={(nextAlign?: TextAlign) =>
-							setAttributes({ textAlign: nextAlign })
+						value={ textAlign }
+						onChange={ ( nextAlign?: string ) =>
+							setAttributes( { textAlign: nextAlign } )
 						}
 					/>
 				</BlockControls>
-			)}
+			) }
 
 			<InspectorControls>
-				<PanelBody title={__('Settings')} initialOpen={true}>
-					{helpText && (
+				<PanelBody title={ __( 'Settings' ) } initialOpen={ true }>
+					{ helpText && (
 						<Text
 							variant="small"
-							style={{ marginBottom: '12px', display: 'block' }}
+							style={ { marginBottom: '12px', display: 'block' } }
 						>
-							{helpText}
+							{ helpText }
 						</Text>
-					)}
+					) }
 
 					<ProductSelector
-						value={productId ?? ''}
-						onChange={(nextProductId: string) =>
-							setAttributes({ productId: nextProductId })
-						}
+						value={ product ?? EMPTY_PRODUCT }
+						onChange={ ( nextProduct: ProductValue ) => {
+							// Reset guards if product cleared
+							const nextId = nextProduct?.id ? String( nextProduct.id ) : '';
+							if ( ! nextId ) {
+								lastFetchedIdRef.current = '';
+								reqSeqRef.current++;
+								setAttributes( { product: nextProduct, content: '' } );
+								return;
+							}
+
+							setAttributes( { product: nextProduct } );
+						} }
 					/>
 				</PanelBody>
 			</InspectorControls>
 			<div className="woocommerce">
 				<RichText
 					identifier="content"
-					tagName="div"
-					value={content}
-					onChange={onContentChange}
-					onMerge={mergeBlocks}
-					onReplace={onReplace}
-					onRemove={() => onReplace([])}
-					placeholder={placeholder || __('Product Rating')}
-					textAlign={textAlign}
+					value={ content }
+					onMerge={ mergeBlocks }
+					onReplace={ onReplace }
+					onRemove={ () => onReplace( [] ) }
+					placeholder={ placeholder || __( 'Product Rating' ) }
 					allowedFormats={ [] }
-					{...(Platform.isNative && { deleteEnter: true })}
-					{...blockProps}
+					textAlign={ textAlign }
+					{ ...( Platform.isNative && { deleteEnter: true } ) }
+					{ ...blockProps }
 				/>
 			</div>
 		</>

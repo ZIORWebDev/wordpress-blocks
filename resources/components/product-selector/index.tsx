@@ -1,94 +1,85 @@
 import type { FC } from 'react';
 import { useState, useEffect, useCallback, useMemo, useRef } from '@wordpress/element';
 import { ComboboxControl } from '@wordpress/components';
-import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
 import { debounce } from '../../utils/debounce';
+import { fetchProductOptions } from './products';
 
 type ComboboxOption = { label: string; value: string };
-
-type ProductApiProduct = {
-  id: number | string;
-  name: string;
-};
-
-type ProductsListResponse = {
-  products?: ProductApiProduct[];
-};
+type ProductAttr = { id: string; label: string };
 
 export interface ProductSelectorProps {
-  value?: string | number | null;
-  onChange?: (value: string) => void;
+  value?: ProductAttr | null;
+  onChange?: (value: ProductAttr) => void;
 }
 
-const ProductSelector: FC<ProductSelectorProps> = ({ value = '', onChange = () => {} }) => {
-  const [product, setProduct] = useState<string>(String(value));
+const EMPTY_PRODUCT: ProductAttr = { id: '', label: '' };
+
+const ProductSelector: FC<ProductSelectorProps> = ({ value, onChange = () => {} }) => {
+  const [product, setProduct] = useState<ProductAttr>(value ?? EMPTY_PRODUCT);
   const [options, setOptions] = useState<ComboboxOption[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  // Sync prop -> state without loops
   useEffect(() => {
-    const next = String(value);
-    setProduct((prev) => (prev === next ? prev : next));
-  }, [value]);
+    setProduct(value ?? EMPTY_PRODUCT);
+  }, [value?.id, value?.label]);
 
   const reqSeqRef = useRef(0);
 
-  const fetchOptions = useCallback(
-    debounce(async (search: unknown, productId: unknown) => {
+  const controlWrapRef = useRef<HTMLDivElement | null>(null);
+  const blurCombobox = useCallback(() => {
+    const input = controlWrapRef.current?.querySelector('input');
+    input?.blur();
+  }, []);
+
+  // Exportable fetcher is wrapped here (debounce + stale guard)
+  const fetchOptions = useMemo(() => {
+    return debounce(async (search: unknown, productId: unknown) => {
       const seq = ++reqSeqRef.current;
 
-      const params = new URLSearchParams();
-      params.set('search', String(search));
-      params.set('productId', String(productId));
-
       try {
-        const results = await apiFetch<ProductsListResponse>({
-          path: `/${ZIORWPBlocks.restUrl}/products/lists?${params.toString()}`,
-        });
-
-        // ignore stale responses
+        const results = await fetchProductOptions(search, productId);
         if (seq !== reqSeqRef.current) return;
 
         const products = results?.products ?? [];
-        setOptions(
-          products.map((p) => ({
-            label: p.name,
-            value: String(p.id),
-          }))
-        );
+        setOptions(products.map((p) => ({ label: p.name, value: String(p.id) })));
       } catch {
         if (seq !== reqSeqRef.current) return;
         setOptions([]);
       }
-    }, 300),
-    []
-  );
+    }, 300);
+  }, []);
 
   useEffect(() => {
-    fetchOptions(searchTerm, product);
-    // If your debounce supports cancel:
-    // return () => fetchOptions.cancel?.();
+    fetchOptions(searchTerm, product.id);
   }, [searchTerm, fetchOptions]);
 
   const displayedOptions = useMemo<ComboboxOption[]>(() => {
-    if (!product) return options;
-    return options.some((o) => o.value === product)
-      ? options
-      : [{ label: `#${product}`, value: product }, ...options];
-  }, [options, product]);
+    const productId = product?.id ? String(product.id) : '';
+    if (!productId) return options;
+
+    if (options.some((o) => o.value === productId)) return options;
+
+    const label = (product?.label ?? '').trim() || `#${productId}`;
+    return [{ label, value: productId }, ...options];
+  }, [options, product.id, product.label]);
 
   return (
-    <div className="components-base-control">
+    <div className="components-base-control" ref={controlWrapRef}>
       <ComboboxControl
         label={__('Product')}
-        value={product}
+        value={product.id}
         options={displayedOptions}
         onChange={(val) => {
-          const next = String(val);
-          setProduct(next);
-          onChange(next);
+          const id = String(val ?? '');
+          const selected = displayedOptions.find((o) => o.value === id);
+
+          const newProduct: ProductAttr = { id, label: selected?.label || '' };
+          setProduct(newProduct);
+          onChange(newProduct);
+
+          requestAnimationFrame(() => blurCombobox());
         }}
         onFilterValueChange={(val) => setSearchTerm(String(val))}
         placeholder={__('Type to search products...')}
