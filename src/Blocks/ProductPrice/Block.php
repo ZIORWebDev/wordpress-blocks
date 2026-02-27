@@ -43,12 +43,12 @@ class Block extends Blocks\Base {
 	public function render( $attributes, $content, $block ) {
 		// Return the content when not on a single product page
 		// and no `productId` is provided in the block attributes.
-		if ( ! is_singular( 'product' ) && empty( $attributes['productId'] ?? '' ) ) {
+		if ( ! is_singular( 'product' ) && empty( $attributes['product']['id'] ?? '' ) ) {
 			return $content;
 		}
 
 		// If `productId` is not provided, fall back to the current product ID.
-		$product_id = $attributes['productId'] ?: get_queried_object_id();
+		$product_id = $attributes['product']['id'] ?: get_queried_object_id();
 
 		if ( ! $product_id ) {
 			return $content;

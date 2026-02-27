@@ -6,7 +6,7 @@ import { clsx } from 'clsx';
 /**
  * WordPress dependencies (use global `wp` instead of module imports)
  */
-import { RichText, useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps } from '@wordpress/block-editor';
 
 /**
  * Types
