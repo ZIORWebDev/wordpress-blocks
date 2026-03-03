@@ -120,6 +120,6 @@ abstract class Base implements Interface\Route {
 			return true;
 		}
 
-		return new \WP_Error( 'rest_forbidden', __( 'Permission denied.' ), array( 'status' => 403 ) );
+		return new \WP_Error( 'rest_forbidden', __( 'Permission denied.', 'zior-wordpress-blocks' ), array( 'status' => 403 ) );
 	}
 }

@@ -64,5 +64,6 @@ class Routes {
 		new Endpoints\PostMeta\Value();
 
 		new Endpoints\Products\Information();
+		new Endpoints\Cache\Reset();
 	}
 }

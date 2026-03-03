@@ -42,5 +42,6 @@ export async function fetchProductOptions(
   });
 
   ZIORWPBlocks.queries[key] = results;
+
   return results;
 }

@@ -5,10 +5,10 @@
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
+namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Cache;
 
 use ZIORWebDev\WordPressBlocks\Api\Endpoints;
-use ZIORWebDev\WordPressBlocks\Controllers\Options as OptionsController;
+use ZIORWebDev\WordPressBlocks\Utils;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package ZIORWebDev\WordPressBlocks\Api\Endpoints\Options
  * @since 1.0.0
  */
-class Lists extends Endpoints\Base {
+class Reset extends Endpoints\Base {
 
 	/**
 	 * Route path
 	 *
 	 * @var string
 	 */
-	protected $route_path = 'options/lists';
+	protected $route_path = 'cache/reset';
 
 	/**
 	 * Callback
@@ -37,40 +37,19 @@ class Lists extends Endpoints\Base {
 	 * @return array The response.
 	 */
 	public function callback( \WP_REST_Request $request ) {
-		$path   = $this->get_rest_path();
-		$params = $request->get_params();
+		$response = array();
 
-		/**
-		 * Sort params for cache key consistency.
-		 */
-		ksort( $params );
+		try {
+			Utils\FileSystem::delete_cache_dir();
+			$response['success'] = true;
+			$response['message'] = 'Cache cleared successfully.';
 
-		/**
-		 * Get cache and return if exists.
-		 */
-		$cache_key   = static::get_cache_key( $path, $params );
-		$cached_data = static::get_cache( $cache_key );
-
-		if ( ! empty( $cached_data ) && is_array( $cached_data ) ) {
-			return rest_ensure_response(
-				array(
-					'meta_keys' => $cached_data,
-				)
-			);
+		} catch ( \Exception $e ) {
+			$response['success'] = false;
+			$response['message'] = $e->getMessage();
 		}
 
-		$options = OptionsController::get_keys( $params );
-
-		/**
-		 * Save cache.
-		 */
-		static::set_cache( $cache_key, $options );
-
-		return rest_ensure_response(
-			array(
-				'meta_keys' => $options,
-			)
-		);
+		return rest_ensure_response( $response );
 	}
 
 	/**
@@ -97,13 +76,7 @@ class Lists extends Endpoints\Base {
 	 * @return array The REST args.
 	 */
 	public function get_rest_args() {
-		return array(
-			'search' => array(
-				'type'              => 'string',
-				'required'          => false,
-				'sanitize_callback' => 'sanitize_text_field',
-			),
-		);
+		return array();
 	}
 
 	/**
@@ -112,6 +85,6 @@ class Lists extends Endpoints\Base {
 	 * @return string The REST method.
 	 */
 	public function get_rest_method() {
-		return \WP_REST_Server::READABLE;
+		return \WP_REST_Server::DELETABLE;
 	}
 }

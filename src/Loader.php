@@ -28,12 +28,48 @@ final class Loader {
 	public function init() {
 		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ), 50 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		( new Routes() )->load();
 		( new Blocks() )->load();
 		( new Hooks\Options() )->init();
 		( new Hooks\PostMeta() )->init();
 		( new Hooks\Editor() )->init();
+		( new Admin\Settings() )->init();
+	}
+
+	/**
+	 * Enqueue admin scripts
+	 *
+	 * @param string $hook The current admin page hook.
+	 * @return void
+	 */
+	public function enqueue_admin_scripts( string $hook ): void {
+		if ( 'settings_page_simpliblocks' !== $hook ) {
+			return;
+		}
+
+		$admin_js = plugin_dir_url( __DIR__ ) . 'dist/admin/admin.min.js';
+
+		wp_enqueue_script(
+			'zior-wp-blocks-admin',
+			$admin_js,
+			array(),
+			self::$package_version,
+			true
+		);
+
+		$rest_namespace = Routes::get_namespace();
+
+		wp_localize_script(
+			'zior-wp-blocks-admin',
+			'ZIORWPBlocks',
+			array(
+				'restUrl'         => $rest_namespace,
+				'hasSubscription' => apply_filters( 'zior_wp_blocks_has_subscription_support', false ),
+				'isWCInstalled'   => apply_filters( 'zior_wp_blocks_is_woocommerce_installed', false ),
+			)
+		);
 	}
 
 	/**

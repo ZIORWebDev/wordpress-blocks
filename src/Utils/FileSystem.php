@@ -76,33 +76,6 @@ class FileSystem {
 	}
 
 	/**
-	 * Clear cache dir
-	 *
-	 * @param string $path
-	 * @return string
-	 * @since 1.0.0
-	 */
-	public static function clear_cache_dir( string $path ): void {
-		if ( ! is_dir( $path ) ) {
-			return;
-		}
-
-		$files = glob( trailingslashit( $path ) . '*' );
-
-		if ( empty( $files ) ) {
-			return;
-		}
-
-		foreach ( $files as $file ) {
-			if ( is_file( $file ) ) {
-				wp_delete_file( $file );
-			}
-		}
-
-		return;
-	}
-
-	/**
 	 * Secure cache dir
 	 *
 	 * @param string $path

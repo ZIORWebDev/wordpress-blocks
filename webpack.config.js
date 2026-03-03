@@ -14,6 +14,7 @@ export default {
 	entry: {
 		'blocks/editor': './resources/editor.ts',
 		'blocks/view': './resources/view.ts',
+		'admin/admin': './resources/admin.ts',
 	},
 
 	output: {
