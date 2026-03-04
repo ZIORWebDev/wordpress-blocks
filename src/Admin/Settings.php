@@ -37,7 +37,7 @@ class Settings {
 	 * @return void
 	 */
 	public static function add_menu_page(): void {
-		add_options_page(
+		add_management_page(
 			__( 'SimpliBlocks', 'zior-wordpress-blocks' ), // Page title
 			__( 'SimpliBlocks', 'zior-wordpress-blocks' ), // Menu title
 			'manage_options',                            // Capability

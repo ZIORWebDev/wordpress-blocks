@@ -45,7 +45,7 @@ final class Loader {
 	 * @return void
 	 */
 	public function enqueue_admin_scripts( string $hook ): void {
-		if ( 'settings_page_simpliblocks' !== $hook ) {
+		if ( 'tools_page_simpliblocks' !== $hook ) {
 			return;
 		}
 
