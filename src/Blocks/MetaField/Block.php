@@ -8,7 +8,7 @@
 namespace ZIORWebDev\WordPressBlocks\Blocks\MetaField;
 
 use ZIORWebDev\WordPressBlocks\Blocks;
-use ZIORWebDev\WordPressBlocks\utils;
+use ZIORWebDev\WordPressBlocks\Utils;
 
 /**
  * Meta Field class

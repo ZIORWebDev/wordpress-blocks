@@ -7,7 +7,7 @@
  */
 namespace ZIORWebDev\WordPressBlocks\Api\Endpoints\Options;
 
-use ZIORWebDev\WordPressBlocks\utils;
+use ZIORWebDev\WordPressBlocks\Utils;
 use ZIORWebDev\WordPressBlocks\Api\Endpoints;
 use ZIORWebDev\WordPressBlocks\Controllers\Options as OptionsController;
 
