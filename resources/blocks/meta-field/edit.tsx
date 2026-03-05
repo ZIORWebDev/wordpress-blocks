@@ -35,6 +35,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { generateAnchor, setAnchor } from './autogenerate-anchors';
 import MetaFieldSelector from '../../components/meta-field-selector';
 import TimeFormatControls from '../../components/time-format-controls';
+import metadata from '../../../src/blocks/MetaField/block.json';
 
 /**
  * Globals typically provided via wp_localize_script / wp_add_inline_script.
@@ -51,11 +52,11 @@ type TimeFormatControlsProps = React.ComponentProps<typeof TimeFormatControls>;
 type MetaFieldType = MetaFieldSelectorProps['metaFieldType'];
 type NonNullMetaFieldType = NonNullable<MetaFieldType>;
 
-/**
- * Types
- */
-type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
-type TagName = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
+// /**
+//  * Types
+//  */
+// type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
+// type TagName = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
 
 interface MegaFieldAttributes {
 	// allow additional attributes (useful when passing through to other components)
@@ -63,10 +64,9 @@ interface MegaFieldAttributes {
 
 	textAlign?: TextAlign;
 	content?: string;
-	level?: number;
 	placeholder?: string;
 	anchor?: string | null;
-	tagName?: TagName;
+	tagName: string;
 
 	metaKey?: string;
 	metaFieldType?: MetaFieldType;
@@ -148,7 +148,6 @@ function MegaFieldEdit({
 	const {
 		textAlign,
 		content = '',
-		level = 2,
 		placeholder,
 		anchor = null,
 		tagName,
@@ -176,11 +175,14 @@ function MegaFieldEdit({
 		dateFormat = '',
 	} = attributes;
 
-	const effectiveTag: TagName = useMemo(() => {
-		if (isTagName(tagName)) return tagName;
-		const computed = `h${level}` as unknown;
-		return isTagName(computed) ? (computed as TagName) : 'h2';
-	}, [tagName, level]);
+	// block.json enum list
+	const tagOptions = useMemo( () => {
+		const tagNameEnum = metadata.attributes.tagName.enum as string[];
+		return tagNameEnum.map( ( value ) => ( {
+			label: value.toUpperCase(),
+			value,
+		} ) );
+	}, []);
 
 	const blockProps = useBlockProps({
 		className: clsx({
@@ -373,42 +375,18 @@ function MegaFieldEdit({
 						/>
 					) : null}
 
-					<SelectControl<TagName>
-						label={__('HTML tag')}
-						value={effectiveTag}
-						options={[
-							{ label: 'H1', value: 'h1' },
-							{ label: 'H2', value: 'h2' },
-							{ label: 'H3', value: 'h3' },
-							{ label: 'H4', value: 'h4' },
-							{ label: 'H5', value: 'h5' },
-							{ label: 'H6', value: 'h6' },
-							{ label: 'Paragraph', value: 'p' },
-							{ label: 'Div', value: 'div' },
-							{ label: 'Span', value: 'span' },
-						]}
-						onChange={(selected?: TagName) => {
-							if (!selected) return;
-
-							if (selected.startsWith('h')) {
-								const parsed = Number.parseInt(selected.slice(1), 10);
-								const nextLevel = Number.isNaN(parsed) ? level : parsed;
-
-								setAttributes({
-									level: nextLevel,
-									tagName: `h${nextLevel}` as TagName,
-								});
-							} else {
-								setAttributes({ tagName: selected });
-							}
-						}}
+					<SelectControl
+						label={ __( 'HTML tag' ) }
+						value={ tagName }
+						options={ tagOptions }
+						onChange={ ( selected?: string ) => setAttributes( { tagName: selected } ) }
 					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<RichText
 				identifier="content"
-				tagName={effectiveTag}
+				tagName={tagName}
 				value={content}
 				onChange={onContentChange}
 				onMerge={mergeBlocks as any}
