@@ -41,7 +41,7 @@ class Block extends Blocks\Base {
 	 */
 	public function render( $attributes, $content, $block ) {
 		$meta_key = $attributes['metaKey'] ?? '';
-		$tag      = $attributes['tagName'] ?? 'h' . ( (int) ( $attributes['level'] ?? 2 ) );
+		$tag      = $attributes['tagName'] ?? 'h2';
 
 		if ( empty( $meta_key ) ) {
 			return $content;
