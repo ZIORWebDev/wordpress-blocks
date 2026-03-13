@@ -44,6 +44,9 @@
 			"default": "h2"
 		}
 	},
+	"usesContext": [
+		"product"
+	],
 	"supports": {
 		"align": false,
 		"anchor": false,

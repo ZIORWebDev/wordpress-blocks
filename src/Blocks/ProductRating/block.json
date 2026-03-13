@@ -30,6 +30,9 @@
 			"type": "string"
 		}
 	},
+	"usesContext": [
+		"product"
+	],
 	"supports": {
 		"align": false,
 		"anchor": false,

@@ -27,6 +27,9 @@
 			"default": false
 		}
 	},
+	"usesContext": [
+		"product"
+	],
 	"supports": {
 		"align": true
 	},
