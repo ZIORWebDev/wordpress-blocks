@@ -24,34 +24,22 @@ import { PanelBody, __experimentalText as Text } from '@wordpress/components';
  * Internal dependencies
  */
 import { ProductSelector } from '@ziorweb-dev/product-selector';
+import type { ProductAttributes, ProductValue } from './index';
 
-type ProductValue = {
-	id: string;
-	label: string;
-};
-
-interface Attributes {
-	textAlign?: string;
-	content?: string;
-	placeholder?: string;
-	anchor?: string;
-	helpText?: string;
-	product?: ProductValue;
-}
-
-type Props = BlockEditProps<Attributes>;
+type Props = BlockEditProps<ProductAttributes>;
 
 const EMPTY_PRODUCT: ProductValue = { id: '', label: '' };
 
-function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Props ) {
+function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style, context }: Props ) {
 	const {
 		textAlign,
 		content = '',
 		placeholder,
 		helpText,
 		product,
+		showProductSelector
 	} = attributes;
-
+	const selectedProduct = context?.product?.id ? context.product : product;
 	const blockProps = useBlockProps( {
 		className: clsx( {
 			[ `has-text-align-${ textAlign }` ]: !! textAlign,
@@ -68,37 +56,6 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 	 */
 	const lastFetchedIdRef = useRef<string>( '' );
 	const reqSeqRef = useRef<number>( 0 );
-
-	const fetchAndSetContent = useCallback(
-		async ( productId: string ) => {
-			if ( ! productId ) return;
-
-			const seq = ++reqSeqRef.current;
-
-			try {
-				const info = await fetchProductInformation( productId );
-				// Ignore stale responses
-				if ( seq !== reqSeqRef.current ) return;
-
-				setAttributes( { content: info?.rating_html ?? '' } );
-			} catch {
-				if ( seq !== reqSeqRef.current ) return;
-				setAttributes( { content: '' } );
-			}
-		},
-		[ setAttributes ]
-	);
-
-	useEffect( () => {
-	const pid = product?.id ? String(product.id) : '';
-		if ( ! pid ) return;
-
-		// Only fetch when productId actually changes
-		if ( lastFetchedIdRef.current === pid ) return;
-		lastFetchedIdRef.current = pid;
-
-		void fetchAndSetContent( pid );
-	}, [ product?.id, fetchAndSetContent ] );
 
 	return (
 		<>
@@ -123,9 +80,9 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 							{ helpText }
 						</Text>
 					) }
-					{ attributes.showProductSelector && (
+					{ showProductSelector && (
 					<ProductSelector
-						value={ product ?? EMPTY_PRODUCT }
+						value={ selectedProduct ?? EMPTY_PRODUCT }
 						onChange={ ( nextProduct: ProductValue ) => {
 							// Reset guards if product cleared
 							const nextId = nextProduct?.id ? String( nextProduct.id ) : '';

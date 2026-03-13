@@ -35,7 +35,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { generateAnchor, setAnchor } from './autogenerate-anchors';
 import MetaFieldSelector from '../../components/meta-field-selector';
 import TimeFormatControls from '../../components/time-format-controls';
-import metadata from '../../../src/blocks/MetaField/block.json';
+import metadata from '../../../src/Blocks/MetaField/block.json';
 
 /**
  * Globals typically provided via wp_localize_script / wp_add_inline_script.

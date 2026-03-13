@@ -23,29 +23,15 @@ import { PanelBody, SelectControl, __experimentalText as Text } from '@wordpress
 /**
  * Internal dependencies
  */
-import metadata from '../../../src/blocks/ProductPrice/block.json';
+import metadata from '../../../src/Blocks/ProductPrice/block.json';
 import { ProductSelector } from '@ziorweb-dev/product-selector';
+import type { ProductAttributes, ProductValue } from './index';
 
-type ProductValue = {
-	id: string;
-	label: string;
-};
-
-interface Attributes {
-	textAlign?: string;
-	content?: string;
-	placeholder?: string;
-	anchor?: string;
-	tagName?: string;
-	helpText?: string;
-	product?: ProductValue;
-}
-
-type Props = BlockEditProps<Attributes>;
+type Props = BlockEditProps<ProductAttributes>;
 
 const EMPTY_PRODUCT: ProductValue = { id: '', label: '' };
 
-function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Props ) {
+function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style, context }: Props ) {
 	const {
 		textAlign,
 		content = '',
@@ -53,8 +39,10 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 		tagName,
 		helpText,
 		product,
+		showProductSelector
 	} = attributes;
 
+	const selectedProduct = context?.product?.id ? context.product : product;
 	// block.json enum list
 	const tagOptions = useMemo( () => {
 		const tagNameEnum = metadata.attributes.tagName.enum as string[];
@@ -81,37 +69,6 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 	const lastFetchedIdRef = useRef<string>( '' );
 	const reqSeqRef = useRef<number>( 0 );
 
-	const fetchAndSetContent = useCallback(
-		async ( productId: string ) => {
-			if ( ! productId ) return;
-
-			const seq = ++reqSeqRef.current;
-
-			try {
-				const info = await fetchProductInformation( productId );
-				// Ignore stale responses
-				if ( seq !== reqSeqRef.current ) return;
-
-				setAttributes( { content: info?.price_html ?? '' } );
-			} catch {
-				if ( seq !== reqSeqRef.current ) return;
-				setAttributes( { content: '' } );
-			}
-		},
-		[ setAttributes ]
-	);
-
-	useEffect( () => {
-    const pid = product?.id ? String(product.id) : '';
-		if ( ! pid ) return;
-
-		// Only fetch when productId actually changes
-		if ( lastFetchedIdRef.current === pid ) return;
-		lastFetchedIdRef.current = pid;
-
-		void fetchAndSetContent( pid );
-	}, [ product?.id, fetchAndSetContent ] );
-
 	return (
 		<>
 			{ blockEditingMode === 'default' && (
@@ -135,26 +92,26 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 							{ helpText }
 						</Text>
 					) }
-					{ attributes.showProductSelector && (
+					{ showProductSelector && (
 					<ProductSelector
-						value={ product ?? EMPTY_PRODUCT }
-							onChange={(nextProduct: ProductValue) => {
-								// Reset guards if product cleared
-								const nextId = nextProduct?.id ? String(nextProduct.id) : '';
-								if (!nextId) {
-									lastFetchedIdRef.current = '';
-									reqSeqRef.current++;
-									setAttributes({ product: nextProduct, content: '' });
-									return;
-								}
+						value={ selectedProduct ?? EMPTY_PRODUCT }
+						onChange={(nextProduct: ProductValue) => {
+							// Reset guards if product cleared
+							const nextId = nextProduct?.id ? String(nextProduct.id) : '';
+							if (!nextId) {
+								lastFetchedIdRef.current = '';
+								reqSeqRef.current++;
+								setAttributes({ product: nextProduct, content: '' });
+								return;
+							}
 
-								setAttributes({ product: nextProduct });
-							}}
-						onProductInformationChange={ ( productInfo ) => {
+							setAttributes({ product: nextProduct });
+						}}
+						onProductInformationChange={(productInfo) => {
 							setAttributes( {
 								content: productInfo?.price_html ?? '',
 							} );
-						} }
+						}}
 					/>
 					) }
 					<SelectControl

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useCallback, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import type { BlockInstance, BlockEditProps } from '@wordpress/blocks';
 import { ProductSelector } from '@ziorweb-dev/product-selector';
-import type { Attributes } from './index';
+import type { ProductAttributes, ProductValue } from './index';
 
 function mergeClasses(existing = '', add = ''): string {
 	const classes = new Set(`${existing} ${add}`.trim().split(/\s+/).filter(Boolean));
@@ -14,23 +14,16 @@ function mergeClasses(existing = '', add = ''): string {
 type BlockEditorSelectors = {
 	getBlock: (clientId: string) => (BlockInstance & { innerBlocks?: BlockInstance[] }) | null;
 };
+const EMPTY_PRODUCT: ProductValue = { id: '', label: '' };
 
-type ProductValue = { id?: string; label?: string };
+export default function Edit({ attributes, setAttributes, clientId, context }: BlockEditProps<ProductAttributes>) {
+	const { showProductSelector, product, showQuantity = false, quantity = 1 } = attributes;
 
-export default function Edit({ attributes, setAttributes, clientId }: BlockEditProps<Attributes>) {
-	const { product, showQuantity = false, quantity = 1 } = attributes;
-
-	// 🔹 Refs
+	// Refs
 	const lastFetchedIdRef = useRef<string>('');
 	const reqSeqRef = useRef<number>(0);
 
-	const selectedProduct: ProductValue = useMemo(() => {
-		const p = (product ?? {}) as ProductValue;
-		return {
-			id: typeof p.id === 'string' ? p.id : '',
-			label: typeof p.label === 'string' ? p.label : '',
-		};
-	}, [product]);
+	const selectedProduct = context?.product?.id ? context.product : product;
 
 	const blockProps = useBlockProps({
 		className: 'zior-add-to-cart add_to_cart_button ajax_add_to_cart',
@@ -73,9 +66,9 @@ export default function Edit({ attributes, setAttributes, clientId }: BlockEditP
 		<>
 			<InspectorControls>
 				<PanelBody title="Product" initialOpen>
-					{ attributes.showProductSelector && (
+					{ showProductSelector && (
 					<ProductSelector
-						value={selectedProduct.id ?? ''}
+						value={ selectedProduct ?? EMPTY_PRODUCT }
 						onChange={(nextProduct: { id: string; label: string }) => {
 							setAttributes({
 								product: {

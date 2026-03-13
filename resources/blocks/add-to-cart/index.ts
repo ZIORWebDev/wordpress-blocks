@@ -5,11 +5,16 @@ import edit from './edit';
 import save from './save';
 import metadata from '../../../src/Blocks/AddToCart/block.json';
 
-export type Attributes = {
-  productId?: string;
+export type ProductValue = {
+  id: string;
+  label: string;
+};
+
+export type ProductAttributes = {
   showQuantity?: boolean;
   quantity?: number;
   showProductSelector?: boolean;
+  product?: ProductValue;
 };
 
 export const name = metadata.name;
@@ -19,7 +24,7 @@ export const settings = {
   icon: 'cart',
   edit,
   save,
-} as unknown as BlockConfiguration<Attributes>;
+} as unknown as BlockConfiguration<ProductAttributes>;
 
 export const init = () => {
   if ( ! ZIORWPBlocks.isWCInstalled ) {
