@@ -23,9 +23,10 @@ import { PanelBody, SelectControl, __experimentalText as Text } from '@wordpress
 /**
  * Internal dependencies
  */
-import ProductSelector from '../../components/product-selector';
+// import ProductSelector from '../../components/product-selector';
 import metadata from '../../../src/blocks/ProductPrice/block.json';
 import { fetchProductInformation } from '../../components/product-selector/product-information';
+import { ProductSelector } from '@ziorweb-dev/product-selector';
 
 type ProductValue = {
 	id: string;

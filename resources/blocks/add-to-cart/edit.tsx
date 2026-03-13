@@ -3,8 +3,8 @@ import { PanelBody, ToggleControl, TextControl } from '@wordpress/components';
 import { useEffect, useMemo, useCallback, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import type { BlockInstance, BlockEditProps } from '@wordpress/blocks';
-
-import ProductSelector from '../../components/product-selector';
+import { ProductSelector } from '@ziorweb-dev/product-selector';
+// import ProductSelector from '../../components/product-selector';
 import type { Attributes } from './index';
 
 function mergeClasses(existing = '', add = ''): string {
