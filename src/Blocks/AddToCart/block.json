@@ -25,6 +25,10 @@
 		"showQuantity": {
 			"type": "boolean",
 			"default": false
+		},
+		"showProductSelector": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"usesContext": [

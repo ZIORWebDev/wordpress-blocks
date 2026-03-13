@@ -23,9 +23,7 @@ import { PanelBody, SelectControl, __experimentalText as Text } from '@wordpress
 /**
  * Internal dependencies
  */
-// import ProductSelector from '../../components/product-selector';
 import metadata from '../../../src/blocks/ProductPrice/block.json';
-import { fetchProductInformation } from '../../components/product-selector/product-information';
 import { ProductSelector } from '@ziorweb-dev/product-selector';
 
 type ProductValue = {
@@ -137,23 +135,28 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 							{ helpText }
 						</Text>
 					) }
-
+					{ attributes.showProductSelector && (
 					<ProductSelector
 						value={ product ?? EMPTY_PRODUCT }
-						onChange={ ( nextProduct: ProductValue ) => {
-							// Reset guards if product cleared
-							const nextId = nextProduct?.id ? String( nextProduct.id ) : '';
-							if ( ! nextId ) {
-								lastFetchedIdRef.current = '';
-								reqSeqRef.current++;
-								setAttributes( { product: nextProduct, content: '' } );
-								return;
-							}
+							onChange={(nextProduct: ProductValue) => {
+								// Reset guards if product cleared
+								const nextId = nextProduct?.id ? String(nextProduct.id) : '';
+								if (!nextId) {
+									lastFetchedIdRef.current = '';
+									reqSeqRef.current++;
+									setAttributes({ product: nextProduct, content: '' });
+									return;
+								}
 
-							setAttributes( { product: nextProduct } );
+								setAttributes({ product: nextProduct });
+							}}
+						onProductInformationChange={ ( productInfo ) => {
+							setAttributes( {
+								content: productInfo?.price_html ?? '',
+							} );
 						} }
 					/>
-
+					) }
 					<SelectControl
 						label={ __( 'HTML tag' ) }
 						value={ tagName }

@@ -28,6 +28,10 @@
 		},
 		"textAlign": {
 			"type": "string"
+		},
+		"showProductSelector": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"usesContext": [

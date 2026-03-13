@@ -4,7 +4,6 @@ import { useEffect, useMemo, useCallback, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import type { BlockInstance, BlockEditProps } from '@wordpress/blocks';
 import { ProductSelector } from '@ziorweb-dev/product-selector';
-// import ProductSelector from '../../components/product-selector';
 import type { Attributes } from './index';
 
 function mergeClasses(existing = '', add = ''): string {
@@ -74,6 +73,7 @@ export default function Edit({ attributes, setAttributes, clientId }: BlockEditP
 		<>
 			<InspectorControls>
 				<PanelBody title="Product" initialOpen>
+					{ attributes.showProductSelector && (
 					<ProductSelector
 						value={selectedProduct.id ?? ''}
 						onChange={(nextProduct: { id: string; label: string }) => {
@@ -85,7 +85,7 @@ export default function Edit({ attributes, setAttributes, clientId }: BlockEditP
 							});
 						}}
 					/>
-
+					) }
 					<ToggleControl
 						label="Show quantity"
 						checked={!!showQuantity}

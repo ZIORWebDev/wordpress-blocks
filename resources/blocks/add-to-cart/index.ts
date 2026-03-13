@@ -9,6 +9,7 @@ export type Attributes = {
   productId?: string;
   showQuantity?: boolean;
   quantity?: number;
+  showProductSelector?: boolean;
 };
 
 export const name = metadata.name;

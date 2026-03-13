@@ -23,8 +23,6 @@ import { PanelBody, __experimentalText as Text } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-// import ProductSelector from '../../components/product-selector';
-import { fetchProductInformation } from '../../components/product-selector/product-information';
 import { ProductSelector } from '@ziorweb-dev/product-selector';
 
 type ProductValue = {
@@ -125,7 +123,7 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 							{ helpText }
 						</Text>
 					) }
-
+					{ attributes.showProductSelector && (
 					<ProductSelector
 						value={ product ?? EMPTY_PRODUCT }
 						onChange={ ( nextProduct: ProductValue ) => {
@@ -139,8 +137,14 @@ function Edit( { attributes, setAttributes, mergeBlocks, onReplace, style }: Pro
 							}
 
 							setAttributes( { product: nextProduct } );
+						}}
+						onProductInformationChange={ ( productInfo ) => {
+							setAttributes( {
+								content: productInfo?.rating_html ?? '',
+							} );
 						} }
-					/>
+						/>
+					) }
 				</PanelBody>
 			</InspectorControls>
 			<div className="woocommerce">
