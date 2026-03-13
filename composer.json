@@ -1,6 +1,6 @@
 {
   "name": "ziorwebdev/wordpress-blocks",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A collection of custom Gutenberg blocks designed to extend the WordPress block editor with icons, dynamic data, and flexible content composition.",
   "type": "library",
   "autoload": {
