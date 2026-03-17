@@ -34,6 +34,10 @@ class Product {
 	public function get_product_get_rating_html( $html, $rating, $count ) {
 		$rating = (float) $rating;
 
+		if ( $rating <= 0 ) {
+			return $html;
+		}
+
 		$rating_rounded = round( $rating, 1 );
 		$rating_text    = number_format( $rating_rounded, 1 );
 
