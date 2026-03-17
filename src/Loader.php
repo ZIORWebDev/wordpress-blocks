@@ -34,6 +34,7 @@ final class Loader {
 		( new Hooks\Options() )->init();
 		( new Hooks\PostMeta() )->init();
 		( new Hooks\Editor() )->init();
+		( new Hooks\Product() )->init();
 		( new Admin\Settings() )->init();
 	}
 
