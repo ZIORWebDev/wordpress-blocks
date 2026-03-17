@@ -85,6 +85,7 @@
 			"clientNavigation": true
 		}
 	},
-	"editorStyle": "wp-block-zior-product-rating-editor",
-	"style": "wp-block-zior-product-rating"
+	"style": "zior-wp-blocks-view",
+	"editorStyle": "zior-wp-blocks-editor",
+	"editorScript": "zior-wp-blocks-editor"
 }

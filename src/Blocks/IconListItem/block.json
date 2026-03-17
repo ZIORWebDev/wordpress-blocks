@@ -19,7 +19,7 @@
     "reusable": false,
     "inserter": false
   },
-  "textdomain": "default",
-  "editorStyle": "wp-block-zior-icon-list-item-editor",
-  "style": "wp-block-zior-icon-list-item"
+	"style": "zior-wp-blocks-view",
+	"editorStyle": "zior-wp-blocks-editor",
+	"editorScript": "zior-wp-blocks-editor"
 }

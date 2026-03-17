@@ -128,6 +128,7 @@
 			"label": "Pill Shape"
 		}
 	],
-	"editorStyle": "wp-block-zior-icon-picker-editor",
-	"style": "wp-block-zior-icon-picker"
+	"style": "zior-wp-blocks-view",
+	"editorStyle": "zior-wp-blocks-editor",
+	"editorScript": "zior-wp-blocks-editor"
 }

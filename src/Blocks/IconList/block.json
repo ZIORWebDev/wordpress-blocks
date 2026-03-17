@@ -19,5 +19,7 @@
 			"clientNavigation": true
 		}
 	},
-	"editorStyle": "wp-block-zior-icon-list-editor"
+	"style": "zior-wp-blocks-view",
+	"editorStyle": "zior-wp-blocks-editor",
+	"editorScript": "zior-wp-blocks-editor"
 }

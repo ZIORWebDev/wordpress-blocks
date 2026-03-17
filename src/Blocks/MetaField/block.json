@@ -145,6 +145,7 @@
       "clientNavigation": true
     }
   },
-  "editorStyle": "wp-block-zior-meta-field-editor",
-  "style": "wp-block-zior-meta-field"
+	"style": "zior-wp-blocks-view",
+	"editorStyle": "zior-wp-blocks-editor",
+	"editorScript": "zior-wp-blocks-editor"
 }

@@ -99,6 +99,7 @@
 			"clientNavigation": true
 		}
 	},
-	"editorStyle": "wp-block-zior-product-price-editor",
-	"style": "wp-block-zior-product-price"
+	"style": "zior-wp-blocks-view",
+	"editorStyle": "zior-wp-blocks-editor",
+	"editorScript": "zior-wp-blocks-editor"
 }
