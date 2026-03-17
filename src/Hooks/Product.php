@@ -19,7 +19,7 @@ class Product {
 	 * Initialize action and filter hooks.
 	 */
 	public function init() {
-		add_filter( 'woocommerce_get_star_rating_html', array( $this, 'get_product_get_rating_html' ), 10, 3 );
+		add_filter( 'woocommerce_product_get_rating_html', array( $this, 'get_product_get_rating_html' ), 10, 3 );
 	}
 
 	/**

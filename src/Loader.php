@@ -27,6 +27,7 @@ final class Loader {
 	 */
 	public function init() {
 		add_action( 'init', array( $this, 'register_block_assets' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		( new Routes() )->load();
@@ -39,6 +40,15 @@ final class Loader {
 	}
 
 	/**
+	 * Enqueue block editor assets
+	 *
+	 * @return void
+	 */
+	public function enqueue_block_editor_assets() {
+		wp_enqueue_style( 'woocommerce-general' );
+	}
+
+	/**
 	 * Register block assets
 	 *
 	 * @return void
@@ -48,7 +58,7 @@ final class Loader {
 		wp_register_style(
 			'zior-wp-blocks-editor',
 			plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css',
-			array( 'woocommerce-general' ),
+			array(),
 			null
 		);
 
@@ -56,7 +66,7 @@ final class Loader {
 		wp_register_style(
 			'zior-wp-blocks-view',
 			plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.css',
-			array( 'woocommerce-general' ),
+			array(),
 			null
 		);
 
