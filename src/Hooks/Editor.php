@@ -24,26 +24,6 @@ class Editor {
 		 */
 		add_filter( 'zior_wp_blocks_has_subscription_support', array( $this, 'has_subscription_support' ), 10 );
 		add_filter( 'zior_wp_blocks_is_woocommerce_installed', array( $this, 'is_woocommerce_installed' ), 10 );
-		add_action(
-			'wp_enqueue_scripts',
-			function () {
-				if ( ! function_exists( 'wc_enqueue_styles' ) ) {
-					return; // WooCommerce not active / not loaded.
-				}
-
-				// Load only when your block exists.
-				if ( is_singular() ) {
-					$post = get_post();
-					if ( $post && has_block( 'zior/product-rating', $post ) ) {
-						wc_enqueue_styles();
-
-						// Safety: ensure the main handle is enqueued (contains .star-rating + @font-face star).
-						wp_enqueue_style( 'woocommerce-general' );
-					}
-				}
-			},
-			20
-		);
 	}
 
 	/**

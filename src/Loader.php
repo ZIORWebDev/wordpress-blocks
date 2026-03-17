@@ -47,7 +47,7 @@ final class Loader {
 		wp_register_style(
 			'zior-wp-blocks-editor',
 			plugin_dir_url( __DIR__ ) . 'dist/blocks/editor.min.css',
-			array(), // dependencies.
+			array( 'woocommerce-general' ),
 			null
 		);
 
@@ -55,7 +55,7 @@ final class Loader {
 		wp_register_style(
 			'zior-wp-blocks-view',
 			plugin_dir_url( __DIR__ ) . 'dist/blocks/view.min.css',
-			array(), // dependencies.
+			array( 'woocommerce-general' ),
 			null
 		);
 
