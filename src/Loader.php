@@ -23,9 +23,20 @@ final class Loader {
 	protected static $package_version = '1.2.6';
 
 	/**
+	 * Initialization flag to prevent multiple initializations.
+	 */
+	protected static $initialized = false;
+
+	/**
 	 * Load classes and actions
 	 */
 	public function init() {
+		if ( self::$initialized ) {
+			return;
+		}
+
+		self::$initialized = true;
+
 		add_action( 'init', array( $this, 'register_block_assets' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
