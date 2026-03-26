@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5544db6644a9906d5564edb22813151",
+    "content-hash": "5d1e7a0720e49db7537808b5fbef5d09",
     "packages": [
         {
             "name": "pinkcrab/wp-psr16-cache",
