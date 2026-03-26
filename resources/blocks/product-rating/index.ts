@@ -1,3 +1,7 @@
+/**
+ * WordPress dependencies
+ */
+import type { BlockConfiguration } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -11,32 +15,42 @@ const { name } = metadata;
 
 export { metadata, name };
 
+declare const ZIORWPBlocks: {
+	isWCInstalled?: boolean;
+};
+
 export type ProductValue = {
-  id: string;
-  label: string;
+	id: string;
+	label: string;
+	rating?: string;
 };
 
 export type ProductAttributes = {
-  textAlign?: string;
-  content?: string;
-  placeholder?: string;
-  anchor?: string;
-  tagName?: string;
-  helpText?: string;
-  product?: ProductValue;
-  showProductSelector?: boolean;
+	textAlign?: 'left' | 'center' | 'right';
+	content?: string;
+	placeholder?: string;
+	anchor?: string;
+	tagName?: string;
+	helpText?: string;
+	product?: ProductValue;
+	showProductSelector?: boolean;
 };
 
-export const settings = {
-  icon: 'star-half',
-  edit,
-  save,
+type BlockSettings = Omit<
+	BlockConfiguration<ProductAttributes>,
+	'name' | 'title' | 'category' | 'attributes'
+>;
+
+export const settings: BlockSettings = {
+	icon: 'star-half',
+	edit,
+	save,
 };
 
-export const init = () => {
-  if ( ! ZIORWPBlocks.isWCInstalled ) {
-    return;
-  }
+export const init = (): void => {
+	if (!ZIORWPBlocks?.isWCInstalled) {
+		return;
+	}
 
-  initBlock({ name, metadata, settings });
+	initBlock({ name, metadata, settings });
 };

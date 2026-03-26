@@ -15,13 +15,17 @@
 			"type": "object",
 			"default": {
 				"id": "",
-				"label": ""
+				"label": "",
+				"price": ""
 			},
 			"properties": {
 				"id": {
 					"type": "string"
 				},
 				"label": {
+					"type": "string"
+				},
+				"price": {
 					"type": "string"
 				}
 			}

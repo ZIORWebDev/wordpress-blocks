@@ -18,7 +18,6 @@ import {
 	useBlockEditingMode,
 	InspectorControls,
 } from '@wordpress/block-editor';
-
 import {
 	PanelBody,
 	SelectControl,
@@ -26,7 +25,6 @@ import {
 	__experimentalNumberControl as NumberControl,
 	__experimentalText as Text,
 } from '@wordpress/components';
-
 import apiFetch from '@wordpress/api-fetch';
 
 /**
@@ -38,41 +36,33 @@ import TimeFormatControls from '../../components/time-format-controls';
 import metadata from '../../../src/Blocks/MetaField/block.json';
 
 /**
- * Globals typically provided via wp_localize_script / wp_add_inline_script.
+ * Globals
  */
 declare const ZIORWPBlocks: { restUrl: string };
 declare const wpApiSettings: { nonce: string };
 
-/**
- * Infer child component prop types (keeps you aligned with their real typings)
- */
 type MetaFieldSelectorProps = React.ComponentProps<typeof MetaFieldSelector>;
 type TimeFormatControlsProps = React.ComponentProps<typeof TimeFormatControls>;
 
 type MetaFieldType = MetaFieldSelectorProps['metaFieldType'];
 type NonNullMetaFieldType = NonNullable<MetaFieldType>;
+type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
+type TagName = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
 
-// /**
-//  * Types
-//  */
-// type TextAlign = 'left' | 'center' | 'right' | 'justify' | undefined;
-// type TagName = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
-
-interface MegaFieldAttributes {
-	// allow additional attributes (useful when passing through to other components)
+interface MetaFieldAttributes {
 	[key: string]: unknown;
 
 	textAlign?: TextAlign;
 	content?: string;
+	metaValue?: string;
 	placeholder?: string;
 	anchor?: string | null;
-	tagName: string;
+	tagName?: TagName;
 
+	postType?: string;
 	metaKey?: string;
 	metaFieldType?: MetaFieldType;
 	fieldProvider?: string;
-	postType?: string;
-
 	showMetaSelector?: boolean;
 
 	returnFormat?: string;
@@ -87,14 +77,16 @@ interface MegaFieldAttributes {
 	timeFormat?: TimeFormatControlsProps['timeFormat'];
 	outputFormat?: TimeFormatControlsProps['outputFormat'];
 
+	saveContent?: boolean;
+
 	showDateControls?: boolean;
 	dateFormat?: string;
 }
 
-type SetAttributes = (next: Partial<MegaFieldAttributes>) => void;
+type SetAttributes = (next: Partial<MetaFieldAttributes>) => void;
 
-interface MegaFieldEditProps {
-	attributes: MegaFieldAttributes;
+interface MetaFieldEditProps {
+	attributes: MetaFieldAttributes;
 	setAttributes: SetAttributes;
 	mergeBlocks?: (...args: unknown[]) => void;
 	onReplace?: (...args: unknown[]) => void;
@@ -102,15 +94,24 @@ interface MegaFieldEditProps {
 	clientId: string;
 }
 
-/**
- * Narrow unknown values safely into numbers.
- */
+type CoreEditorSelectors = {
+	getCurrentPost?: () => { id?: number } | undefined;
+};
+
+type BlockEditorSettings = {
+	generateAnchors?: boolean;
+};
+
 const toNumber = (value: unknown, fallback = 0): number => {
-	if (typeof value === 'number' && Number.isFinite(value)) return value;
-	if (typeof value === 'string' && value.trim() !== '') {
-		const n = Number(value);
-		return Number.isFinite(n) ? n : fallback;
+	if (typeof value === 'number' && Number.isFinite(value)) {
+		return value;
 	}
+
+	if (typeof value === 'string' && value.trim() !== '') {
+		const parsed = Number(value);
+		return Number.isFinite(parsed) ? parsed : fallback;
+	}
+
 	return fallback;
 };
 
@@ -128,36 +129,27 @@ const isTagName = (value: unknown): value is TagName => {
 	);
 };
 
-/**
- * Minimal selector shape for core/editor (so we don't need @wordpress/editor package)
- */
-type CoreEditorSelectors = {
-	getCurrentPost?: () => { id?: number } | undefined;
-};
-
-type BlockEditorSettings = { generateAnchors?: boolean };
-
-function MegaFieldEdit({
+function MetaFieldEdit({
 	attributes,
 	setAttributes,
 	mergeBlocks,
 	onReplace,
 	style,
 	clientId,
-}: MegaFieldEditProps) {
+}: MetaFieldEditProps) {
 	const {
 		textAlign,
 		content = '',
+		metaValue = '',
 		placeholder,
 		anchor = null,
-		tagName,
+		tagName = 'h2',
 
+		postType = 'page',
 		metaKey = '',
 		metaFieldType = 'post_meta' as NonNullMetaFieldType,
 		fieldProvider = '',
-		// keep in attributes even if MetaFieldSelector doesn't accept it
-		postType = 'post',
-		showMetaSelector = false,
+		showMetaSelector = true,
 
 		returnFormat = '',
 		showReturnFormat = false,
@@ -168,20 +160,24 @@ function MegaFieldEdit({
 		helpText = '',
 
 		showTimeControls = false,
-		timeFormat,
-		outputFormat,
+		timeFormat = 'g:i a',
+		outputFormat = 'summarized',
+
+		saveContent = true,
 
 		showDateControls = false,
-		dateFormat = '',
+		dateFormat = 'F d, Y',
 	} = attributes;
 
-	// block.json enum list
-	const tagOptions = useMemo( () => {
-		const tagNameEnum = metadata.attributes.tagName.enum as string[];
-		return tagNameEnum.map( ( value ) => ( {
+	const editorValue = metaValue || content || '';
+
+	const tagOptions = useMemo(() => {
+		const enumValues = metadata.attributes.tagName.enum as string[];
+
+		return enumValues.map((value) => ({
 			label: value.toUpperCase(),
 			value,
-		} ) );
+		}));
 	}, []);
 
 	const blockProps = useBlockProps({
@@ -200,32 +196,39 @@ function MegaFieldEdit({
 
 		const coreEditor = select('core/editor' as const) as unknown as CoreEditorSelectors;
 		const currentPost = coreEditor.getCurrentPost?.();
-		const postId = currentPost?.id ?? 0;
 
 		return {
 			canGenerateAnchors: Boolean(settings.generateAnchors) || tocCount > 0,
-			postId,
+			postId: currentPost?.id ?? 0,
 		};
 	}, []);
 
 	const { __unstableMarkNextChangeAsNotPersistent } = useDispatch(
-		blockEditorStore,
-	) as { __unstableMarkNextChangeAsNotPersistent?: () => void };
+		blockEditorStore
+	) as {
+		__unstableMarkNextChangeAsNotPersistent?: () => void;
+	};
 
 	useEffect(() => {
-		if (!canGenerateAnchors) return;
+		if (!canGenerateAnchors) {
+			return;
+		}
 
-		if (!anchor && content) {
+		if (!anchor && editorValue) {
 			__unstableMarkNextChangeAsNotPersistent?.();
-			setAttributes({ anchor: generateAnchor(clientId, content) });
+			setAttributes({
+				anchor: generateAnchor(clientId, editorValue),
+			});
 		}
 
 		setAnchor(clientId, anchor);
 
-		return () => setAnchor(clientId, null);
+		return () => {
+			setAnchor(clientId, null);
+		};
 	}, [
 		anchor,
-		content,
+		editorValue,
 		clientId,
 		canGenerateAnchors,
 		__unstableMarkNextChangeAsNotPersistent,
@@ -234,77 +237,184 @@ function MegaFieldEdit({
 
 	const onContentChange = useCallback(
 		(value: string) => {
-			const nextAttrs: Partial<MegaFieldAttributes> = { content: value };
+			const nextAttributes: Partial<MetaFieldAttributes> = {
+				content: value,
+				metaValue: value,
+			};
 
 			if (
 				canGenerateAnchors &&
-				(!anchor || !value || generateAnchor(clientId, content) === anchor)
+				(!anchor || !value || generateAnchor(clientId, editorValue) === anchor)
 			) {
-				nextAttrs.anchor = generateAnchor(clientId, value);
+				nextAttributes.anchor = generateAnchor(clientId, value);
 			}
 
-			setAttributes(nextAttrs);
+			setAttributes(nextAttributes);
 		},
-		[anchor, canGenerateAnchors, clientId, content, setAttributes],
+		[anchor, canGenerateAnchors, clientId, editorValue, setAttributes]
 	);
 
-	const queryString = useMemo(() => {
-		if (!metaKey) return '';
+	const buildQueryString = useCallback(
+		(next: Partial<MetaFieldAttributes> = {}) => {
+			const resolvedMetaFieldType = (next.metaFieldType ?? metaFieldType) as NonNullMetaFieldType;
+			const resolvedMetaKey = String(next.metaKey ?? metaKey ?? '');
+			const resolvedFieldProvider = String(next.fieldProvider ?? fieldProvider ?? '');
+			const resolvedPostType = String(next.postType ?? postType ?? '');
+			const resolvedShowDataIndex = Boolean(next.showDataIndex ?? showDataIndex);
+			const resolvedDataIndex = toNumber(next.dataIndex ?? dataIndex, 0);
+			const resolvedReturnFormat = String(next.returnFormat ?? returnFormat ?? '');
+			const resolvedOutputFormat = String(next.outputFormat ?? outputFormat ?? '');
+			const resolvedTimeFormat = String(next.timeFormat ?? timeFormat ?? '');
+			const resolvedDateFormat = String(next.dateFormat ?? dateFormat ?? '');
 
-		const params = new URLSearchParams({
-			metaFieldType: String(metaFieldType),
+			if (!resolvedMetaKey) {
+				return '';
+			}
+
+			const params = new URLSearchParams({
+				metaFieldType: String(resolvedMetaFieldType),
+				metaKey: resolvedMetaKey,
+				postId: String(postId),
+				fieldProvider: resolvedFieldProvider,
+			});
+
+			if (resolvedShowDataIndex) {
+				params.set('dataIndex', String(resolvedDataIndex));
+			}
+
+			if (resolvedReturnFormat) {
+				params.set('returnFormat', resolvedReturnFormat);
+			}
+
+			if (resolvedOutputFormat) {
+				params.set('outputFormat', resolvedOutputFormat);
+			}
+
+			if (resolvedTimeFormat) {
+				params.set('timeFormat', resolvedTimeFormat);
+			}
+
+			if (resolvedDateFormat) {
+				params.set('dateFormat', resolvedDateFormat);
+			}
+
+			if (resolvedPostType) {
+				params.set('postType', resolvedPostType);
+			}
+
+			return params.toString();
+		},
+		[
+			metaFieldType,
 			metaKey,
-			postId: String(postId),
 			fieldProvider,
-		});
+			postType,
+			showDataIndex,
+			dataIndex,
+			returnFormat,
+			outputFormat,
+			timeFormat,
+			dateFormat,
+			postId,
+		]
+	);
 
-		if (showDataIndex) params.set('dataIndex', String(dataIndex));
-		if (returnFormat) params.set('returnFormat', returnFormat);
-		if (outputFormat) params.set('outputFormat', String(outputFormat));
-		if (timeFormat) params.set('timeFormat', String(timeFormat));
-		if (dateFormat) params.set('dateFormat', dateFormat);
+	const fetchAndStoreMetaValue = useCallback(
+		async (next: Partial<MetaFieldAttributes> = {}) => {
+			const resolvedMetaFieldType = (next.metaFieldType ?? metaFieldType) as NonNullMetaFieldType;
+			const resolvedMetaKey = String(next.metaKey ?? metaKey ?? '');
 
-		// keep postType in the request if you rely on it server-side
-		if (postType) params.set('postType', String(postType));
+			if (!resolvedMetaKey) {
+				setAttributes({
+					content: '',
+					metaValue: '',
+				});
+				return;
+			}
 
-		return params.toString();
-	}, [
-		metaKey,
-		metaFieldType,
-		fieldProvider,
-		postId,
-		showDataIndex,
-		dataIndex,
-		returnFormat,
-		outputFormat,
-		timeFormat,
-		dateFormat,
-		postType,
-	]);
+			try {
+				const queryString = buildQueryString(next);
 
-	const fetchMetaValue = useCallback(async () => {
-		if (!metaKey) return;
+				const response = (await apiFetch({
+					path: `${ZIORWPBlocks.restUrl}/${String(
+						resolvedMetaFieldType
+					)}/value/?${queryString}`,
+					headers: {
+						'X-WP-Nonce': wpApiSettings.nonce,
+					},
+				})) as { value?: unknown } | undefined;
 
-		try {
-			const path = `${ZIORWPBlocks.restUrl}/${String(
-				metaFieldType,
-			)}/value/?${queryString}`;
+				const value =
+					typeof response?.value === 'string'
+						? response.value
+						: response?.value != null
+							? String(response.value)
+							: '';
 
-			const response = (await apiFetch({
-				path,
-				headers: { 'X-WP-Nonce': wpApiSettings.nonce },
-			})) as { value?: unknown } | undefined;
+				setAttributes({
+					content: saveContent ? value : content,
+					metaValue: value,
+				});
+			} catch {
+				setAttributes({
+					content: saveContent ? '' : content,
+					metaValue: '',
+				});
+			}
+		},
+		[buildQueryString, content, metaFieldType, metaKey, saveContent, setAttributes]
+	);
 
-			setAttributes({ content: (response?.value as string) ?? '' });
-		} catch {
-			setAttributes({ content: '' });
-		}
-	}, [metaKey, metaFieldType, queryString, setAttributes]);
+	const handleMetaKeyChange = useCallback(
+		(nextMetaKey: string) => {
+			setAttributes({
+				metaKey: nextMetaKey,
+			});
 
-	useEffect(() => {
-		if (!metaKey) return;
-		void fetchMetaValue();
-	}, [metaKey, fetchMetaValue]);
+			void fetchAndStoreMetaValue({
+				metaKey: nextMetaKey,
+			});
+		},
+		[fetchAndStoreMetaValue, setAttributes]
+	);
+
+	const handleMetaFieldTypeChange = useCallback(
+		(nextType: NonNullMetaFieldType) => {
+			setAttributes({
+				metaFieldType: nextType,
+				metaKey: '',
+				content: '',
+				metaValue: '',
+			});
+		},
+		[setAttributes]
+	);
+
+	const handleFieldProviderChange = useCallback(
+		(nextFieldProvider: string) => {
+			setAttributes({
+				fieldProvider: nextFieldProvider,
+			});
+
+			if (metaKey) {
+				void fetchAndStoreMetaValue({
+					fieldProvider: nextFieldProvider,
+				});
+			}
+		},
+		[fetchAndStoreMetaValue, metaKey, setAttributes]
+	);
+
+	const handleSelectorAttributesChange = useCallback(
+		(nextAttributes: Partial<MetaFieldAttributes>) => {
+			setAttributes(nextAttributes);
+
+			if (Object.prototype.hasOwnProperty.call(nextAttributes, 'fieldProvider')) {
+				handleFieldProviderChange(String(nextAttributes.fieldProvider ?? ''));
+			}
+		},
+		[handleFieldProviderChange, setAttributes]
+	);
 
 	return (
 		<>
@@ -334,12 +444,14 @@ function MegaFieldEdit({
 						<MetaFieldSelector
 							value={metaKey}
 							metaFieldType={metaFieldType}
-							onChange={(next: string) => setAttributes({ metaKey: next })}
-							onTypeChange={(nextType: NonNullMetaFieldType) =>
-								setAttributes({ metaFieldType: nextType })
+							onChange={handleMetaKeyChange}
+							onTypeChange={handleMetaFieldTypeChange}
+							attributes={
+								attributes as unknown as MetaFieldSelectorProps['attributes']
 							}
-							attributes={attributes as unknown as MetaFieldSelectorProps['attributes']}
-							setAttributes={setAttributes as unknown as MetaFieldSelectorProps['setAttributes']}
+							setAttributes={
+								handleSelectorAttributesChange as unknown as MetaFieldSelectorProps['setAttributes']
+							}
 						/>
 					) : null}
 
@@ -348,7 +460,10 @@ function MegaFieldEdit({
 							label={__('Template Tokens')}
 							help={__('Define the output format using dynamic tokens.')}
 							value={returnFormat}
-							onChange={(value: string) => setAttributes({ returnFormat: value })}
+							onChange={(value: string) => {
+								setAttributes({ returnFormat: value });
+								void fetchAndStoreMetaValue({ returnFormat: value });
+							}}
 							placeholder="{field_key}"
 						/>
 					) : null}
@@ -358,9 +473,12 @@ function MegaFieldEdit({
 							label={__('Data Index')}
 							help={__('Enter the index of the data for array-type meta fields')}
 							value={dataIndex}
-							onChange={(nextValue?: string) =>
-								setAttributes({ dataIndex: toNumber(nextValue, 0) })
-							}
+							onChange={(nextValue?: string) => {
+								const nextIndex = toNumber(nextValue, 0);
+
+								setAttributes({ dataIndex: nextIndex });
+								void fetchAndStoreMetaValue({ dataIndex: nextIndex });
+							}}
 							placeholder="0"
 						/>
 					) : null}
@@ -371,15 +489,24 @@ function MegaFieldEdit({
 							outputFormat={outputFormat}
 							showDateControls={showDateControls}
 							dateFormat={dateFormat}
-							onChange={setAttributes as unknown as TimeFormatControlsProps['onChange']}
+							onChange={(nextAttributes) => {
+								setAttributes(nextAttributes as Partial<MetaFieldAttributes>);
+								void fetchAndStoreMetaValue(
+									nextAttributes as Partial<MetaFieldAttributes>
+								);
+							}}
 						/>
 					) : null}
 
 					<SelectControl
-						label={ __( 'HTML tag' ) }
-						value={ tagName }
-						options={ tagOptions }
-						onChange={ ( selected?: string ) => setAttributes( { tagName: selected } ) }
+						label={__('HTML tag')}
+						value={tagName}
+						options={tagOptions}
+						onChange={(selected?: string) =>
+							setAttributes({
+								tagName: isTagName(selected) ? selected : 'h2',
+							})
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -387,13 +514,12 @@ function MegaFieldEdit({
 			<RichText
 				identifier="content"
 				tagName={tagName}
-				value={content}
+				value={editorValue}
 				onChange={onContentChange}
-				onMerge={mergeBlocks as any}
-				onReplace={onReplace as any}
+				onMerge={mergeBlocks as never}
+				onReplace={onReplace as never}
 				onRemove={() => onReplace?.([])}
 				placeholder={placeholder || __('Meta Field')}
-				// RichText typings in newer WP don't include `textAlign`; alignment is handled via className.
 				{...(!Platform.isWeb ? { deleteEnter: true } : undefined)}
 				{...blockProps}
 			/>
@@ -401,4 +527,4 @@ function MegaFieldEdit({
 	);
 }
 
-export default MegaFieldEdit;
+export default MetaFieldEdit;

@@ -19,9 +19,6 @@ type ApiResult = {
 	meta_keys: string[];
 };
 
-/**
- * Single source of truth: Meta Field Type
- */
 const META_FIELD_TYPE_OPTIONS = [
 	{ label: __('Post Meta', 'wordpress-blocks'), value: 'post_meta' },
 	{ label: __('Options', 'wordpress-blocks'), value: 'options' },
@@ -35,9 +32,6 @@ function toMetaFieldType(input: string): MetaFieldType {
 	return input === 'options' ? 'options' : 'post_meta';
 }
 
-/**
- * Single source of truth: Field Provider
- */
 const FIELD_PROVIDER_OPTIONS = [
 	{ label: __('— Select —', 'wordpress-blocks'), value: '' },
 	{ label: __('ACF', 'wordpress-blocks'), value: 'acf' },
@@ -49,8 +43,6 @@ const FIELD_PROVIDER_OPTIONS = [
 >[];
 
 type FieldProviderValue = (typeof FIELD_PROVIDER_OPTIONS)[number]['value'];
-// If you truly need arbitrary custom strings too, use:
-// type FieldProviderValue = (typeof FIELD_PROVIDER_OPTIONS)[number]['value'] | (string & {});
 
 type Attributes = {
 	fieldProvider?: FieldProviderValue;
@@ -66,7 +58,6 @@ type Props = {
 	metaFieldType?: MetaFieldType;
 };
 
-// WP globals you’re using
 declare const ZIORWPBlocks: { restUrl: string };
 declare const wpApiSettings: { nonce: string };
 
@@ -85,20 +76,17 @@ export default function MetaFieldSelector({
 	const [options, setOptions] = useState<Option[]>([]);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
-	// --- Sync props with internal state (avoid loops) ---
 	useEffect(() => {
 		if (propMetaFieldType && propMetaFieldType !== metaFieldType) {
 			setMetaFieldType(propMetaFieldType);
 		}
+	}, [propMetaFieldType, metaFieldType]);
+
+	useEffect(() => {
 		if (value !== undefined && value !== metaKey) {
 			setMetaKey(value ?? '');
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [propMetaFieldType, value]);
-
-	// --- Notify parent ---
-	useEffect(() => onChange(metaKey), [metaKey, onChange]);
-	useEffect(() => onTypeChange(metaFieldType), [metaFieldType, onTypeChange]);
+	}, [value, metaKey]);
 
 	const fetchOptions = useCallback(
 		debounce((search: string) => {
@@ -118,10 +106,13 @@ export default function MetaFieldSelector({
 		[metaFieldType]
 	);
 
-	useEffect(() => fetchOptions(searchTerm), [searchTerm, fetchOptions]);
+	useEffect(() => {
+		void fetchOptions(searchTerm);
+	}, [searchTerm, fetchOptions]);
 
 	const displayedOptions = useMemo<Option[]>(() => {
 		if (!metaKey) return options;
+
 		return options.some((o) => o.value === metaKey)
 			? options
 			: [{ label: metaKey, value: metaKey }, ...options];
@@ -129,30 +120,34 @@ export default function MetaFieldSelector({
 
 	return (
 		<>
-			{/* Meta Field Type */}
 			<SelectControl
 				label={__('Meta Field Type', 'wordpress-blocks')}
 				value={metaFieldType}
 				options={META_FIELD_TYPE_OPTIONS as unknown as SelectOption[]}
 				onChange={(next: string) => {
-					setMetaFieldType(toMetaFieldType(next));
+					const nextType = toMetaFieldType(next);
+
+					setMetaFieldType(nextType);
 					setMetaKey('');
 					setOptions([]);
+					onTypeChange(nextType);
+					onChange('');
 				}}
 			/>
 
-			{/* Meta Key */}
 			<div className="components-base-control">
-        <ComboboxControl
-          label={__('Meta Key', 'wordpress-blocks')}
-          value={metaKey}
-          options={displayedOptions}
-          onChange={(next?: string | null) => {
-            setMetaKey(next ?? '');
-          }}
-          onFilterValueChange={(term: string) => setSearchTerm(term)}
-          placeholder={__('Type to search meta keys...', 'wordpress-blocks')}
-        />
+				<ComboboxControl
+					label={__('Meta Key', 'wordpress-blocks')}
+					value={metaKey}
+					options={displayedOptions}
+					onChange={(next?: string | null) => {
+						const nextValue = next ?? '';
+						setMetaKey(nextValue);
+						onChange(nextValue);
+					}}
+					onFilterValueChange={(term: string) => setSearchTerm(term)}
+					placeholder={__('Type to search meta keys...', 'wordpress-blocks')}
+				/>
 				<p className="components-base-control__help">
 					{__(
 						'Only choose meta keys safe for public display. Avoid private values such as user data, tokens, or license keys.',
@@ -161,7 +156,6 @@ export default function MetaFieldSelector({
 				</p>
 			</div>
 
-			{/* Field Provider */}
 			<div className="components-base-control">
 				<SelectControl
 					label={__('Field Provider', 'wordpress-blocks')}

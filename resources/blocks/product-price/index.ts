@@ -14,6 +14,7 @@ export { metadata, name };
 export type ProductValue = {
   id: string;
   label: string;
+  price?: string;
 };
 
 export type ProductAttributes = {
