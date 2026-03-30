@@ -20,7 +20,7 @@ final class Loader {
 	 *
 	 * @var string
 	 */
-	protected static $package_version = '1.2.6';
+	protected static $package_version = '1.2.13';
 
 	/**
 	 * Initialization flag to prevent multiple initializations.
